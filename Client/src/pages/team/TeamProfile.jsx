@@ -12,7 +12,7 @@ import MediaGallery from "../../components/team/MediaGallery";
 import Modal from "../../components/team/Modal";
 
 import AwardForm from "../../components/team/forms/AwardForm";
-import SponsorForm from "../../components/team/forms/SponsorForm";
+import SponsorForm from "../../components/team/forms/sponsorForm";
 import MediaForm from "../../components/team/forms/MediaForm";
 import TeamDescriptionForm from "../../components/team/forms/TeamDescriptionForm";
 import SocialForm from "../../components/team/forms/SocialForm";
