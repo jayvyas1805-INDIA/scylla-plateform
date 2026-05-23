@@ -6,7 +6,7 @@ import TeamHeader from "../../components/team/TeamHeader";
 import TeamDescription from "../../components/team/TeamDescription";
 import AchievementsSection from "../../components/team/AchievementsSection";
 import TeamLocation from "../../components/team/TeamLocation";
-import SponsorsSection from "../../components/team/sponsorsSection";
+import SponsorsSection from "../../components/team/SponsorsSection";
 import ConnectWithUs from "../../components/team/ConnectWithUs";
 import MediaGallery from "../../components/team/MediaGallery";
 import Modal from "../../components/team/Modal";
