@@ -1,0 +1,339 @@
+.product-listing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  overflow-x: hidden;
+}
+
+.product-listing-main {
+  flex: 1;
+  width: 100%;
+  padding: var(--spacing-lg);
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ================= ADD PRODUCT BUTTON (MATCH REQUEST QUOTE) ================= */
+
+.catalog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ⬅️ OPPOSITE SIDES */
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* SAME FEEL AS REQUEST QUOTE */
+.add-product-btn {
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    0 0 12px rgba(59, 130, 246, 0.4),
+    inset 0 0 0 rgba(255, 255, 255, 0);
+}
+
+/* Hover = same energy as Request Quote */
+.add-product-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 18px rgba(59, 130, 246, 0.6),
+    0 0 32px rgba(6, 182, 212, 0.35);
+}
+
+/* Click */
+.add-product-btn:active {
+  transform: scale(0.96);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .catalog-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .add-product-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+/* ================= HERO BANNER ================= */
+
+.product-hero-banner {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 58, 138, 0.3) 0%,
+    rgba(6, 182, 212, 0.2) 100%
+  );
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+  box-sizing: border-box;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-badge {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+  text-shadow:
+    0 0 10px rgba(6, 181, 212, 0.5),
+    0 0 20px rgba(6, 181, 212, 0.3),
+    0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.hero-location {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
+}
+
+.btn-edit-product {
+  white-space: nowrap;
+}
+
+/* ================= QUICK ACTION ICONS ================= */
+
+.quick-action-icons {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.action-icon {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background-color: var(--bg-secondary);
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.action-icon:hover {
+  border-color: var(--blue-neon);
+  background-color: rgba(6, 181, 212, 0.2);
+  box-shadow:
+    0 0 25px rgba(6, 181, 212, 0.5),
+    0 0 50px rgba(6, 181, 212, 0.3),
+    inset 0 0 15px rgba(6, 181, 212, 0.1);
+  transform: scale(1.1);
+}
+
+/* ================= CARD BASE ================= */
+
+.card {
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  box-sizing: border-box;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ================= PRODUCT GRID (DESKTOP FIX) ================= */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ ALWAYS 4 ON DESKTOP */
+  gap: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ================= PRODUCT CARD ================= */
+
+.product-card-item {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-normal);
+}
+
+.product-card-item:hover {
+  border-color: var(--blue-neon);
+  box-shadow: 0 0 20px rgba(6, 181, 212, 0.25);
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(6, 182, 212, 0.1)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.product-icon {
+  font-size: 3rem;
+}
+
+.product-info {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.product-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.product-code {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue-primary);
+}
+
+.product-specs,
+.product-category {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.product-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-primary);
+}
+
+.product-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.product-status.in-stock {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--green-success);
+}
+
+.product-status.limited {
+  background: rgba(249, 115, 22, 0.2);
+  color: var(--orange-pending);
+}
+
+.product-status.pre-order {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--blue-primary);
+}
+
+.product-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.product-actions .btn {
+  flex: 1;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+
+/* ================= RESPONSIVE BREAKPOINTS ================= */
+
+/* Large tablets / small laptops */
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-hero-banner {
+    flex-direction: column;
+  }
+}
+
+/* Phones */
+@media (max-width: 520px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-listing-main {
+    padding: var(--spacing-md);
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+}

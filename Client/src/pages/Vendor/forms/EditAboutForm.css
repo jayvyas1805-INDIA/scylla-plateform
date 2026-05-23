@@ -1,0 +1,19 @@
+/* ================= EDIT ABOUT FORM ================= */
+
+.edit-about-form textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.edit-about-form textarea:focus {
+  outline: none;
+  border-color: var(--blue-neon);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+}

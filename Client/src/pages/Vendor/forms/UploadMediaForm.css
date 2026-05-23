@@ -1,0 +1,17 @@
+/* ================= UPLOAD MEDIA FORM ================= */
+
+.upload-media-form input[type="file"] {
+  width: 100%;
+  padding: 14px;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-media-form input[type="file"]:hover {
+  border-color: var(--blue-neon);
+  background: rgba(37, 99, 235, 0.15);
+}

@@ -1,0 +1,16 @@
+.team-profile {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000000 0%, #0a0a1a 50%, #1a0033 100%);
+  padding-bottom: 2rem;
+}
+
+/* Scroll smooth behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Overflow handling */
+.team-profile {
+  width: 100%;
+  overflow-x: hidden;
+}

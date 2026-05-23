@@ -1,0 +1,183 @@
+.team-header1 {
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.7), rgba(26, 36, 86, 0.5));
+  border-bottom: 2px solid rgba(59, 130, 246, 0.4);
+  padding: 3rem 2rem;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+.team-header-content1 {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.team-logo-section1 {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.team-logo1 {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(0, 102, 255, 0.1));
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+  transition: all 0.3s ease;
+}
+
+.team-logo1:hover {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+  transform: scale(1.05);
+}
+
+.team-logo1 img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.team-info1 {
+  flex: 1;
+}
+
+.team-name1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+  animation: neon-glow 3s infinite;
+}
+
+.team-subtitle1 {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.team-location1 {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.edit-profile-btn1 {
+  background: linear-gradient(135deg, #3b82f6, #0066ff);
+  color: #fff;
+  border: none;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.edit-profile-btn1:hover {
+  box-shadow: 0 0 35px rgba(59, 130, 246, 0.6);
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #0066ff, #3b82f6);
+}
+
+.edit-profile-btn1:active {
+  transform: scale(0.98);
+}
+
+/* Member Avatars */
+.member-avatars {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #0066ff);
+  border: 2px solid rgba(59, 130, 246, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+}
+
+.avatar.add-member {
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.4);
+}
+
+.avatar.add-member:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-header1 {
+    padding: 2rem 1.5rem;
+  }
+
+  .team-header-content1 {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .team-logo-section1 {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .team-name1 {
+    font-size: 1.8rem;
+  }
+
+  .edit-profile-btn1 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-header1 {
+    padding: 1.5rem 1rem;
+  }
+
+  .team-logo1 {
+    width: 60px;
+    height: 60px;
+  }
+
+  .team-name1 {
+    font-size: 1.4rem;
+  }
+
+  .team-subtitle1 {
+    font-size: 0.85rem;
+  }
+}

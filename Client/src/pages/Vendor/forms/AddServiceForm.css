@@ -1,0 +1,16 @@
+/* ================= ADD SERVICE FORM ================= */
+
+.add-service-form input {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text-primary);
+}
+
+.add-service-form input:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
+}

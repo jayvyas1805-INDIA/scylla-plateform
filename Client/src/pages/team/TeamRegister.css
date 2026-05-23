@@ -1,0 +1,211 @@
+/* PAGE BACKGROUND */
+.team-register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #0a0f1e, #000);
+  padding: 120px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* DYNAMIC NEON AMBIENT GLOW */
+.team-register-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(
+    circle,
+    rgba(31, 107, 255, 0.35),
+    transparent 70%
+  );
+  filter: blur(80px);
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 0.6; transform: scale(1); }
+}
+
+/* MAIN CARD */
+.team-register-card {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 16, 35, 0.96),
+    rgba(5, 8, 18, 0.98)
+  );
+  border-radius: 18px;
+  padding: 34px;
+  z-index: 1;
+
+  box-shadow:
+    0 0 45px rgba(31, 107, 255, 0.55),
+    inset 0 0 0 1px rgba(120, 170, 255, 0.25);
+
+  backdrop-filter: blur(18px);
+}
+
+/* TITLES */
+.team-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.team-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #9fb2ff;
+  margin-bottom: 28px;
+}
+
+/* SECTIONS */
+.section-title {
+  font-size: 16px;
+  margin: 28px 0 12px;
+  color: #6ea2ff;
+}
+
+/* FORM */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #cdd7ff;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(120, 170, 255, 0.25);
+  border-radius: 8px;
+  padding: 12px;
+  color: #fff;
+  outline: none;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #1f6bff;
+  box-shadow: 0 0 12px rgba(31, 107, 255, 0.5);
+}
+
+.form-group textarea {
+  resize: none;
+  height: 80px;
+}
+
+/* UPLOAD BOX */
+.upload-box {
+  border: 1px dashed rgba(120, 170, 255, 0.6);
+  border-radius: 12px;
+  padding: 22px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  transition: box-shadow 0.3s;
+}
+
+.upload-box:hover {
+  box-shadow: 0 0 18px rgba(31, 107, 255, 0.45);
+}
+
+.upload-icon {
+  font-size: 26px;
+  color: #6ea2ff;
+}
+
+.upload-box p {
+  margin: 8px 0 4px;
+}
+
+.upload-box small {
+  font-size: 12px;
+  color: #9fb2ff;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+  margin-top: 28px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #1f6bff, #4f8cff);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 26px rgba(31, 107, 255, 0.65);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 36px rgba(31, 107, 255, 0.85);
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .team-register-card {
+    padding: 26px;
+  }
+
+  .team-title {
+    font-size: 24px;
+  }
+}
+
+/* ===============================
+   FIX SELECT / OPTION TEXT VISIBILITY
+   =============================== */
+
+.form-group select {
+  color: #ffffff;
+  background-color: rgba(10, 16, 35, 0.9);
+}
+
+/* Dropdown options */
+.form-group select option {
+  background-color: #0a0f1e;
+  color: #ffffff;
+}
+
+/* When option is hovered / selected */
+.form-group select option:hover,
+.form-group select option:checked {
+  background-color: #1f6bff;
+  color: #ffffff;
+}
+
+
+.login-link {
+  margin-top: 20px;
+  text-align: center;
+  color: #b8c2ff;
+}
+
+.login-link .link {
+  color: #3b82f6;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: text-shadow 0.3s ease;
+}
+
+.login-link .link:hover {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+
+

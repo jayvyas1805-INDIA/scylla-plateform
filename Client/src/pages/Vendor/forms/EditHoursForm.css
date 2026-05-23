@@ -1,0 +1,23 @@
+/* ================= EDIT HOURS FORM ================= */
+
+.edit-hours-form .hours-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.edit-hours-form input {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.edit-hours-form input:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.35);
+}

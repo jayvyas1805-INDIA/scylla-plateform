@@ -1,0 +1,230 @@
+.team-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 10, 30, 0.96),
+    rgba(5, 10, 30, 0.88)
+  );
+  border-bottom: 1px solid rgba(0, 170, 255, 0.25);
+  backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 100;
+}
+
+/* LEFT */
+.team-logo {
+  font-size: 22px;
+  color: #eaf3ff;
+  letter-spacing: 2px;
+}
+
+.team-subtitle {
+  font-size: 12px;
+  color: #6aa9ff;
+}
+
+/* CENTER */
+.team-nav-center {
+  display: flex;
+  gap: 34px;
+}
+
+.team-nav-center a {
+  color: #cfe4ff;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+}
+
+.team-nav-center a::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #2b78ff;
+  transition: width 0.3s ease;
+}
+
+.team-nav-center a.active::after {
+  width: 100%;
+}
+
+/* RIGHT */
+.team-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #2b78ff;
+}
+
+/* PROFILE DROPDOWN */
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  background: rgba(10, 15, 40, 0.95);
+  border: 1px solid rgba(0, 170, 255, 0.25);
+  border-radius: 10px;
+  width: 160px;
+  padding: 8px;
+}
+
+.profile-dropdown button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #cfe4ff;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  background: rgba(43, 120, 255, 0.15);
+}
+
+.profile-dropdown .logout {
+  color: #ff5c5c;
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #cfe4ff;
+  font-size: 22px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .team-nav-center {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: rgba(5, 10, 30, 0.98);
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    display: none;
+  }
+
+  .team-nav-center.open {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+
+.team-navbar-center span {
+  position: relative;
+  cursor: pointer;
+  padding-bottom: 6px;
+  color: #cfe4ff;
+}
+
+.team-navbar-center span.active {
+  color: #4aa3ff;
+}
+
+.team-navbar-center span.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: #4aa3ff;
+  border-radius: 2px;
+}
+
+.team-navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 64px;
+  z-index: 1000;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 8, 20, 0.95),
+    rgba(5, 8, 20, 0.85)
+  );
+}
+
+
+/* ================================
+   FINAL OVERRIDES – DO NOT REMOVE
+   FIXES BLANK SPACE & JUMPING NAVBAR
+================================ */
+
+/* FORCE SINGLE SOURCE OF TRUTH */
+.team-navbar {
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 64px;
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 2000;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 10, 30, 0.96),
+    rgba(5, 10, 30, 0.88)
+  );
+}
+
+/* FIX MOBILE MENU POSITION */
+@media (max-width: 1024px) {
+  .team-nav-center {
+    top: 64px !important;
+  }
+}
+
+/* PREVENT BODY PUSHING CONTENT */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ENSURE DROPDOWN DOES NOT CREATE LAYOUT SHIFT */
+.profile-dropdown {
+  position: absolute;
+  top: 56px;
+  right: 0;
+}
+
+/* REMOVE UNUSED CONFLICTING CLASS VISUALLY */
+.team-navbar-center {
+  display: none;
+}
