@@ -444,45 +444,45 @@ const VendorMyProfile = () => {
         <div className="vendor-profile1">
             <Header currentPath={location.pathname} />
 
-            <main className="profile1-main">
+            <main className="vendor-profile1-main">
                 {/* Profile Header */}
-                <div className="profile-header-section">
-                    <div className="profile-header-content">
-                        <div className="profile-title-area">
-                            <h1 className="profile-title">Vendor Profile & Business Settings</h1>
-                            <p className="profile-subtitle">Manage business info, verification documents, certifications, and product listings.</p>
+                <div className="vendor-profile-header-section">
+                    <div className="vendor-profile-header-content">
+                        <div className="vendor-profile-title-area">
+                            <h1 className="vendor-profile-title">Vendor Profile & Business Settings</h1>
+                            <p className="vendor-profile-subtitle">Manage business info, verification documents, certifications, and product listings.</p>
                         </div>
-                        <div className="profile-header-actions">
-                            <div className="profile-avatar-header">👤</div>
-                            <button className="btn btn-primary" onClick={() => navigate('/vendor/profile/edit')}>Edit Profile</button>
+                        <div className="vendor-profile-header-actions">
+                            <div className="vendor-profile-avatar-header">👤</div>
+                            <button className="vendor-btn btn-primary" onClick={() => navigate('/vendor/profile/edit')}>Edit Profile</button>
                         </div>
                     </div>
                 </div>
 
-                <div className="profile-container">
+                <div className="vendor-profile-container">
                     {/* LEFT COLUMN */}
-                    <aside className="profile-left-column">
+                    <aside className="vendor-profile-left-column">
                         {/* Business Information Card */}
-                        <div className="profile-card business-info-card">
-                            <div className="card-image-header">
-                                <div className="company-image-placeholder">
-                                    <span className="company-icon">🏢</span>
+                        <div className="vendor-profile-card vendor-business-info-card">
+                            <div className="vendorcard-image-header">
+                                <div className="vendor-company-image-placeholder">
+                                    <span className="vendor-company-icon">🏢</span>
                                 </div>
                             </div>
 
-                            <div className="card-content">
-                                <h2 className="card-title">Business Information</h2>
+                            <div className="vendor-card-content">
+                                <h2 className="vendor-card-title">Business Information</h2>
 
                                 {/* Business Name & Category */}
-                                <div className="info-grid">
-                                    <div className="info-item">
-                                        <label className="info-label">Business Name</label>
-                                        <p className="info-value">{vendor?.businessName}</p>
+                                <div className="vendor-info-grid">
+                                    <div className="vendor-info-item">
+                                        <label className="vendor-info-label">Business Name</label>
+                                        <p className="vendor-info-value">{vendor?.businessName}</p>
                                     </div>
-                                    <div className="info-item">
-                                        <label className="info-label">Category</label>
-                                        <div className="category-select">
-                                            <select className="select-input">
+                                    <div className="vendor-info-item">
+                                        <label className="vendor-info-label">Category</label>
+                                        <div className="vendor-category-select">
+                                            <select className="vendor-select-input">
                                                 <option>Fabrication & Engineering</option>
                                                 <option>Services</option>
                                                 <option>Products</option>
@@ -492,159 +492,159 @@ const VendorMyProfile = () => {
                                 </div>
 
                                 {/* Tagline */}
-                                <div className="info-item">
-                                    <label className="info-label">Tagline</label>
-                                    <p className="info-value">{vendor?.description}</p>
+                                <div className="vendor-info-item">
+                                    <label className="vendor-info-label">Tagline</label>
+                                    <p className="vendor-info-value">{vendor?.description}</p>
                                 </div>
 
                                 {/* GST & Phone */}
-                                <div className="info-grid">
-                                    <div className="info-item">
-                                        <label className="info-label">GST Number</label>
-                                        <p className="info-value">{vendor?.gstNumber}</p>
+                                <div className="vendor-info-grid">
+                                    <div className="vendor-info-item">
+                                        <label className="vendor-info-label">GST Number</label>
+                                        <p className="vendor-info-value">{vendor?.gstNumber}</p>
                                     </div>
-                                    <div className="info-item">
-                                        <label className="info-label">Phone</label>
-                                        <p className="info-value">{vendor?.phone}</p>
+                                    <div className="vendor-info-item">
+                                        <label className="vendor-info-label">Phone</label>
+                                        <p className="vendor-info-value">{vendor?.phone}</p>
                                     </div>
                                 </div>
 
                                 {/* Business Address */}
-                                <div className="info-item">
-                                    <label className="info-label">Business Address</label>
-                                    <p className="info-value">{vendor?.location}</p>
+                                <div className="vendor-info-item">
+                                    <label className="vendor-info-label">Business Address</label>
+                                    <p className="vendor-info-value">{vendor?.location}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Business Hours Card */}
-                        <div className="profile-card">
-                            <div className="card-header">
-                                <h2 className="card-title">Business Hours</h2>
-                                <a href="#" className="edit-link">Edit Hours</a>
+                        <div className="vendor-profile-card">
+                            <div className="vendor-card-header">
+                                <h2 className="vendor-card-title">Business Hours</h2>
+                                <a href="#" className="vendor-edit-link">Edit Hours</a>
                             </div>
 
-                            <div className="business-hours">
-                                <div className="hours-row">
-                                    <div className="hours-col">
-                                        <span className="day-label">Monday -</span>
-                                        <span className="time-label">9:00 AM - 6:00 PM</span>
+                            <div className="vendor-business-hours">
+                                <div className="vendor-hours-row">
+                                    <div className="vendor-hours-col">
+                                        <span className="vendor-day-label">Monday -</span>
+                                        <span className="vendor-time-label">9:00 AM - 6:00 PM</span>
                                     </div>
-                                    <div className="hours-col">
-                                        <span className="day-label">Saturday</span>
-                                        <span className="time-label">9:00 AM - 2:00 PM</span>
+                                    <div className="vendor-hours-col">
+                                        <span className="vendor-day-label">Saturday</span>
+                                        <span className="vendor-time-label">9:00 AM - 2:00 PM</span>
                                     </div>
                                 </div>
-                                <div className="hours-row">
-                                    <div className="hours-col">
-                                        <span className="day-label">Sunday</span>
-                                        <span className="time-label">Closed</span>
+                                <div className="vendor-hours-row">
+                                    <div className="vendor-hours-col">
+                                        <span className="vendor-day-label">Sunday</span>
+                                        <span className="vendor-time-label">Closed</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Social Media Card */}
-                        <div className="profile-card">
-                            <div className="card-header">
-                                <h2 className="card-title">Social Media</h2>
-                                <a href="#" className="edit-link">Edit Links</a>
+                        <div className="vendor-profile-card">
+                            <div className="vendor-card-header">
+                                <h2 className="vendor-card-title">Social Media</h2>
+                                <a href="#" className="vendor-edit-link">Edit Links</a>
                             </div>
 
-                            <div className="social-media-icons">
-                                <a href="#" className="social-icon instagram" title="Instagram">📷</a>
-                                <a href="#" className="social-icon youtube" title="YouTube">▶️</a>
-                                <a href="#" className="social-icon linkedin" title="LinkedIn">in</a>
-                                <a href="#" className="social-icon whatsapp" title="WhatsApp">💬</a>
-                                <a href="#" className="social-icon website" title="Website">🌐</a>
+                            <div className="vendor-social-media-icons">
+                                <a href="#" className="vendor-social-icon instagram" title="Instagram">📷</a>
+                                <a href="#" className="vendor-social-icon youtube" title="YouTube">▶️</a>
+                                <a href="#" className="vendor-social-icon linkedin" title="LinkedIn">in</a>
+                                <a href="#" className="vendor-social-icon whatsapp" title="WhatsApp">💬</a>
+                                <a href="#" className="vendor-social-icon website" title="Website">🌐</a>
                             </div>
                         </div>
 
                         {/* Products & Services Summary */}
-                        <div className="profile-card">
-                            <h2 className="card-title">Products & Services Summary</h2>
+                        <div className="vendor-profile-card">
+                            <h2 className="vendor-card-title">Products & Services Summary</h2>
 
-                            <div className="summary-stats">
-                                <div className="stat-item">
-                                    <span className="stat-label">Total Products</span>
-                                    <span className="stat-value">24</span>
+                            <div className="vendor-summary-stats">
+                                <div className="vendor-stat-item">
+                                    <span className="vendor-stat-label">Total Products</span>
+                                    <span className="vendor-stat-value">24</span>
                                 </div>
-                                <div className="stat-item">
-                                    <span className="stat-label">Active Services</span>
-                                    <span className="stat-value">8</span>
+                                <div className="vendor-stat-item">
+                                    <span className="vendor-stat-label">Active Services</span>
+                                    <span className="vendor-stat-value">8</span>
                                 </div>
                             </div>
 
-                            <div className="summary-stats">
-                                <div className="stat-item">
-                                    <span className="stat-label">Draft Listings</span>
-                                    <span className="stat-value">3</span>
+                            <div className="vendor-summary-stats">
+                                <div className="vendor-stat-item">
+                                    <span className="vendor-stat-label">Draft Listings</span>
+                                    <span className="vendor-stat-value">3</span>
                                 </div>
-                                <div className="stat-item">
-                                    <span className="stat-label">Requests Received</span>
-                                    <span className="stat-value">12</span>
+                                <div className="vendor-stat-item">
+                                    <span className="vendor-stat-label">Requests Received</span>
+                                    <span className="vendor-stat-value">12</span>
                                 </div>
                             </div>
 
-                            <button className="btn btn-primary full-width">Manage Listings</button>
+                            <button className="vendor-btn vendor-btn-primary vendor-full-width">Manage Listings</button>
                         </div>
                     </aside>
 
                     {/* RIGHT COLUMN */}
-                    <section className="profile-right-column">
+                    <section className="vendor-profile-right-column">
                         {/* Document & Compliance Management */}
-                        <div className="profile-card">
-                            <h2 className="card-title">Document & Compliance Management</h2>
+                        <div className="vendor-profile-card">
+                            <h2 className="vendor-card-title">Document & Compliance Management</h2>
 
                             {/* Verification Documents */}
-                            <div className="compliance-section">
-                                <h3 className="compliance-title">Verification Documents</h3>
+                            <div className="vendor-compliance-section">
+                                <h3 className="vendor-compliance-title">Verification Documents</h3>
 
                                 {/* Business Registration Certificate */}
-                                <div className="document-item">
-                                    <div className="document-header">
-                                        <div className="document-icon">📄</div>
-                                        <div className="document-info">
-                                            <h4 className="document-name">Business Registration Certificate</h4>
-                                            <p className="document-meta">business_registration_v2.pdf • Uploaded: 2024-01-15 | Version 2.0</p>
+                                <div className="vendor-document-item">
+                                    <div className="vendor-document-header">
+                                        <div className="vendor-document-icon">📄</div>
+                                        <div className="vendor-document-info">
+                                            <h4 className="vendor-document-name">Business Registration Certificate</h4>
+                                            <p className="vendor-document-meta">business_registration_v2.pdf • Uploaded: 2024-01-15 | Version 2.0</p>
                                         </div>
                                     </div>
-                                    <div className="document-actions">
-                                        <span className="status-badge verified">✓ Verified</span>
-                                        <button className="action-btn" title="Download">⬇️</button>
-                                        <button className="action-btn" title="Preview">👁️</button>
-                                        <button className="action-btn delete" title="Delete">🗑️</button>
+                                    <div className="vendor-document-actions">
+                                        <span className="vendor-status-badge vendor-status-verified">✓ Verified</span>
+                                        <button className="vendor-action-btn" title="Download">⬇️</button>
+                                        <button className="vendor-action-btn" title="Preview">👁️</button>
+                                        <button className="vendor-action-btn vendor-delete" title="Delete">🗑️</button>
                                     </div>
                                 </div>
 
                                 {/* GST Certificate */}
-                                <div className="document-item">
-                                    <div className="document-header">
-                                        <div className="document-icon">📄</div>
-                                        <div className="document-info">
-                                            <h4 className="document-name">GST Certificate</h4>
-                                            <p className="document-meta">gst_certificate_2024.pdf • Uploaded: 2024-01-10 | Version 1.0</p>
+                                <div className="vendor-document-item">
+                                    <div className="vendor-document-header">
+                                        <div className="vendor-document-icon">📄</div>
+                                        <div className="vendor-document-info">
+                                            <h4 className="vendor-document-name">GST Certificate</h4>
+                                            <p className="vendor-document-meta">gst_certificate_2024.pdf • Uploaded: 2024-01-10 | Version 1.0</p>
                                         </div>
                                     </div>
-                                    <div className="document-actions">
-                                        <span className="status-badge expiring">⚠️ Expires in 80 days</span>
-                                        <button className="action-btn" title="Download">⬇️</button>
-                                        <button className="action-btn" title="Preview">👁️</button>
-                                        <button className="action-btn delete" title="Delete">🗑️</button>
+                                    <div className="vendor-document-actions">
+                                        <span className="vendor-status-badge vendor-status-expiring">⚠️ Expires in 80 days</span>
+                                        <button className="vendor-action-btn" title="Download">⬇️</button>
+                                        <button className="vendor-action-btn" title="Preview">👁️</button>
+                                        <button className="vendor-action-btn vendor-delete" title="Delete">🗑️</button>
                                     </div>
                                 </div>
 
                                 {/* Workshop Safety Certificate - Upload Area */}
-                                <div className="document-item upload-placeholder">
-                                    <div className="upload-area">
-                                        <div className="upload-icon">⬆️</div>
-                                        <h4 className="upload-title">Click to upload or drag and drop</h4>
-                                        <p className="upload-subtitle">PDF, JPG, PNG or other formats</p>
-                                        <button className="btn btn-secondary">Browse Files</button>
+                                <div className="vendor-document-item vendor-upload-placeholder">
+                                    <div className="vendor-upload-area">
+                                        <div className="vendor-upload-icon">⬆️</div>
+                                        <h4 className="vendor-upload-title">Click to upload or drag and drop</h4>
+                                        <p className="vendor-upload-subtitle">PDF, JPG, PNG or other formats</p>
+                                        <button className="vendor-btn vendor-btn-secondary">Browse Files</button>
                                     </div>
                                     <input
                                         type="file"
-                                        className="file-input"
+                                        className="vendor-file-input"
                                         onChange={(e) => handleFileUpload(e, 'workshopSafety')}
                                         style={{ display: 'none' }}
                                     />
@@ -653,84 +653,84 @@ const VendorMyProfile = () => {
                         </div>
 
                         {/* Expiry Reminders */}
-                        <div className="profile-card">
-                            <div className="card-header">
-                                <h2 className="card-title">Expiry Reminders</h2>
-                                <label className="checkbox-toggle">
+                        <div className="vendor-profile-card">
+                            <div className="vendor-card-header">
+                                <h2 className="vendor-card-title">Expiry Reminders</h2>
+                                <label className="vendor-checkbox-toggle">
                                     <input type="checkbox" defaultChecked />
-                                    <span className="toggle-label">Enable Renewal Alerts</span>
+                                    <span className="vendor-toggle-label">Enable Renewal Alerts</span>
                                 </label>
                             </div>
 
-                            <div className="expiry-items">
-                                <div className="expiry-item critical">
-                                    <span className="expiry-name">Workshop Safety Certificate</span>
-                                    <span className="expiry-date">Expires in 12 days</span>
+                            <div className="vendor-expiry-items">
+                                <div className="vendor-expiry-item critical">
+                                    <span className="vendor-expiry-name">Workshop Safety Certificate</span>
+                                    <span className="vendor-expiry-date">Expires in 12 days</span>
                                 </div>
-                                <div className="expiry-item warning">
-                                    <span className="expiry-name">GST Certificate</span>
-                                    <span className="expiry-date">Expires in 80 days</span>
+                                <div className="vendor-expiry-item warning">
+                                    <span className="vendor-expiry-name">GST Certificate</span>
+                                    <span className="vendor-expiry-date">Expires in 80 days</span>
                                 </div>
-                                <div className="expiry-item info">
-                                    <span className="expiry-name">Business Registration</span>
-                                    <span className="expiry-date">Valid for 2 years</span>
+                                <div className="vendor-expiry-item info">
+                                    <span className="vendor-expiry-name">Business Registration</span>
+                                    <span className="vendor-expiry-date">Valid for 2 years</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Professional Certifications */}
-                        <div className="profile-card">
-                            <h2 className="card-title">Professional Certifications</h2>
+                        <div className="vendor-profile-card">
+                            <h2 className="vendor-card-title">Professional Certifications</h2>
 
-                            <div className="certifications-grid">
-                                <div className="certification-card">
-                                    <div className="cert-icon">●</div>
-                                    <h4 className="cert-name">FMSCI Scrutineer Training</h4>
-                                    <p className="cert-status">Level 2 Certified</p>
-                                    <p className="cert-date">Valid until: Dec 2025</p>
+                            <div className="vendor-certifications-grid">
+                                <div className="vendor-certification-card">
+                                    <div className="vendor-cert-icon">●</div>
+                                    <h4 className="vendor-cert-name">FMSCI Scrutineer Training</h4>
+                                    <p className="vendor-cert-status">Level 2 Certified</p>
+                                    <p className="vendor-cert-date">Valid until: Dec 2025</p>
                                 </div>
 
-                                <div className="certification-card">
-                                    <div className="cert-icon">●</div>
-                                    <h4 className="cert-name">ISO Workshop Safety</h4>
-                                    <p className="cert-status">ISO 45001:2018</p>
-                                    <p className="cert-date">Valid until: Jan 2025</p>
+                                <div className="vendor-certification-card">
+                                    <div className="vendor-cert-icon">●</div>
+                                    <h4 className="vendor-cert-name">ISO Workshop Safety</h4>
+                                    <p className="vendor-cert-status">ISO 45001:2018</p>
+                                    <p className="vendor-cert-date">Valid until: Jan 2025</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Marketplace Activity */}
-                        <div className="profile-card">
-                            <h2 className="card-title">Marketplace Activity</h2>
+                        <div className="vendor-profile-card">
+                            <h2 className="vendor-card-title">Marketplace Activity</h2>
 
-                            <div className="activity-stats">
-                                <div className="activity-stat">
-                                    <span className="stat-number">7</span>
-                                    <span className="stat-name">Pending Inquiries</span>
+                            <div className="vendor-activity-stats">
+                                <div className="vendor-activity-stat">
+                                    <span className="vendor-stat-number">7</span>
+                                    <span className="vendor-stat-name">Pending Inquiries</span>
                                 </div>
-                                <div className="activity-stat">
-                                    <span className="stat-number">3</span>
-                                    <span className="stat-name">Open Chats</span>
+                                <div className="vendor-activity-stat">
+                                    <span className="vendor-stat-number">3</span>
+                                    <span className="vendor-stat-name">Open Chats</span>
                                 </div>
-                                <div className="activity-stat">
-                                    <span className="stat-number">5</span>
-                                    <span className="stat-name">Quotes Sent</span>
+                                <div className="vendor-activity-stat">
+                                    <span className="vendor-stat-number">5</span>
+                                    <span className="vendor-stat-name">Quotes Sent</span>
                                 </div>
-                                <div className="activity-stat">
-                                    <span className="stat-number">2</span>
-                                    <span className="stat-name">Flagged Items</span>
+                                <div className="vendor-activity-stat">
+                                    <span className="vendor-stat-number">2</span>
+                                    <span className="vendor-stat-name">Flagged Items</span>
                                 </div>
                             </div>
 
-                            <button className="btn btn-primary full-width">Open Marketplace Dashboard</button>
+                            <button className="vendor-btn vendor-btn-primary vendor-full-width">Open Marketplace Dashboard</button>
                         </div>
 
                         {/* Add New Document Type */}
-                        <div className="profile-card add-document-card">
-                            <div className="add-document-content">
-                                <span className="add-icon">+</span>
-                                <h3 className="add-title">Add New Document Type</h3>
-                                <p className="add-subtitle">Upload additional compliance documents</p>
+                        <div className="vendor-profile-card vendor-add-document-card">
+                            <div className="vendor-add-document-content">
+                                <span className="vendor-add-icon">+</span>
+                                <h3 className="vendor-add-title">Add New Document Type</h3>
+                                <p className="vendor-add-subtitle">Upload additional compliance documents</p>
                             </div>
                         </div>
                     </section>
