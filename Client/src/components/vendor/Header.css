@@ -1,4 +1,4 @@
-.header {
+.vendor-header {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   padding: var(--spacing-md) 0;
@@ -8,7 +8,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.header-container {
+.vendor-header-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
@@ -19,7 +19,7 @@
 }
 
 /* Logo */
-.logo {
+.vendor-logo {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -27,7 +27,7 @@
   flex-shrink: 0;
 }
 
-.logo-icon {
+.vendor-logo-icon {
   width: 32px;
   height: 32px;
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
@@ -39,19 +39,19 @@
   font-weight: 700;
 }
 
-.logo-text {
+.vendor-logo-text {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: 1px;
 }
 
-.logo:hover {
+.vendor-logo:hover {
   opacity: 0.8;
 }
 
 /* Company name */
-.company-name {
+.vendor-company-name {
   color: var(--text-secondary);
   font-size: 13px;
   white-space: nowrap;
@@ -59,7 +59,7 @@
 }
 
 /* Navigation */
-.nav-links {
+.vendor-nav-links {
   display: flex;
   gap: var(--spacing-xl);
   flex: 1;
@@ -67,7 +67,7 @@
   align-items: center;
 }
 
-.nav-link {
+.vendor-nav-link {
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
@@ -77,22 +77,22 @@
   border-bottom: 2px solid transparent;
 }
 
-.nav-link:hover {
+.vendor-nav-link:hover {
   color: var(--blue-neon);
 }
 
-.nav-link.active {
+.vendor-nav-link.active {
   color: var(--blue-primary);
   border-bottom-color: var(--blue-primary);
 }
 
 /* Profile section */
-.profile-section {
+.vendor-profile-section {
   position: relative;
   flex-shrink: 0;
 }
 
-.profile-avatar {
+.vendor-profile-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -108,12 +108,12 @@
   font-size: 14px;
 }
 
-.profile-avatar:hover {
+.vendor-profile-avatar:hover {
   box-shadow: 0 0 20px rgba(6, 181, 212, 0.4);
   border-color: var(--blue-neon);
 }
 
-.avatar-initials {
+.vendor-avatar-initials {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -123,7 +123,7 @@
 }
 
 /* Dropdown menu */
-.dropdown-menu {
+.vendor-dropdown-menu {
   position: absolute;
   top: 100%;
   right: 0;
@@ -149,7 +149,7 @@
   }
 }
 
-.dropdown-item {
+.vendor-dropdown-item {
   display: block;
   width: 100%;
   padding: var(--spacing-md);
@@ -165,45 +165,45 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.dropdown-item:last-child {
+.vendor-dropdown-item:last-child {
   border-bottom: none;
 }
 
-.dropdown-item:hover {
+.vendor-dropdown-item:hover {
   background-color: var(--bg-secondary);
   color: var(--blue-neon);
 }
 
-.dropdown-item.logout:hover {
+.vendor-dropdown-item.logout:hover {
   color: var(--red-danger);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .company-name {
+  .vendor-company-name {
     display: none;
   }
 
-  .nav-links {
+  .vendor-nav-links {
     gap: var(--spacing-lg);
   }
 
-  .header-container {
+  .vendor-header-container {
     gap: var(--spacing-lg);
   }
 }
 
 @media (max-width: 768px) {
-  .nav-links {
+  .vendor-nav-links {
     display: none;
   }
 
-  .header-container {
+  .vendor-header-container {
     justify-content: space-between;
   }
 }
 
-.hamburger {
+.vendor-hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
@@ -213,7 +213,7 @@
   padding: 6px;
 }
 
-.hamburger span {
+.vendor-hamburger span {
   width: 26px;
   height: 3px;
   background-color: var(--text-primary);
@@ -222,24 +222,24 @@
 @media (max-width: 1024px) {
 
   /* Show hamburger */
-  .hamburger {
+  .vendor-hamburger {
     display: flex;
   }
 
   /* Group hamburger + profile on right */
-  .profile-section {
+  .vendor-profile-section {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
   /* Hide center company name */
-  .company-name {
+  .vendor-company-name {
     display: none;
   }
 
   /* Mobile dropdown menu */
-  .nav-links {
+  .vendor-nav-links {
     position: absolute;
     top: 100%;
     left: 0;
@@ -254,7 +254,7 @@
     border-top: 1px solid var(--border-color);
   }
 
-  .nav-links.show {
+  .vendor-nav-links.show {
     display: flex;
   }
 }

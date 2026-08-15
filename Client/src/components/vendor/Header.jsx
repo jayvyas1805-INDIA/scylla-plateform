@@ -36,21 +36,21 @@ const Header = ({ currentPath }) => {
   ]; 
 
   return (
-    <header className="header">
-      <div className="header-container">
+    <header className="vendor-header">
+      <div className="vendor-header-container">
 
         {/* Logo */}
-        <Link to="/" className="logo">
-          <div className="logo-icon">⚡</div>
-          <span className="logo-text">SCYLLA</span>
+        <Link to="/" className="vendor-logo">
+          <div className="vendor-logo-icon">⚡</div>
+          <span className="vendor-logo-text">SCYLLA</span>
         </Link>
 
         {/* Company Name */}
-        <div className="company-name">{vendor?.businessName}</div>
+        <div className="vendor-company-name">{vendor?.businessName}</div>
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="hamburger"
+          className="vendor-hamburger"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <span></span>
@@ -59,10 +59,10 @@ const Header = ({ currentPath }) => {
         </button>
 
         {/* Navigation */}
-        <nav className={`nav-links ${mobileMenuOpen ? "show" : ""}`}>
+        <nav className={`vendor-nav-links ${mobileMenuOpen ? "show" : ""}`}>
           <Link
             to="/vendor/home"
-            className={`nav-link ${currentPath === '/' ? 'active' : ''}`}
+            className={`vendor-nav-link ${currentPath === '/' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Home
@@ -70,7 +70,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/profile"
-            className={`nav-link ${currentPath === '/vendor-profile' ? 'active' : ''}`}
+            className={`vendor-nav-link ${currentPath === '/vendor-profile' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Vendor Profile
@@ -78,7 +78,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/product"
-            className={`nav-link ${currentPath === '/product-listing' ? 'active' : ''}`}
+            className={`vendor-nav-link ${currentPath === '/product-listing' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Product / Service Listing
@@ -86,7 +86,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/quote"
-            className={`nav-link ${currentPath === '/quotes-inquiries' ? 'active' : ''}`}
+            className={`vendor-nav-link ${currentPath === '/quotes-inquiries' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Quotes & Inquiries
@@ -94,26 +94,26 @@ const Header = ({ currentPath }) => {
         </nav>
 
         {/* Profile Dropdown */}
-        <div className="profile-section">
+        <div className="vendor-profile-section">
           <button
-            className="profile-avatar"
+            className="vendor-profile-avatar"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <img className="avatar-initials" src={vendor?.logo} alt="logo" />
+            <img className="vendor-avatar-initials" src={vendor?.logo} alt="logo" />
           </button>
 
           {isDropdownOpen && (
-            <div className="dropdown-menu">
+            <div className="vendor-dropdown-menu">
               <Link
                 to="/vendor/myProfile"
-                className="dropdown-item"
+                className="vendor-dropdown-item"
                 onClick={() => setIsDropdownOpen(false)}
               >
                 My Profile
               </Link>
 
               <button
-                className="dropdown-item logout"
+                className="vendor-dropdown-item logout"
                 onClick={() => {
                   handleLogout();
                   localStorage.removeItem("token");
