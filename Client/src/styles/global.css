@@ -52,6 +52,29 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Spacing scale — referenced across Vendor + Messages screens */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Transition tokens */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+
+  /* Status / accent aliases used across Vendor quote & message screens */
+  --text-tertiary: var(--neutral-600);
+  --blue-neon: var(--primary);
+  --blue-primary: var(--primary);
+  --blue-dark: var(--primary-dark);
+  --green-success: var(--tertiary);
+  --orange-pending: var(--quinary);
+  --red-danger: var(--danger);
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 @keyframes neon-glow {

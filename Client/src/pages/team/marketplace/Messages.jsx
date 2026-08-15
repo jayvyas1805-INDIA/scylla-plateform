@@ -98,6 +98,7 @@ const Messages = () => {
     },
   ]);
 
+  // Full detail record — kept for the one inquiry with rich sample data.
   const [inquiryDetails] = useState({
     'scylla-racing': {
       name: 'Scylla Racing',
@@ -125,16 +126,64 @@ const Messages = () => {
     },
   });
 
+  // Editable copy of every thread's messages, seeded once so sending a
+  // reply actually appends to the conversation instead of just logging.
+  const [threads, setThreads] = useState(() => {
+    const seeded = {};
+    inquiries.forEach((inq) => {
+      seeded[inq.id] = inquiryDetails[inq.id]?.messages || [
+        { sender: inq.name, time: inq.timestamp, text: inq.message },
+      ];
+    });
+    return seeded;
+  });
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All Inquiries');
 
-  const current = inquiryDetails[selectedInquiry];
+  const filteredInquiries = inquiries.filter((inquiry) => {
+    const matchesSearch =
+      !searchTerm.trim() ||
+      inquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      inquiry.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterStatus === 'All Inquiries' || inquiry.status === filterStatus;
+    return matchesSearch && matchesFilter;
+  });
+
+  // Falls back to sensible placeholder details for inquiries that don't
+  // have the full hand-authored record, so every inquiry is clickable
+  // instead of only "Scylla Racing" rendering content.
+  const selectedInquiryMeta = inquiries.find((i) => i.id === selectedInquiry);
+  const current = inquiryDetails[selectedInquiry] || (selectedInquiryMeta && {
+    name: selectedInquiryMeta.name,
+    avatar: selectedInquiryMeta.avatar,
+    status: selectedInquiryMeta.status,
+    received: selectedInquiryMeta.timestamp,
+    requestDetails: {
+      categoryNeeded: selectedInquiryMeta.category,
+      expectedLeadTime: 'Not specified yet',
+    },
+    specifications: 'No specifications provided yet.',
+    description: selectedInquiryMeta.message,
+    specialInstructions: 'None provided.',
+    attachments: [],
+  });
 
   const handleSendMessage = () => {
-    if (messageInput.trim()) {
-      console.log('Message sent:', messageInput);
-      setMessageInput('');
-    }
+    if (!messageInput.trim() || !selectedInquiry) return;
+
+    const newMessage = {
+      sender: 'You',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: messageInput.trim(),
+    };
+
+    setThreads((prev) => ({
+      ...prev,
+      [selectedInquiry]: [...(prev[selectedInquiry] || []), newMessage],
+    }));
+    setMessageInput('');
   };
 
   return (
@@ -181,28 +230,32 @@ const Messages = () => {
 
             {/* Inquiries List */}
             <div className="inquiries-list">
-              {inquiries.map((inquiry) => (
-                <div
-                  key={inquiry.id}
-                  className={`inquiry-item ${selectedInquiry === inquiry.id ? 'active' : ''} ${
-                    inquiry.isUnread ? 'unread' : ''
-                  }`}
-                  onClick={() => setSelectedInquiry(inquiry.id)}
-                >
-                  <div className="inquiry-avatar">{inquiry.avatar}</div>
-                  <div className="inquiry-content">
-                    <div className="inquiry-header">
-                      <h3 className="inquiry-name">{inquiry.name}</h3>
-                      <span className={`inquiry-badge badge-${inquiry.status.toLowerCase()}`}>
-                        {inquiry.status}
-                      </span>
+              {filteredInquiries.length > 0 ? (
+                filteredInquiries.map((inquiry) => (
+                  <div
+                    key={inquiry.id}
+                    className={`inquiry-item ${selectedInquiry === inquiry.id ? 'active' : ''} ${
+                      inquiry.isUnread ? 'unread' : ''
+                    }`}
+                    onClick={() => setSelectedInquiry(inquiry.id)}
+                  >
+                    <div className="inquiry-avatar">{inquiry.avatar}</div>
+                    <div className="inquiry-content">
+                      <div className="inquiry-header">
+                        <h3 className="inquiry-name">{inquiry.name}</h3>
+                        <span className={`inquiry-badge badge-${inquiry.status.toLowerCase()}`}>
+                          {inquiry.status}
+                        </span>
+                      </div>
+                      <p className="inquiry-category">{inquiry.category}</p>
+                      <p className="inquiry-message">{inquiry.message}</p>
+                      <p className="inquiry-time">{inquiry.timestamp}</p>
                     </div>
-                    <p className="inquiry-category">{inquiry.category}</p>
-                    <p className="inquiry-message">{inquiry.message}</p>
-                    <p className="inquiry-time">{inquiry.timestamp}</p>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="inquiries-empty">No inquiries match your search.</p>
+              )}
             </div>
           </aside>
 
@@ -258,25 +311,27 @@ const Messages = () => {
                 </div>
 
                 {/* Attachments Card */}
-                <div className="details-card attachments-card">
-                  <h3 className="card-title">Attachments</h3>
-                  <div className="attachments-grid">
-                    {current.attachments.map((attachment, index) => (
-                      <div key={index} className="attachment-item">
-                        <div className="attachment-icon">
-                          {attachment.type === 'pdf' && '📄'}
-                          {attachment.type === 'image' && '🖼️'}
-                          {attachment.type === 'document' && '📋'}
+                {current.attachments && current.attachments.length > 0 && (
+                  <div className="details-card attachments-card">
+                    <h3 className="card-title">Attachments</h3>
+                    <div className="attachments-grid">
+                      {current.attachments.map((attachment, index) => (
+                        <div key={index} className="attachment-item">
+                          <div className="attachment-icon">
+                            {attachment.type === 'pdf' && '📄'}
+                            {attachment.type === 'image' && '🖼️'}
+                            {attachment.type === 'document' && '📋'}
+                          </div>
+                          <div className="attachment-info">
+                            <p className="attachment-name">{attachment.name}</p>
+                            <p className="attachment-size">{attachment.size}</p>
+                          </div>
+                          <button className="attachment-download">Download</button>
                         </div>
-                        <div className="attachment-info">
-                          <p className="attachment-name">{attachment.name}</p>
-                          <p className="attachment-size">{attachment.size}</p>
-                        </div>
-                        <button className="attachment-download">Download</button>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="action-buttons">
@@ -303,7 +358,7 @@ const Messages = () => {
 
                 {/* Messages Thread */}
                 <div className="messages-container">
-                  {current.messages.map((msg, index) => (
+                  {(threads[selectedInquiry] || []).map((msg, index) => (
                     <div key={index} className={`message ${msg.sender === 'You' ? 'outgoing' : 'incoming'}`}>
                       {msg.sender !== 'You' && (
                         <div className="message-avatar">{current.avatar}</div>

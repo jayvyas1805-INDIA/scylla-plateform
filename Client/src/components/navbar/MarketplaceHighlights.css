@@ -42,6 +42,29 @@
   gap: 20px;
 }
 
+.land-marketplace-loading,
+.land-marketplace-empty {
+  text-align: center;
+  color: #6b6b6b;
+  font-size: 14px;
+  padding: 40px 0;
+}
+
+.land-description-toggle {
+  background: none;
+  border: none;
+  color: #6699ff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.land-description-toggle:hover {
+  text-decoration: underline;
+}
+
 .land-product-card {
   background-color: #1a1a1a;
   color: #ffffff;

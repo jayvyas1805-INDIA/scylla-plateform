@@ -122,6 +122,13 @@ const Marketplace = () => {
         <div className="marketplace-container">
             <NavBar />
 
+            <div className="marketplace-header">
+                <h1 className="marketplace-title">Marketplace</h1>
+                <p className="marketplace-subtitle">
+                    Browse parts, gear, and equipment listed by teams and vendors
+                </p>
+            </div>
+
             <div className="marketplace-main">
 
                 <div className="marketplace-controls">

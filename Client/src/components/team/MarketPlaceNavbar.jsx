@@ -15,7 +15,7 @@ const NavBar = () => {
         <div className="navbar-links navbar-links-centered">
           <Link
             to="/team/marketplace"
-            className={`navbar-link ${location.pathname === '/' ? 'active' : ''}`}
+            className={`navbar-link ${location.pathname === '/team/marketplace' ? 'active' : ''}`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M13 21H3v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2M16 5a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
@@ -25,7 +25,7 @@ const NavBar = () => {
 
           <Link
             to="/team/messages"
-            className={`navbar-link ${location.pathname === '/messages' ? 'active' : ''}`}
+            className={`navbar-link ${location.pathname === '/team/messages' ? 'active' : ''}`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -53,7 +53,7 @@ const NavBar = () => {
           <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
             <Link
               to="/team/marketplace"
-              className={`mobile-menu-link ${location.pathname === '/' ? 'active' : ''}`}
+              className={`mobile-menu-link ${location.pathname === '/team/marketplace' ? 'active' : ''}`}
               onClick={closeMenu}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -64,7 +64,7 @@ const NavBar = () => {
 
             <Link
               to="/team/messages"
-              className={`mobile-menu-link ${location.pathname === '/messages' ? 'active' : ''}`}
+              className={`mobile-menu-link ${location.pathname === '/team/messages' ? 'active' : ''}`}
               onClick={closeMenu}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

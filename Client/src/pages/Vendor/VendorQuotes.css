@@ -125,6 +125,13 @@
   gap: var(--spacing-sm);
 }
 
+.inquiries-empty {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
 .inquiry-item {
   display: flex;
   gap: var(--spacing-md);
