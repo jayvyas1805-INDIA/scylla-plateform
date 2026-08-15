@@ -1,13 +1,13 @@
-.marketplace-highlights {
+.land-marketplace-highlights {
   background-color: #f5f5f5;
   padding: 60px 20px;
 }
 
-.marketplace-highlights .section-title {
+.land-marketplace-highlights .land-section-title {
   color: #1a1a1a;
 }
 
-.marketplace-header {
+.land-marketplace-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,11 +16,11 @@
   gap: 20px;
 }
 
-.marketplace-header .section-title {
+.land-marketplace-header .land-section-title {
   margin: 0;
 }
 
-.explore-link {
+.land-explore-link {
   color: #ff4444;
   text-decoration: none;
   font-size: 14px;
@@ -31,18 +31,18 @@
   gap: 4px;
 }
 
-.explore-link:hover {
+.land-explore-link:hover {
   color: #cc3333;
   transform: translateX(4px);
 }
 
-.products-grid {
+.land-products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.product-card {
+.land-product-card {
   background-color: #1a1a1a;
   color: #ffffff;
   border-radius: 8px;
@@ -53,41 +53,41 @@
   flex-direction: column;
 }
 
-.product-card:hover {
+.land-product-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid #3366ff;
 }
 
-.product-image-wrapper {
+.land-product-image-wrapper {
   width: 100%;
   height: 200px;
   overflow: hidden;
 }
 
-.product-image {
+.land-product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.product-card:hover .product-image {
+.land-product-card:hover .land-product-image {
   transform: scale(1.05);
 }
 
-.product-content {
+.land-product-content {
   padding: 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.product-header {
+.land-product-header {
   margin-bottom: 12px;
 }
 
-.product-icon {
+.land-product-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -99,21 +99,21 @@
   font-weight: 700;
 }
 
-.product-title {
+.land-product-title {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 8px;
   color: #ffffff;
 }
 
-.product-description {
+.land-product-description {
   font-size: 13px;
   color: #bbbbbb;
   margin-bottom: 16px;
   flex: 1;
 }
 
-.view-products-btn {
+.land-view-products-btn {
   background-color: #3366ff;
   color: #ffffff;
   border: none;
@@ -127,73 +127,73 @@
   margin-top: auto;
 }
 
-.view-products-btn:hover {
+.land-view-products-btn:hover {
   background-color: #254fbf;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(51, 102, 255, 0.3);
 }
 
-.view-products-btn:active {
+.land-view-products-btn:active {
   transform: translateY(0);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .products-grid {
+  .land-products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .marketplace-highlights {
+  .land-marketplace-highlights {
     padding: 40px 20px;
   }
 
-  .marketplace-header {
+  .land-marketplace-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .products-grid {
+  .land-products-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  .product-image-wrapper {
+  .land-product-image-wrapper {
     height: 180px;
   }
 
-  .product-content {
+  .land-product-content {
     padding: 16px;
   }
 
-  .product-title {
+  .land-product-title {
     font-size: 15px;
   }
 }
 
 @media (max-width: 480px) {
-  .marketplace-highlights {
+  .land-marketplace-highlights {
     padding: 30px 16px;
   }
 
-  .marketplace-header {
+  .land-marketplace-header {
     gap: 12px;
   }
 
-  .explore-link {
+  .land-explore-link {
     font-size: 12px;
   }
 
-  .product-image-wrapper {
+  .land-product-image-wrapper {
     height: 150px;
   }
 
-  .product-title {
+  .land-product-title {
     font-size: 14px;
   }
 
-  .product-description {
+  .land-product-description {
     font-size: 12px;
   }
 }

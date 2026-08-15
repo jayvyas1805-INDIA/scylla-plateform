@@ -7,7 +7,10 @@ const MediaGallery = ({ mediaItems, onAddClick, onDelete }) => {
   return (
     <section className="content-section">
       <div className="section-header">
-        <h2 className="section-title">Media Gallery</h2>
+        <div className="section-title-wrap">
+          <span className="section-icon-badge" style={{ '--badge-color': 'var(--senary)' }}>📸</span>
+          <h2 className="section-title">Media Gallery</h2>
+        </div>
         <button className="add-btn" onClick={onAddClick}>
           + Add Media
         </button>
@@ -18,7 +21,6 @@ const MediaGallery = ({ mediaItems, onAddClick, onDelete }) => {
           <div
             key={item.id}
             className="media-item"
-            style={{ position: 'relative' }}
             onMouseEnter={() => setHoveredId(item.id)}
             onMouseLeave={() => setHoveredId(null)}
           >
@@ -28,26 +30,9 @@ const MediaGallery = ({ mediaItems, onAddClick, onDelete }) => {
             </div>
             {hoveredId === item.id && (
               <button
-                className="delete-btn"
+                className="delete-btn card-delete-btn"
                 onClick={() => onDelete(item.id)}
                 aria-label="Delete media"
-                style={{
-                  position: 'absolute',
-                  top: '8px',
-                  right: '8px',
-                  background: '#ff6b6b',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  zIndex: 10
-                }}
               >
                 ✕
               </button>

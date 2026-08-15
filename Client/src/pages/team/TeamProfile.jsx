@@ -262,6 +262,12 @@ useEffect(() => {
       <TeamHeader
         teamData={teamData}
         onEditClick={() => handleOpenModal('team-description')}
+        stats={{
+          achievements: achievements?.length || 0,
+          sponsors: sponsors?.length || 0,
+          media: mediaItems?.length || 0,
+          socials: socialLinks?.length || 0,
+        }}
       />
 
       <TeamDescription

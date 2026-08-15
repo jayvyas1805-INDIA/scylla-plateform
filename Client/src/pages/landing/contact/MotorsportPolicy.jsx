@@ -129,28 +129,28 @@ export default function MotorsportPolicy() {
   return (
     <div className="container">
       {/* Policy Header */}
-      <section className="policy-header">
-        <div className="policy-header-content">
-          <div className="policy-icon">🏁</div>
-          <h1 className="policy-title">Motorsports Rules & Regulations</h1>
-          <p className="policy-subtitle">Essential guidelines for safe and fair racing competition</p>
+      <section className="land-policy-header">
+        <div className="land-policy-header-content">
+          <div className="land-policy-icon">🏁</div>
+          <h1 className="land-policy-title">Motorsports Rules & Regulations</h1>
+          <p className="land-policy-subtitle">Essential guidelines for safe and fair racing competition</p>
         </div>
       </section>
 
       {/* Rules Content */}
-      <section className="rules-section">
-        <div className="rules-content">
+      <section className="land-rules-section">
+        <div className="land-rules-content">
           {rules.map((ruleGroup, index) => (
-            <div key={index} className="rule-group">
-              <div className="rule-group-header">
-                <div className="rule-group-icon">{ruleGroup.icon}</div>
-                <h2 className="rule-group-title">{ruleGroup.category}</h2>
+            <div key={index} className="land-rule-group">
+              <div className="land-rule-group-header">
+                <div className="land-rule-group-icon">{ruleGroup.icon}</div>
+                <h2 className="land-rule-group-title">{ruleGroup.category}</h2>
               </div>
-              <ul className="rule-items">
+              <ul className="land-rule-items">
                 {ruleGroup.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="rule-item">
-                    <span className="rule-checkmark">✓</span>
-                    <span className="rule-text">{item}</span>
+                  <li key={itemIndex} className="land-rule-item">
+                    <span className="land-rule-checkmark">✓</span>
+                    <span className="land-rule-text">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -160,15 +160,15 @@ export default function MotorsportPolicy() {
       </section>
 
       {/* Important Notice */}
-      <section className="policy-notice">
-        <div className="notice-card">
-          <div className="notice-icon">⚠️</div>
-          <div className="notice-content">
-            <h3 className="notice-title">Important Notice</h3>
-            <p className="notice-text">
+      <section className="land-policy-notice">
+        <div className="land-notice-card">
+          <div className="land-notice-icon">⚠️</div>
+          <div className="land-notice-content">
+            <h3 className="land-notice-title">Important Notice</h3>
+            <p className="land-notice-text">
               These are the basic rules and regulations for motorsports competitions. Specific events may have additional rules and requirements. All participants must review the detailed race regulations provided by the event organizers and comply with all local, state, and international motorsports regulations. Failure to follow these rules may result in penalties, disqualification, or suspension from future events.
             </p>
-            <p className="notice-text">
+            <p className="land-notice-text">
               For complete and up-to-date regulations, please contact the event organizers or your racing federation. The platform is not responsible for rule enforcement; that responsibility lies with the event officials and sanctioning bodies.
             </p>
           </div>
@@ -176,13 +176,13 @@ export default function MotorsportPolicy() {
       </section>
 
       {/* Contact Section */}
-      <section className="policy-contact">
-        <div className="contact-card">
-          <h2 className="contact-title">Questions About the Rules?</h2>
-          <p className="contact-subtitle">Contact us for clarification on specific regulations</p>
-          <div className="contact-buttons">
+      <section className="land-policy-contact">
+        <div className="land-contact-card">
+          <h2 className="land-contact-title">Questions About the Rules?</h2>
+          <p className="land-contact-subtitle">Contact us for clarification on specific regulations</p>
+          <div className="land-contact-buttons">
             <button
-              className="btn btn-primary"
+              className="land-btn land-btn-primary"
               onClick={() => {
                 navigate('/');
                 setTimeout(() => {
@@ -193,7 +193,7 @@ export default function MotorsportPolicy() {
               Submit an Inquiry
             </button>
             <button
-              className="btn btn-secondary"
+              className="land-btn land-btn-secondary"
               onClick={() => navigate('/')}
             >
               ← Back to Home

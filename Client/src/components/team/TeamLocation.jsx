@@ -3,58 +3,52 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 
-const TeamLocation = ({ teamData,onEditClick }) => {
-  const locations = [
-    { icon: '🏢', name: 'MIT Motorsports Lab' },
-    { icon: '📍', name: 'Kote road' },
-    { icon: '🏙️', name: 'Pune' },
-    { icon: '🇮🇳', name: 'India' }
-  ];
-
-  // const lat = teamData?.location?.lat || 23.0225; // default to Ahmedabad if not provided
-  // const lng = teamData?.location?.lng || 72.5714;
+const TeamLocation = ({ teamData, onEditClick }) => {
+  const hasCoords = teamData?.location?.lat && teamData?.location?.lng;
 
   return (
     <section className="content-section">
       <div className="section-header">
-        <h2 className="section-title">Team Location</h2>
+        <div className="section-title-wrap">
+          <span className="section-icon-badge" style={{ '--badge-color': 'var(--tertiary)' }}>📍</span>
+          <h2 className="section-title">Team Location</h2>
+        </div>
         <button className="edit-icon-btn" onClick={onEditClick} aria-label="Edit team location">
           ✏️
         </button>
       </div>
-      
+
       <div className="location-content">
         <div className="location-list">
           <h3 className="location-title">Headquarters</h3>
           <div className="location-items">
-            
-                
-                <span className="location-name">{teamData?.location?.address}</span>
+            <div className="location-item">
+              <span className="location-icon">📍</span>
+              <span className="location-name">
+                {teamData?.location?.address || "No address added yet"}
+              </span>
+            </div>
           </div>
         </div>
 
-         <div className="location-map">
-          <div className="map-placeholder">
-          {/* 🔹 Replace placeholder with Leaflet map */}
-          {/* <MapContainer
-            center={[teamData?.location?.lat, teamData?.location?.lng]}
-            zoom={15}
-            style={{ height: '250px', width: '100%', borderRadius: '8px' }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[teamData?.location?.lat, teamData?.location?.lng]} />
-          </MapContainer> */}
-          {teamData?.location?.lat && (
-                 <MapContainer
-                    center={[teamData?.location.lat, teamData?.location.lng]}
-                     zoom={13}
-                    style={{height: '100%', width: '100%', borderRadius: '8px' }}
-                   >
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                     <Marker position={[teamData?.location.lat, teamData?.location.lng]} />
-                   </MapContainer>
-                 )}
-                 </div>
+        <div className="location-map">
+          <div className={`map-placeholder${hasCoords ? ' has-map' : ''}`}>
+            {hasCoords ? (
+              <MapContainer
+                center={[teamData.location.lat, teamData.location.lng]}
+                zoom={13}
+                style={{ height: '100%', width: '100%', borderRadius: '10px' }}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <Marker position={[teamData.location.lat, teamData.location.lng]} />
+              </MapContainer>
+            ) : (
+              <>
+                <span className="map-text">🗺️</span>
+                <p className="map-subtitle">Add coordinates to show your location on the map</p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </section>

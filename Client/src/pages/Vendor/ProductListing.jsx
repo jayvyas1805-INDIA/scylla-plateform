@@ -4,7 +4,7 @@ import Header from '../../components/vendor/Header';
 import AddProductForm from "./AddProductForm";
 import { getMarketPlace, addProduct } from '../../api/product.api';
 // import '../../index.css'
-import '../../../globle.css'
+// import '../../../globle.css'
 import './ProductListing.css';
 import '../../styles/product-card.css';
 import { useNavigate } from 'react-router-dom';

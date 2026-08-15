@@ -14,7 +14,10 @@ const AchievementsSection = ({ achievements, onAddClick, onDelete }) => {
   return (
     <section className="content-section">
       <div className="section-header">
-        <h2 className="section-title">Achievements & Awards</h2>
+        <div className="section-title-wrap">
+          <span className="section-icon-badge" style={{ '--badge-color': 'var(--quinary)' }}>🏆</span>
+          <h2 className="section-title">Achievements & Awards</h2>
+        </div>
         <button className="add-btn" onClick={onAddClick}>
           + Add Achievement
         </button>
@@ -41,7 +44,6 @@ const AchievementsSection = ({ achievements, onAddClick, onDelete }) => {
                 className="delete-btn"
                 onClick={() => onDelete(achievement.id)}
                 aria-label="Delete achievement"
-                style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', fontSize: '1.2rem', padding: '0.5rem' }}
               >
                 ✕
               </button>

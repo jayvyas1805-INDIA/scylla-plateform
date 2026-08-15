@@ -18,7 +18,10 @@ const ConnectWithUs = ({ socialLinks = [], onAddClick, onDelete }) => {
   return (
     <section className="content-section">
       <div className="section-header">
-        <h2 className="section-title">Connect With Us</h2>
+        <div className="section-title-wrap">
+          <span className="section-icon-badge" style={{ '--badge-color': 'var(--quaternary)' }}>🔗</span>
+          <h2 className="section-title">Connect With Us</h2>
+        </div>
         <button className="add-btn" onClick={onAddClick} aria-label="Add social link">
           + Add Link
         </button>
@@ -29,42 +32,27 @@ const ConnectWithUs = ({ socialLinks = [], onAddClick, onDelete }) => {
           <div
             key={social.id}
             className="social-link-card"
-            style={{ position: 'relative' }}
             title={social.platform}
             onMouseEnter={() => setHoveredId(social.id)}
             onMouseLeave={() => setHoveredId(null)}
           >
             {hoveredId === social.id && (
               <button
-                className="delete-btn"
+                className="delete-btn card-delete-btn"
                 onClick={() => onDelete(social.id)}
                 aria-label="Delete social link"
-                style={{
-                  position: 'absolute',
-                  top: '-8px',
-                  right: '-8px',
-                  background: '#ff6b6b',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
               >
                 ✕
               </button>
             )}
             <div className="social-icon-wrapper">
-              <span style={{ fontSize: '1.5rem' }}>{getPlatformIcon(social.platform)}</span>
+              <span>{getPlatformIcon(social.platform)}</span>
             </div>
             <div className="social-info">
               <p className="social-platform">{social.platform}</p>
-              <a href={social.url} target="_blank" rel="noopener noreferrer">{social.handle}</a>
+              <a className="social-handle" href={social.url} target="_blank" rel="noopener noreferrer">
+                {social.handle}
+              </a>
             </div>
           </div>
         ))}

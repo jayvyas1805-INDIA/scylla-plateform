@@ -18,31 +18,14 @@ const SponsorsSection = ({ sponsors = [], onUploadClick, onDelete }) => {
           <div
             key={sponsor._id}
             className="sponsor-card-new"
-            style={{ position: 'relative' }}
             onMouseEnter={() => setHoveredId(sponsor.id)}
             onMouseLeave={() => setHoveredId(null)}
           >
             {hoveredId === sponsor.id && (
               <button
-                className="delete-btn"
+                className="delete-btn card-delete-btn"
                 onClick={() => onDelete(sponsor.id)}
                 aria-label="Delete sponsor"
-                style={{
-                  position: 'absolute',
-                  top: '-8px',
-                  right: '-8px',
-                  background: '#ff6b6b',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
               >
                 ✕
               </button>

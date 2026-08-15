@@ -24,15 +24,16 @@
 
 .modal-content {
   background: var(--card-bg);
-  border: 2px solid var(--neon-blue);
-  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 128, 255, 0.35);
+  border-radius: var(--radius-lg);
   padding: 2rem;
   max-width: 500px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 128, 255, 0.15);
   animation: slideUp 0.3s ease;
 }
 

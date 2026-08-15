@@ -33,21 +33,21 @@ function TopRiders() {
   ];
 
   return (
-    <section className="top-riders">
-      <div className="container">
-        <h2 className="section-title">Top Riders</h2>
+    <section className="land-top-riders">
+      <div className="land-container">
+        <h2 className="land-section-title">Top Riders</h2>
 
-        <div className="riders-grid">
+        <div className="land-riders-grid">
           {riders.map((rider) => (
-            <div key={rider.id} className="rider-card">
-              <div className="rider-avatar">
+            <div key={rider.id} className="land-rider-card">
+              <div className="land-rider-avatar">
                 <img src={rider.avatar} alt={rider.name} />
               </div>
-              <h3 className="rider-name">{rider.name}</h3>
-              <p className="rider-team">{rider.team}</p>
-              <div className="rider-badges">
-                <span className="badge badge-gold">★</span>
-                <span className="badge badge-blue">★</span>
+              <h3 className="land-rider-name">{rider.name}</h3>
+              <p className="land-rider-team">{rider.team}</p>
+              <div className="land-rider-badges">
+                <span className="land-badge land-badge-gold">★</span>
+                <span className="land-badge land-badge-blue">★</span>
               </div>
             </div>
           ))}

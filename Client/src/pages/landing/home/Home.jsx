@@ -12,7 +12,7 @@ function Home() {
     <div className="home-page">
       <Navbar />
       <HeroSection />
-      {/* <UpcomingEvents /> */}
+      <UpcomingEvents />
       <TopRiders />
       <FeaturedTeams />
       <EventsNotification />

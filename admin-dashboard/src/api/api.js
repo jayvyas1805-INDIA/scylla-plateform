@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL : import.meta.env.VITE_backend_url, //change the backend url when you deploy
+    baseURL : import.meta.env.VITE_backend_url || "http://localhost:5000", //change the backend url when you deploy
     withCredentials: true,
 
 })

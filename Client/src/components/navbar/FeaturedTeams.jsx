@@ -83,16 +83,16 @@ function FeaturedTeams() {
   if (teams.length === 0) return null;
 
   return (
-    <section className="featured-teams">
-      <div className="container">
-        <h2 className="section-title">Featured Teams</h2>
+    <section className="land-featured-teams">
+      <div className="land-container">
+        <h2 className="land-section-title">Featured Teams</h2>
 
-        <div className="teams-grid">
+        <div className="land-teams-grid">
           {teams.map((team) => (
-            <div key={team._id} className="team-card">
+            <div key={team._id} className="land-team-card">
 
               {/* TEAM LOGO */}
-              <div className="team-icon">
+              <div className="land-team-icon">
                 {team.logo ? (
                   <img
                     src={team.logo}
@@ -101,17 +101,17 @@ function FeaturedTeams() {
                   />
 
                 ) : (
-                  <span className="team-placeholder">🏁</span>
+                  <span className="land-team-placeholder">🏁</span>
                 )}
               </div>
 
-              <h3 className="team-name">{team.name}</h3>
+              <h3 className="land-team-name">{team.name}</h3>
 
-              <p className="team-category">
+              <p className="land-team-category">
                 {team.tagline || team.location}
               </p>
 
-              <button className="view-team-btn">
+              <button className="land-view-team-btn">
                 View Team Page
               </button>
             </div>

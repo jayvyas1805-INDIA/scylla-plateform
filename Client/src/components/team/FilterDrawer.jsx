@@ -75,6 +75,7 @@ const FilterDrawer = ({ isOpen, onClose, filters, setFilters, filterOptions }) =
 
         <div className="filter-content">
           <input
+            className="price-slider"
             type="range"
             min="0"
             max={maxPrice}
@@ -100,6 +101,7 @@ const FilterDrawer = ({ isOpen, onClose, filters, setFilters, filterOptions }) =
               {conditions.map(condition => (
                 <label key={condition} className="filter-option">
                   <input
+                    className="filter-checkbox"
                     type="checkbox"
                     checked={filters.conditions.includes(condition)}
                     onChange={() =>
@@ -111,7 +113,7 @@ const FilterDrawer = ({ isOpen, onClose, filters, setFilters, filterOptions }) =
                       }))
                     }
                   />
-                  <span>{condition.toUpperCase()}</span>
+                  <span className="filter-label">{condition.toUpperCase()}</span>
                 </label>
               ))}
 
@@ -125,11 +127,12 @@ const FilterDrawer = ({ isOpen, onClose, filters, setFilters, filterOptions }) =
               {categories.map(category => (
                 <label key={category} className="filter-option">
                   <input
+                    className="filter-checkbox"
                     type="checkbox"
                     checked={filters.categories.includes(category)}
                     onChange={() => handleCategoryChange(category)}
                   />
-                  <span>{category}</span>
+                  <span className="filter-label">{category}</span>
                 </label>
               ))}
 

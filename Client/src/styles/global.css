@@ -41,6 +41,22 @@
   --shadow-lg: 0 10px 32px rgba(0, 128, 255, 0.2);
   --glow-sm: 0 0 10px rgba(0, 128, 255, 0.3);
   --glow-md: 0 0 20px rgba(0, 128, 255, 0.4);
+
+  /* Aliases used across the Team module — kept in sync with the palette
+     above so every card/modal/button shares one source of truth. */
+  --neon-blue: var(--primary);
+  --hover-accent: var(--tertiary);
+  --card-bg: rgba(15, 21, 53, 0.65);
+  --danger: #ff5c5c;
+  --danger-light: rgba(255, 92, 92, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+@keyframes neon-glow {
+  0%, 100% { text-shadow: 0 0 8px rgba(0, 128, 255, 0.35); }
+  50% { text-shadow: 0 0 16px rgba(0, 128, 255, 0.65), 0 0 2px rgba(255, 255, 255, 0.3); }
 }
 
 body {

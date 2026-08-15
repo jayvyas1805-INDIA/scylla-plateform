@@ -24,17 +24,17 @@ function Navbar() {
   }, [location.pathname]);
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-logo">
-          <span className="logo-text">SCYLLA</span>
+    <nav className="land-navbar">
+      <div className="land-navbar-container">
+        <div className="land-navbar-logo">
+          <span className="land-logo-text">SCYLLA</span>
         </div>
 
-        <ul className="nav-menu">
-          <li className="nav-item">
+        <ul className="land-nav-menu">
+          <li className="land-nav-item">
             <NavLink
               to="/"
-              className={`nav-link ${activeNav === "home" ? "active" : ""}`}
+              className={`land-nav-link ${activeNav === "home" ? "active" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/");
@@ -44,10 +44,10 @@ function Navbar() {
             </NavLink>
           </li>
 
-          <li className="nav-item">
+          <li className="land-nav-item">
             <NavLink
               to="/about"
-              className={`nav-link ${activeNav === "about" ? "active" : ""}`}
+              className={`land-nav-link ${activeNav === "about" ? "active" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/about");
@@ -57,10 +57,10 @@ function Navbar() {
             </NavLink>
           </li>
 
-          <li className="nav-item">
+          <li className="land-nav-item">
             <NavLink
               to="/teams"
-              className={`nav-link ${activeNav === "contact" ? "active" : ""}`}
+              className={`land-nav-link ${activeNav === "contact" ? "active" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/teams");
@@ -70,10 +70,10 @@ function Navbar() {
             </NavLink>
           </li>
 
-          <li className="nav-item">
+          <li className="land-nav-item">
             <NavLink
               to="/vendor"
-              className={`nav-link ${activeNav === "events" ? "active" : ""}`}
+              className={`land-nav-link ${activeNav === "events" ? "active" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/vendor");
@@ -83,10 +83,10 @@ function Navbar() {
             </NavLink>
           </li>
 
-          <li className="nav-item">
+          <li className="land-nav-item">
             <NavLink
               to="/contact"
-              className={`nav-link ${activeNav === "teams" ? "active" : ""}`}
+              className={`land-nav-link ${activeNav === "teams" ? "active" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/contact");
@@ -97,19 +97,19 @@ function Navbar() {
           </li>
         </ul>
 
-        <div className="signin-container">
+        <div className="land-signin-container">
           <button
-            className="signin-button"
+            className="land-signin-button"
             onClick={() => setShowDropdown(!showDropdown)}
           >
             Sign In
           </button>
 
           {showDropdown && (
-            <div className="signin-dropdown">
+            <div className="land-signin-dropdown">
               <NavLink
                 to="/team/login"
-                className="signin-option"
+                className="land-signin-option"
                 onClick={(e) => {
                   e.preventDefault();
                   navigate("/team/login");
@@ -120,7 +120,7 @@ function Navbar() {
 
               <NavLink
                 to="/vendor/login"
-                className="signin-option"
+                className="land-signin-option"
                 onClick={(e) => {
                   e.preventDefault();
                   navigate("/vendor/login");
@@ -130,7 +130,7 @@ function Navbar() {
               </NavLink>
 
               <button
-                className="signin-option"
+                className="land-signin-option"
                 onClick={() => {
                   window.location.href = `${adminUrl}/admin/login`;
                 }}

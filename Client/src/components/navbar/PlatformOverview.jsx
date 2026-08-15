@@ -2,11 +2,11 @@ import "./PlatformOverview.css";
 
 function PlatformOverview() {
   return (
-    <section className="platform-overview">
-      <div className="container">
-        <h2 className="section-title">Platform Overview</h2>
+    <section className="land-platform-overview">
+      <div className="land-container">
+        <h2 className="land-section-title">Platform Overview</h2>
 
-        <div className="overview-content">
+        <div className="land-overview-content">
           <p>
             Motorsport/club represents a unified digital ecosystem that brings together every aspect of motorsport management and collaboration. Our platform eliminates the fragmentation that has long plagued the motorsports industry by providing a centralized space where all stakeholders can interact seamlessly.
           </p>

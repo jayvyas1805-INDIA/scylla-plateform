@@ -15,7 +15,10 @@ function HeroSection() {
   const fetchAdminContent = async () => {
     try {
       const res = await getAdminContent();
-      setContent(res.data.content);
+
+      console.log("API Response:", res.data);
+
+      setContent(res.data.content|| []);
     } catch (error) {
       console.error("Failed to fetch admin content", error);
     } finally {
@@ -37,25 +40,25 @@ function HeroSection() {
 
 
   useEffect(() => {
-  if (!autoPlay || content.length === 0) return;
+    if (!autoPlay || content.length === 0) return;
 
-  const currentItem = content[currentIndex];
+    const currentItem = content[currentIndex];
 
-  // If image → auto change after 4s
-  if (currentItem.fileType === "image") {
-    const timer = setTimeout(() => {
-      nextImage();
-    }, 4000);
+    // If image → auto change after 4s
+    if (currentItem.fileType === "image") {
+      const timer = setTimeout(() => {
+        nextImage();
+      }, 4000);
 
-    return () => clearTimeout(timer);
-  }
+      return () => clearTimeout(timer);
+    }
 
-  // If video → wait until video ends (handled by onEnded)
-}, [currentIndex, autoPlay, content]);
+    // If video → wait until video ends (handled by onEnded)
+  }, [currentIndex, autoPlay, content]);
 
 
   if (loading) return null;
-  if (content.length === 0) return null;
+  // if (content.length === 0) return null;
 
   const nextImage = () => {
     setCurrentIndex((prev) => (prev + 1) % content.length);
@@ -72,33 +75,33 @@ function HeroSection() {
 
 
   return (
-    <section className="hero-section">
-      <div className="hero-content">
-        <h1 className="hero-title">
+    <section className="land-hero-section">
+      <div className="land-hero-content">
+        <h1 className="land-hero-title">
           Scylla Racing Sport
         </h1>
 
-        <p className="hero-subtitle">
+        <p className="land-hero-subtitle">
           welcome to our website
         </p>
 
-        <button className="hero-button">Explore Team</button>
+        <button className="land-hero-button">Explore Team</button>
       </div>
 
-      <div className="hero-carousel">
+      <div className="land-hero-carousel">
         <button
-          className="carousel-nav carousel-prev"
+          className="land-carousel-nav land-carousel-prev"
           onClick={prevImage}
           title="Previous image"
         >
           ‹
         </button>
 
-        <div className="carousel-wrapper">
+        <div className="land-carousel-wrapper">
           {content.map((item, index) => (
             <div
               key={item._id || index}
-              className={`carousel-slide ${index === currentIndex ? "active" : ""
+              className={`land-carousel-slide ${index === currentIndex ? "active" : ""
                 }`}
             >
               {/* SHOW IMAGE ONLY */}
@@ -113,7 +116,7 @@ function HeroSection() {
                   muted
                   playsInline
                   preload="metadata"
-                  className="carousel-video"
+                  className="land-carousel-video"
                   ref={(el) => {
                     if (el && index === currentIndex) {
                       el.play().catch(() => { });
@@ -129,7 +132,7 @@ function HeroSection() {
         </div>
 
         <button
-          className="carousel-nav carousel-next"
+          className="land-carousel-nav land-carousel-next"
           onClick={nextImage}
           title="Next image"
         >
@@ -137,11 +140,11 @@ function HeroSection() {
         </button>
       </div>
 
-      <div className="carousel-indicators">
+      <div className="land-carousel-indicators">
         {content.map((_, index) => (
           <button
             key={index}
-            className={`indicator ${index === currentIndex ? "active" : ""
+            className={`land-indicator ${index === currentIndex ? "active" : ""
               }`}
             onClick={() => {
               setCurrentIndex(index);
@@ -152,9 +155,9 @@ function HeroSection() {
         ))}
       </div>
 
-      <div className="autoplay-toggle">
+      <div className="land-autoplay-toggle">
         <button
-          className="autoplay-btn"
+          className="land-autoplay-btn"
           onClick={() => setAutoPlay(!autoPlay)}
           title={autoPlay ? "Pause auto-play" : "Resume auto-play"}
         >

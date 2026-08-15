@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AddProductForm.css";
-import "../../index.css"
+// import "../../index.css"
 import { addProduct } from "../../api/product.api";
 
 const AddProductForm = ({ onClose, onAdd }) => {

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 // please also set me as admin dashboard url when you deploy
-export const adminUrl = import.meta.env.VITE_admin_url;
+export const adminUrl = import.meta.env.VITE_admin_url || "http://localhost:5174"; //change the admin dashboard url when you deploy
 // uper pan url change karvu admin dashboard nu.......................
 const api = axios.create({
-    baseURL : import.meta.env.VITE_backend_url, //change with backend url
+    baseURL : import.meta.env.VITE_backend_url || "http://localhost:5000", //change with backend url
     // headers: { "Content-Type": "application/json" }
     withCredentials: true,
 

@@ -29,36 +29,36 @@ function MotorsportTeams() {
   ];
 
   return (
-    <section className="motorsport-teams">
-      <div className="container">
-        <h2 className="section-title">Motorsport Teams</h2>
-        <p className="section-description">
+    <section className="land-motorsport-teams">
+      <div className="land-container">
+        <h2 className="land-section-title">Motorsport Teams</h2>
+        <p className="land-section-description">
           Among teams can use our platform to manage their operations, connect with verified vendors, coordinate with event organizers, and showcase their achievements to the motorsports community.
         </p>
 
-        <div className="teams-showcase">
+        <div className="land-teams-showcase">
           {teams.map((team) => (
-            <div key={team.id} className="team-showcase-card">
-              <div className="team-icon-circle" style={{ backgroundColor: team.iconBg }}>
+            <div key={team.id} className="land-team-showcase-card">
+              <div className="land-team-icon-circle" style={{ backgroundColor: team.iconBg }}>
                 {team.icon}
               </div>
-              <h3 className="team-name">{team.name}</h3>
-              <div className="team-stats">
-                <div className="stat">
-                  <span className="stat-number">{team.members}</span>
-                  <span className="stat-label">Teams</span>
+              <h3 className="land-team-name">{team.name}</h3>
+              <div className="land-team-stats">
+                <div className="land-stat">
+                  <span className="land-stat-number">{team.members}</span>
+                  <span className="land-stat-label">Teams</span>
                 </div>
-                <div className="stat">
-                  <span className="stat-number">{team.events}</span>
-                  <span className="stat-label">Events</span>
+                <div className="land-stat">
+                  <span className="land-stat-number">{team.events}</span>
+                  <span className="land-stat-label">Events</span>
                 </div>
               </div>
-              <button className="view-profile-btn">View Team Profile</button>
+              <button className="land-view-profile-btn">View Team Profile</button>
             </div>
           ))}
         </div>
 
-        <button className="view-all-btn">View All Teams</button>
+        <button className="land-view-all-btn">View All Teams</button>
       </div>
     </section>
   );

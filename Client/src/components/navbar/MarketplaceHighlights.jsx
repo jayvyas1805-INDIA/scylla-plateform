@@ -48,45 +48,45 @@ function MarketplaceHighlights() {
   }
 
   return (
-    <section className="marketplace-highlights">
-      <div className="container">
-        <div className="marketplace-header">
-          <h2 className="section-title">Marketplace Highlights</h2>
-          <a href="/" className="explore-link">
+    <section className="land-marketplace-highlights">
+      <div className="land-container">
+        <div className="land-marketplace-header">
+          <h2 className="land-section-title">Marketplace Highlights</h2>
+          <a href="/" className="land-explore-link">
             Explore Marketplace →
           </a>
         </div>
 
-        <div className="products-grid">
+        <div className="land-products-grid">
           {products.map((product) => (
-            <div key={product._id} className="product-card">
-              <div className="product-image-wrapper">
+            <div key={product._id} className="land-product-card">
+              <div className="land-product-image-wrapper">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="product-image"
+                  className="land-product-image"
                   onError={(e) => {
                     e.target.src = "/fallback-product.png";
                   }}
                 />
               </div>
 
-              <div className="product-content">
-                <div className="product-header">
+              <div className="land-product-content">
+                <div className="land-product-header">
                   <span
-                    className="product-icon"
+                    className="land-product-icon"
                     style={{ backgroundColor: "#ff4444" }}
                   >
                     ●
                   </span>
                 </div>
 
-                <h3 className="product-title">{product.name}</h3>
-                <p className="product-description">
+                <h3 className="land-product-title">{product.name}</h3>
+                <p className="land-product-description">
                   {product.description?.slice(0, 80)}...
                 </p>
 
-                <button className="view-products-btn">
+                <button className="land-view-products-btn">
                   View Product
                 </button>
               </div>

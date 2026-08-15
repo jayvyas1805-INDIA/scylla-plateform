@@ -3,20 +3,20 @@ import '../../styles/footer.css';
 
 export default function Footer() {
   return (
-    <footer className="footer">
-           <section className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-section">
-              <h4 className="footer-title">SCYLLA</h4>
-              <p className="footer-description">
+    <footer className="land-footer">
+           <section className="land-footer">
+        <div className="land-container">
+          <div className="land-footer-content">
+            <div className="land-footer-section">
+              <h4 className="land-footer-title">SCYLLA</h4>
+              <p className="land-footer-description">
                 The ultimate platform for motorsport enthusiasts, teams, and professionals.
               </p>
             </div>
 
-            <div className="footer-section">
-              <h5 className="footer-heading">Quick Links</h5>
-              <ul className="footer-links">
+            <div className="land-footer-section">
+              <h5 className="land-footer-heading">Quick Links</h5>
+              <ul className="land-footer-links">
                 <li>
                   <a href="#">Events</a>
                 </li>
@@ -32,9 +32,9 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="footer-section">
-              <h5 className="footer-heading">Categories</h5>
-              <ul className="footer-links">
+            <div className="land-footer-section">
+              <h5 className="land-footer-heading">Categories</h5>
+              <ul className="land-footer-links">
                 <li>
                   <a href="#">Formula Racing</a>
                 </li>
@@ -50,24 +50,24 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="footer-section">
-              <h5 className="footer-heading">Follow Us</h5>
-              <div className="social-links">
-                <a href="#" className="social-link">
+            <div className="land-footer-section">
+              <h5 className="land-footer-heading">Follow Us</h5>
+              <div className="land-social-links">
+                <a href="#" className="land-social-link">
                   f
                 </a>
-                <a href="#" className="social-link">
+                <a href="#" className="land-social-link">
                   𝕏
                 </a>
-                <a href="#" className="social-link">
+                <a href="#" className="land-social-link">
                   ▶
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="footer-bottom">
-            <p className="footer-copyright">
+          <div className="land-footer-bottom">
+            <p className="land-footer-copyright">
               © 2024 Motorsport Platform. All rights reserved.
             </p>
           </div>

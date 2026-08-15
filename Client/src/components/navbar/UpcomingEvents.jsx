@@ -35,25 +35,25 @@ function UpcomingEvents() {
   ];
 
   return (
-    <section className="upcoming-events">
-      <div className="container">
-        <h2 className="section-title">Upcoming Events</h2>
+    <section className="land-upcoming-events">
+      <div className="land-container">
+        <h2 className="land-section-title">Upcoming Events</h2>
 
-        <div className="events-grid">
+        <div className="land-events-grid">
           {events.map((event) => (
-            <div key={event.id} className="event-card">
-              <div className="event-image-wrapper">
-                <img src={event.image} alt={event.title} className="event-image" />
-                <span className="event-badge" style={{ backgroundColor: event.badgeColor }}>
+            <div key={event.id} className="land-event-card">
+              <div className="land-event-image-wrapper">
+                <img src={event.image} alt={event.title} className="land-event-image" />
+                <span className="land-event-badge" style={{ backgroundColor: event.badgeColor }}>
                   {event.badge}
                 </span>
               </div>
 
-              <div className="event-content">
-                <h3 className="event-title">{event.title}</h3>
-                <p className="event-date">{event.date}</p>
-                <p className="event-location">{event.location}</p>
-                <button className="view-details-btn">View Details</button>
+              <div className="land-event-content">
+                <h3 className="land-event-title">{event.title}</h3>
+                <p className="land-event-date">{event.date}</p>
+                <p className="land-event-location">{event.location}</p>
+                <button className="land-view-details-btn">View Details</button>
               </div>
             </div>
           ))}

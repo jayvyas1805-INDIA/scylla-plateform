@@ -9,9 +9,9 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import './VendorProfile1.css';
-import '../team/TeamMembers.css';
-import '../../../globle.css'
-import '../../index.css'
+// import '../team/TeamMembers.css';
+// import '../../../globle.css'
+// import '../../index.css'
 import "../team/TeamProfile.css"
 import {
   FaPlus,

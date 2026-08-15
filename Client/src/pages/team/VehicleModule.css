@@ -1,27 +1,27 @@
-.vehicle-page {
+.team-vehicle-page {
   padding: 40px;
   color: #eaf3ff;
 }
 
 /* HEADER */
-.vehicle-header {
+.team-vehicle-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
 }
 
-.vehicle-header h1 {
+.team-vehicle-header h1 {
   font-size: 36px;
   color: #4aa3ff;
   text-shadow: 0 0 20px rgba(74, 163, 255, 0.6);
 }
 
-.vehicle-header p {
+.team-vehicle-header p {
   color: #9bbcff;
 }
 
-.add-vehicle-btn {
+.team-vehicle-add-btn {
   background: linear-gradient(135deg, #2b78ff, #4aa3ff);
   border: none;
   padding: 12px 20px;
@@ -32,14 +32,14 @@
 }
 
 /* GRID */
-.vehicle-grid {
+.team-vehicle-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 30px;
 }
 
 /* CARD */
-.vehicle-card {
+.team-vehicle-card {
   background: rgba(10, 15, 40, 0.95);
   border-radius: 18px;
   padding: 24px;
@@ -48,28 +48,28 @@
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.vehicle-card:hover {
+.team-vehicle-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 0 60px rgba(0, 170, 255, 0.45);
 }
 
 /* HEADER */
-.vehicle-card-header {
+.team-vehicle-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.vehicle-card-header h2 {
+.team-vehicle-card-header h2 {
   color: #6aa9ff;
 }
 
-.vehicle-card-header span {
+.team-vehicle-card-header span {
   font-size: 14px;
   color: #9bbcff;
 }
 
-.icon-btn {
+.team-vehicle-icon-btn {
   background: none;
   border: 1px solid #2b78ff;
   color: #2b78ff;
@@ -78,19 +78,19 @@
 }
 
 /* IMAGE */
-.vehicle-main-image img {
+.team-vehicle-main-image img {
   width: 100%;
   border-radius: 14px;
   margin: 20px 0;
 }
 
 /* GALLERY */
-.vehicle-gallery {
+.team-vehicle-gallery {
   display: flex;
   gap: 10px;
 }
 
-.vehicle-gallery img {
+.team-vehicle-gallery img {
   width: 60px;
   height: 60px;
   border-radius: 10px;
@@ -98,27 +98,27 @@
 }
 
 /* SPECS */
-.specs-section h3,
-.performance-section h3,
-.pdf-section h3 {
+.team-specs-section h3,
+.team-performance-section h3,
+.team-pdf-section h3 {
   margin: 24px 0 12px;
   color: #4aa3ff;
 }
 
-.spec-grid {
+.team-spec-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
 /* PERFORMANCE */
-.performance-grid {
+.team-performance-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 
-.stat-box {
+.team-stat-box {
   background: rgba(0, 170, 255, 0.08);
   padding: 12px;
   border-radius: 12px;
@@ -126,12 +126,12 @@
 }
 
 /* PDF */
-.pdf-buttons {
+.team-pdf-buttons {
   display: flex;
   gap: 12px;
 }
 
-.pdf-buttons .primary {
+.team-pdf-buttons .primary {
   background: #2b78ff;
   border: none;
   padding: 10px 16px;
@@ -139,7 +139,7 @@
   color: white;
 }
 
-.pdf-buttons .secondary {
+.team-pdf-buttons .secondary {
   background: transparent;
   border: 1px solid #2b78ff;
   padding: 10px 16px;
@@ -148,13 +148,13 @@
 }
 
 /* ACTIONS */
-.vehicle-actions {
+.team-vehicle-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.edit-btn {
+.team-vehicle-edit-btn {
   flex: 1;
   margin-right: 10px;
   background: rgba(43, 120, 255, 0.15);
@@ -164,7 +164,7 @@
   color: #eaf3ff;
 }
 
-.delete-btn {
+.team-delete-btn {
   background: rgba(255, 60, 60, 0.2);
   border: 1px solid #ff5c5c;
   padding: 10px 14px;
@@ -175,24 +175,24 @@
 /* RESPONSIVE */
 @media (max-width: 768px) {
 
-  .vehicle-header {
+  .team-vehicle-header {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
 
-  .performance-grid {
+  .team-performance-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .spec-grid {
+  .team-spec-grid {
     grid-template-columns: 1fr;
   }
 }
 
 
 /* MODAL OVERLAY */
-.vehicle-modal-overlay {
+.team-vehicle-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
@@ -204,7 +204,7 @@
 }
 
 /* MODAL */
-.vehicle-modal {
+.team-vehicle-modal {
   width: min(900px, 92%);
   background: linear-gradient(135deg,
       rgba(10, 15, 30, 0.95),
@@ -217,17 +217,17 @@
 }
 
 /* HEADER */
-.vehicle-modal-header {
+.team-vehicle-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.vehicle-modal-header h2 {
+.team-vehicle-modal-header h2 {
   color: #4aa3ff;
 }
 
-.close-btn {
+.team-vehicle-modal-close-btn {
   background: none;
   border: none;
   color: #cfe4ff;
@@ -236,7 +236,7 @@
 }
 
 /* BODY */
-.vehicle-modal-body {
+.team-vehicle-modal-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -244,14 +244,14 @@
 }
 
 /* FORM */
-.modal-left label {
+.team-modal-left label {
   display: block;
   font-size: 13px;
   margin-top: 12px;
   color: #6aa9ff;
 }
 
-.modal-left input {
+.team-modal-left input {
   width: 100%;
   margin-top: 6px;
   padding: 12px;
@@ -262,7 +262,7 @@
 }
 
 /* UPLOAD BOX */
-.upload-box {
+.team-upload-box {
   height: 140px;
   border: 2px dashed rgba(43, 120, 255, 0.4);
   border-radius: 14px;
@@ -276,11 +276,11 @@
   transition: 0.3s;
 }
 
-.upload-box:hover {
+.team-upload-box:hover {
   box-shadow: 0 0 25px rgba(43, 120, 255, 0.6);
 }
 
-.pdf-tag {
+.team-pdf-tag {
   background: #2b78ff;
   padding: 4px 10px;
   border-radius: 6px;
@@ -288,7 +288,7 @@
 }
 
 /* FOOTER */
-.vehicle-modal-footer {
+.team-vehicle-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 14px;
@@ -297,7 +297,7 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .vehicle-modal-body {
+  .team-vehicle-modal-body {
     grid-template-columns: 1fr;
   }
 }
@@ -308,14 +308,14 @@
 
 
 
-.vehicle-gallery {
+.team-vehicle-gallery {
   display: flex;
   gap: 10px;
   margin-top: 10px;
   overflow-x: auto;
 }
 
-.vehicle-gallery img.gallery-thumb {
+.team-vehicle-gallery img.gallery-thumb {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -325,18 +325,18 @@
   border: 2px solid transparent;
 }
 
-.vehicle-gallery img.gallery-thumb:hover {
+.team-vehicle-gallery img.gallery-thumb:hover {
   transform: scale(1.1);
   border: 2px solid #007bff;
 }
 
-.vehicle-gallery img.active-thumb {
+.team-vehicle-gallery img.active-thumb {
   border: 2px solid #007bff;
   transform: scale(1.1);
 }
 
 
-.image-preview-container {
+.team-image-preview-container {
   display: flex;
   flex-wrap: wrap;
   /* allows multiple rows if too many images */
@@ -348,7 +348,7 @@
   /* scroll if too many images */
 }
 
-.image-preview-container img.preview-thumb {
+.team-image-preview-container img.preview-thumb {
   width: 80px;
   /* fixed width */
   height: 80px;
@@ -361,7 +361,7 @@
   transition: border 0.2s ease, transform 0.2s ease;
 }
 
-.image-preview-container img.preview-thumb:hover {
+.team-image-preview-container img.preview-thumb:hover {
   border: 2px solid #007bff;
   transform: scale(1.05);
 }

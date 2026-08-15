@@ -4,8 +4,8 @@ import FilterDrawer from '../../components/team/FilterDrawer';
 import ProductForm from '../../components/team/ProductForm';
 import ProductCard from '../../components/team/ProductCard';
 import '../../styles/marketplace.css';
-import '../../index.css'
-import '../../../globle.css'
+// import '../../index.css'
+// import '../../../globle.css'
 import { getMarketPlace, addProduct, getMarketplaceFilters } from "../../api/product.api"
 
 const Marketplace = () => {

@@ -1,10 +1,10 @@
-.contact-page  {
+.land-contact-page  {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.contact-page body {
+.land-contact-page body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -30,30 +30,30 @@ input[type="file"]::file-selector-button:hover {
   background-color: #d62828;
 }
 
-.contact-page html,
-.contact-page body {
+.land-contact-page html,
+.land-contact-page body {
   width: 100%;
   height: 100%;
 }
 
-.contact-page #root {
+.land-contact-page #root {
   width: 100%;
   min-height: 100vh;
 }
 
-.contact-page .container {
+.land-contact-page .land-container {
   width: 100%;
 }
 
 /* Hero Section */
-.contact-page .hero-section {
+.land-contact-page .land-hero-section {
   background: linear-gradient(135deg, #1a2438 0%, #0d0f14 100%);
   padding: 100px 24px 80px;
   text-align: center;
   color: #ffffff;
 }
 
-.contact-page .hero-icon {
+.land-contact-page .land-hero-icon {
   font-size: 52px;
   margin-bottom: 28px;
   display: inline-block;
@@ -71,7 +71,7 @@ input[type="file"]::file-selector-button:hover {
   }
 }
 
-.contact-page .hero-title {
+.land-contact-page .land-hero-title {
   font-size: 52px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -79,7 +79,7 @@ input[type="file"]::file-selector-button:hover {
   letter-spacing: -0.5px;
 }
 
-.contact-page .hero-subtitle {
+.land-contact-page .land-hero-subtitle {
   font-size: 18px;
   font-weight: 400;
   color: #a8b0ba;
@@ -90,7 +90,7 @@ input[type="file"]::file-selector-button:hover {
   line-height: 1.7;
 }
 
-.contact-page .hero-buttons {
+.land-contact-page .land-hero-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -99,7 +99,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 /* Buttons */
-.contact-page .btn {
+.land-contact-page .land-btn {
   padding: 12px 32px;
   border: none;
   border-radius: 6px;
@@ -113,62 +113,62 @@ input[type="file"]::file-selector-button:hover {
   font-family: inherit;
 }
 
-.contact-page  .btn-primary {
+.land-contact-page  .land-btn-primary {
   background-color: #e63946;
   color: #ffffff;
   border: 2px solid #e63946;
 }
 
-.contact-page .btn-primary:hover {
+.land-contact-page .land-btn-primary:hover {
   background-color: #d62828;
   border-color: #d62828;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(230, 57, 70, 0.4);
 }
 
-.contact-page .btn-primary:active {
+.land-contact-page .land-btn-primary:active {
   transform: translateY(0);
 }
 
-.contact-page .btn-secondary {
+.land-contact-page .land-btn-secondary {
   background-color: #ffffff;
   color: #1a2332;
   border: 2px solid #1a2332;
 }
 
-.contact-page .btn-secondary:hover {
+.land-contact-page .land-btn-secondary:hover {
   background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.contact-page .btn-secondary:active {
+.land-contact-page .land-btn-secondary:active {
   transform: translateY(0);
 }
 
 /* Who Are You Section */
-.contact-page .who-section {
+.land-contact-page .land-who-section {
   background-color: #0a0a0a;
   padding: 60px 24px 80px;
   text-align: center;
   color: #ffffff;
 }
 
-.contact-page .who-title {
+.land-contact-page .land-who-title {
   font-size: 40px;
   font-weight: 700;
   margin-bottom: 14px;
   letter-spacing: -0.5px;
 }
 
-.contact-page .who-subtitle {
+.land-contact-page .land-who-subtitle {
   font-size: 16px;
   color: #a8b0ba;
   margin-bottom: 52px;
   font-weight: 400;
 }
 
-.contact-page .category-cards {
+.land-contact-page .land-category-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 24px;
@@ -177,7 +177,7 @@ input[type="file"]::file-selector-button:hover {
   padding: 0 20px;
 }
 
-.contact-page .category-card {
+.land-contact-page .land-category-card {
   background-color: #ffffff;
   color: #1a2332;
   padding: 32px 24px;
@@ -188,38 +188,38 @@ input[type="file"]::file-selector-button:hover {
   border: 2px solid #f0f0f0;
 }
 
-.contact-page .category-card:hover {
+.land-contact-page .land-category-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(230, 57, 70, 0.2);
   border-color: #e63946;
   background-color: #fafafa;
 }
 
-.contact-page .category-icon {
+.land-contact-page .land-category-icon {
   font-size: 44px;
   margin-bottom: 16px;
 }
 
-.contact-page .category-name {
+.land-contact-page .land-category-name {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #1a2332;
 }
 
-.contact-page .category-description {
+.land-contact-page .land-category-description {
   font-size: 13px;
   color: #8a9299;
   line-height: 1.5;
 }
 
 /* Form Section */
-.contact-page .form-section {
+.land-contact-page .land-form-section {
   background: linear-gradient(180deg, #adb5bf 0%, #9ba3ac 100%);
   padding: 60px 24px 80px;
 }
 
-.contact-page .form-container {
+.land-contact-page .land-form-container {
   background-color: #ffffff;
   border-radius: 12px;
   padding: 48px;
@@ -240,49 +240,49 @@ input[type="file"]::file-selector-button:hover {
   }
 }
 
-.contact-page .form-title {
+.land-contact-page .land-form-title {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 12px;
   color: #1a2332;
 }
 
-.contact-page .form-subtitle {
+.land-contact-page .land-form-subtitle {
   font-size: 14px;
   color: #7a8a9a;
   margin-bottom: 32px;
 }
 
-.contact-page .form-row {
+.land-contact-page .land-form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-bottom: 20px;
 }
 
-.contact-page .form-row.full {
+.land-contact-page .land-form-row.land-full {
   grid-template-columns: 1fr;
 }
 
-.contact-page .form-group {
+.land-contact-page .land-form-group {
   display: flex;
   flex-direction: column;
 }
 
-.contact-page .form-label {
+.land-contact-page .land-form-label {
   font-size: 14px;
   font-weight: 600;
   color: #1a2332;
   margin-bottom: 8px;
 }
 
-.contact-page .form-label .required {
+.land-contact-page .land-form-label .land-required {
   color: #e63946;
 }
 
-.contact-page .form-input,
-.contact-page .form-select,
-.contact-page .form-textarea {
+.land-contact-page .land-form-input,
+.land-contact-page .land-form-select,
+.land-contact-page .land-form-textarea {
   padding: 12px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
@@ -292,33 +292,33 @@ input[type="file"]::file-selector-button:hover {
   background-color: #f9fafb;
 }
 
-.contact-page .form-input:hover,
-.contact-page .form-select:hover,
-.contact-page .form-textarea:hover {
+.land-contact-page .land-form-input:hover,
+.land-contact-page .land-form-select:hover,
+.land-contact-page .land-form-textarea:hover {
   border-color: #d1d5db;
   background-color: #ffffff;
 }
 
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
+.land-form-input:focus,
+.land-form-select:focus,
+.land-form-textarea:focus {
   outline: none;
   border-color: #e63946;
   background-color: #ffffff;
   box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
 }
 
-.form-input::placeholder,
-.form-textarea::placeholder {
+.land-form-input::placeholder,
+.land-form-textarea::placeholder {
   color: #9ca7b2;
 }
 
-.form-textarea {
+.land-form-textarea {
   resize: vertical;
   min-height: 120px;
 }
 
-.contact-page .form-attachments {
+.land-contact-page .land-form-attachments {
   border: 2px dashed #d1d5db;
   border-radius: 8px;
   padding: 24px;
@@ -333,12 +333,12 @@ input[type="file"]::file-selector-button:hover {
   min-height: 120px;
 }
 
-.contact-page .form-attachments:hover {
+.land-contact-page .land-form-attachments:hover {
   border-color: #e63946;
   background-color: #fef5f5;
 }
 
-.contact-page .form-attachments label {
+.land-contact-page .land-form-attachments label {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -347,23 +347,23 @@ input[type="file"]::file-selector-button:hover {
   height: 100%;
 }
 
-.contact-page .attachments-icon {
+.land-contact-page .land-attachments-icon {
   font-size: 36px;
   margin-bottom: 12px;
 }
 
-.contact-page .attachments-text {
+.land-contact-page .land-attachments-text {
   font-size: 13px;
   color: #7a8a9a;
 }
 
-.contact-page .attachments-subtext {
+.land-contact-page .land-attachments-subtext {
   font-size: 12px;
   color: #9ca7b2;
   margin-top: 4px;
 }
 
-.form-checkbox {
+.land-form-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -373,61 +373,61 @@ input[type="file"]::file-selector-button:hover {
   line-height: 1.5;
 }
 
-.form-checkbox input {
+.land-form-checkbox input {
   margin-top: 2px;
   cursor: pointer;
   accent-color: #e63946;
 }
 
-.form-checkbox a {
+.land-form-checkbox a {
   color: #e63946;
   text-decoration: none;
 }
 
-.form-checkbox a:hover {
+.land-form-checkbox a:hover {
   text-decoration: underline;
 }
 
-.form-actions {
+.land-form-actions {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 16px;
   margin-top: 32px;
 }
 
-.form-actions .btn {
+.land-form-actions .land-btn {
   flex: 1;
 }
 
-.form-actions .btn-secondary {
+.land-form-actions .land-btn-secondary {
   flex: 0;
   padding: 12px 24px;
 }
 
 /* File List Styling */
-.attachments-list {
+.land-attachments-list {
   margin-top: 12px;
   font-size: 13px;
   color: #7a8a9a;
 }
 
-.attachments-list strong {
+.land-attachments-list strong {
   color: #1a2332;
   font-weight: 600;
 }
 
-.attachments-list ul {
+.land-attachments-list ul {
   margin-left: 20px;
   margin-top: 8px;
   list-style: disc;
 }
 
-.attachments-list li {
+.land-attachments-list li {
   padding: 4px 0;
 }
 
 /* Success Message Animation */
-.success-message {
+.land-success-message {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -457,7 +457,7 @@ input[type="file"]::file-selector-button:hover {
   }
 }
 
-.success-icon {
+.land-success-icon {
   font-size: 56px;
   margin-bottom: 20px;
   animation: iconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -478,21 +478,21 @@ input[type="file"]::file-selector-button:hover {
   }
 }
 
-.success-title {
+.land-success-title {
   font-size: 24px;
   font-weight: 700;
   color: #1a2332;
   margin-bottom: 12px;
 }
 
-.success-message-text {
+.land-success-message-text {
   font-size: 14px;
   color: #7a8a9a;
   margin-bottom: 24px;
   line-height: 1.6;
 }
 
-.overlay {
+.land-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -513,12 +513,12 @@ input[type="file"]::file-selector-button:hover {
 }
 
 /* Support & Help Section */
-.support-section {
+.land-support-section {
   background-color: #ffffff;
   padding: 80px 24px 60px;
 }
 
-.support-title {
+.land-support-title {
   font-size: 40px;
   font-weight: 700;
   text-align: center;
@@ -527,7 +527,7 @@ input[type="file"]::file-selector-button:hover {
   letter-spacing: -0.5px;
 }
 
-.support-subtitle {
+.land-support-subtitle {
   font-size: 16px;
   color: #8a9299;
   text-align: center;
@@ -535,7 +535,7 @@ input[type="file"]::file-selector-button:hover {
   font-weight: 400;
 }
 
-.support-cards {
+.land-support-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 24px;
@@ -544,7 +544,7 @@ input[type="file"]::file-selector-button:hover {
   padding: 0 20px;
 }
 
-.support-card {
+.land-support-card {
   background-color: #f8f9fa;
   padding: 36px 28px;
   border-radius: 12px;
@@ -553,14 +553,14 @@ input[type="file"]::file-selector-button:hover {
   border: 2px solid #f0f0f0;
 }
 
-.support-card:hover {
+.land-support-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   border-color: transparent;
   background-color: #ffffff;
 }
 
-.support-icon {
+.land-support-icon {
   font-size: 48px;
   margin-bottom: 20px;
   display: flex;
@@ -573,46 +573,46 @@ input[type="file"]::file-selector-button:hover {
   border-radius: 50%;
 }
 
-.support-card-1 .support-icon {
+.land-support-card-1 .land-support-icon {
   background-color: #e0f2fe;
   color: #0369a1;
 }
 
-.support-card-2 .support-icon {
+.land-support-card-2 .land-support-icon {
   background-color: #dcfce7;
   color: #15803d;
 }
 
-.support-card-3 .support-icon {
+.land-support-card-3 .land-support-icon {
   background-color: #f3e8ff;
   color: #7e22ce;
 }
 
-.support-card-4 .support-icon {
+.land-support-card-4 .land-support-icon {
   background-color: #fee2e2;
   color: #dc2626;
 }
 
-.support-card-title {
+.land-support-card-title {
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 10px;
   color: #1a2332;
 }
 
-.support-card-text {
+.land-support-card-text {
   font-size: 14px;
   color: #8a9299;
   line-height: 1.6;
 }
 
 /* Platform Information Section */
-.platform-section {
+.land-platform-section {
   background-color: #f8f9fa;
   padding: 80px 24px 60px;
 }
 
-.platform-content {
+.land-platform-content {
   max-width: 1300px;
   margin: 0 auto;
   display: grid;
@@ -622,73 +622,73 @@ input[type="file"]::file-selector-button:hover {
   padding: 0 20px;
 }
 
-.platform-list {
+.land-platform-list {
   list-style: none;
 }
 
-.platform-item {
+.land-platform-item {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
   align-items: flex-start;
 }
 
-.platform-icon {
+.land-platform-icon {
   color: #e63946;
   font-size: 20px;
   margin-top: 2px;
 }
 
-.platform-info {
+.land-platform-info {
   flex: 1;
 }
 
-.platform-item-title {
+.land-platform-item-title {
   font-size: 15px;
   font-weight: 600;
   color: #1a2332;
   margin-bottom: 4px;
 }
 
-.platform-item-description {
+.land-platform-item-description {
   font-size: 13px;
   color: #7a8a9a;
 }
 
-.platform-map {
+.land-platform-map {
   background-color: #e5e7eb;
   border-radius: 12px;
   height: 300px;
   overflow: hidden;
 }
 
-.platform-map iframe {
+.land-platform-map iframe {
   width: 100%;
   height: 100%;
   border: none;
 }
 
 /* FAQ Section */
-.faq-section {
+.land-faq-section {
   background-color: #a8afb8;
   padding: 60px 24px;
   text-align: center;
 }
 
-.faq-title {
+.land-faq-title {
   font-size: 32px;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 12px;
 }
 
-.faq-subtitle {
+.land-faq-subtitle {
   font-size: 14px;
   color: #e8eaed;
   margin-bottom: 48px;
 }
 
-.faq-cards {
+.land-faq-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
@@ -696,7 +696,7 @@ input[type="file"]::file-selector-button:hover {
   margin: 0 auto;
 }
 
-.faq-card {
+.land-faq-card {
   background-color: #ffffff;
   padding: 24px;
   border-radius: 8px;
@@ -704,36 +704,36 @@ input[type="file"]::file-selector-button:hover {
   transition: all 0.3s ease;
 }
 
-.faq-card:hover {
+.land-faq-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-.faq-icon {
+.land-faq-icon {
   font-size: 24px;
   margin-bottom: 12px;
 }
 
-.faq-card-title {
+.land-faq-card-title {
   font-size: 15px;
   font-weight: 600;
   color: #1a2332;
   margin-bottom: 8px;
 }
 
-.faq-card-description {
+.land-faq-card-description {
   font-size: 12px;
   color: #7a8a9a;
   line-height: 1.5;
 }
 
 /* Data Privacy Section */
-.privacy-section {
+.land-privacy-section {
   background-color: #f9fafb;
   padding: 60px 24px;
 }
 
-.privacy-card {
+.land-privacy-card {
   background-color: #ffffff;
   border: 2px solid #e63946;
   border-radius: 12px;
@@ -742,39 +742,39 @@ input[type="file"]::file-selector-button:hover {
   margin: 0 auto;
 }
 
-.privacy-header {
+.land-privacy-header {
   display: flex;
   gap: 16px;
   align-items: flex-start;
   margin-bottom: 24px;
 }
 
-.privacy-icon {
+.land-privacy-icon {
   font-size: 32px;
   color: #e63946;
   flex-shrink: 0;
 }
 
-.privacy-title {
+.land-privacy-title {
   font-size: 20px;
   font-weight: 700;
   color: #1a2332;
   margin-bottom: 8px;
 }
 
-.privacy-description {
+.land-privacy-description {
   font-size: 13px;
   color: #7a8a9a;
   margin-bottom: 20px;
   line-height: 1.6;
 }
 
-.privacy-list {
+.land-privacy-list {
   list-style: none;
   margin-bottom: 20px;
 }
 
-.privacy-item {
+.land-privacy-item {
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
@@ -782,44 +782,44 @@ input[type="file"]::file-selector-button:hover {
   color: #7a8a9a;
 }
 
-.privacy-checkmark {
+.land-privacy-checkmark {
   color: #16a34a;
   font-weight: bold;
   flex-shrink: 0;
 }
 
-.privacy-link {
+.land-privacy-link {
   color: #e63946;
   text-decoration: none;
   font-weight: 600;
 }
 
-.privacy-link:hover {
+.land-privacy-link:hover {
   text-decoration: underline;
 }
 
 /* Footer Section */
-.contact-page .footer-section {
+.land-contact-page .land-footer-section {
   background-color: #080808;
   padding: 80px 24px 60px;
   text-align: center;
   color: #ffffff;
 }
 
-.contact-page .footer-icon {
+.land-contact-page .land-footer-icon {
   font-size: 44px;
   margin-bottom: 24px;
   animation: slideDown 0.6s ease-out;
 }
 
-.contact-page .footer-title {
+.land-contact-page .land-footer-title {
   font-size: 40px;
   font-weight: 700;
   margin-bottom: 16px;
   letter-spacing: -0.5px;
 }
 
-.contact-page .footer-subtitle {
+.land-contact-page .land-footer-subtitle {
   font-size: 15px;
   color: #a8b0ba;
   margin-bottom: 40px;
@@ -830,7 +830,7 @@ input[type="file"]::file-selector-button:hover {
   font-weight: 400;
 }
 
-.contact-page .footer-buttons {
+.land-contact-page .land-footer-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -839,7 +839,7 @@ input[type="file"]::file-selector-button:hover {
   padding: 0 20px;
 }
 
-.contact-page .footer-branding {
+.land-contact-page .land-footer-branding {
   border-top: 1px solid #2a2a2a;
   padding-top: 24px;
   display: flex;
@@ -850,31 +850,31 @@ input[type="file"]::file-selector-button:hover {
   color: #a8b0ba;
 }
 
-.contact-page .footer-logo {
+.land-contact-page .land-footer-logo {
   font-size: 20px;
 }
 
 /* Policy Page Styling */
-.contact-page .policy-header {
+.land-contact-page .land-policy-header {
   background: linear-gradient(135deg, #1a2438 0%, #0d0f14 100%);
   padding: 100px 24px 80px;
   text-align: center;
   color: #ffffff;
 }
 
-.policy-header-content {
+.land-policy-header-content {
   max-width: 1000px;
   margin: 0 auto;
 }
 
-.policy-icon {
+.land-policy-icon {
   font-size: 52px;
   margin-bottom: 28px;
   display: inline-block;
   animation: slideDown 0.6s ease-out;
 }
 
-.policy-title {
+.land-policy-title {
   font-size: 52px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -882,7 +882,7 @@ input[type="file"]::file-selector-button:hover {
   letter-spacing: -0.5px;
 }
 
-.policy-subtitle {
+.land-policy-subtitle {
   font-size: 18px;
   font-weight: 400;
   color: #a8b0ba;
@@ -891,18 +891,18 @@ input[type="file"]::file-selector-button:hover {
 }
 
 /* Rules Section */
-.rules-section {
+.land-rules-section {
   background-color: #ffffff;
   padding: 80px 24px;
 }
 
-.rules-content {
+.land-rules-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.rule-group {
+.land-rule-group {
   margin-bottom: 48px;
   background-color: #f8f9fa;
   padding: 32px;
@@ -911,24 +911,24 @@ input[type="file"]::file-selector-button:hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.rule-group:hover {
+.land-rule-group:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transform: translateX(4px);
 }
 
-.rule-group-header {
+.land-rule-group-header {
   display: flex;
   gap: 16px;
   align-items: flex-start;
   margin-bottom: 24px;
 }
 
-.rule-group-icon {
+.land-rule-group-icon {
   font-size: 40px;
   flex-shrink: 0;
 }
 
-.rule-group-title {
+.land-rule-group-title {
   font-size: 24px;
   font-weight: 700;
   color: #1a2332;
@@ -936,13 +936,13 @@ input[type="file"]::file-selector-button:hover {
   line-height: 1.3;
 }
 
-.rule-items {
+.land-rule-items {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.rule-item {
+.land-rule-item {
   display: flex;
   gap: 12px;
   margin-bottom: 16px;
@@ -952,23 +952,23 @@ input[type="file"]::file-selector-button:hover {
   transition: all 0.3s ease;
 }
 
-.rule-item:hover {
+.land-rule-item:hover {
   background-color: #fef5f5;
   padding-left: 16px;
 }
 
-.rule-item:last-child {
+.land-rule-item:last-child {
   margin-bottom: 0;
 }
 
-.rule-checkmark {
+.land-rule-checkmark {
   color: #16a34a;
   font-weight: bold;
   flex-shrink: 0;
   font-size: 18px;
 }
 
-.rule-text {
+.land-rule-text {
   font-size: 15px;
   color: #4a5568;
   line-height: 1.6;
@@ -976,12 +976,12 @@ input[type="file"]::file-selector-button:hover {
 }
 
 /* Policy Notice */
-.policy-notice {
+.land-policy-notice {
   background-color: #f8f9fa;
   padding: 60px 24px;
 }
 
-.notice-card {
+.land-notice-card {
   background-color: #ffffff;
   border: 2px solid #e63946;
   border-radius: 12px;
@@ -993,260 +993,260 @@ input[type="file"]::file-selector-button:hover {
   align-items: flex-start;
 }
 
-.notice-icon {
+.land-notice-icon {
   font-size: 48px;
   flex-shrink: 0;
 }
 
-.notice-content {
+.land-notice-content {
   flex: 1;
 }
 
-.notice-title {
+.land-notice-title {
   font-size: 22px;
   font-weight: 700;
   color: #1a2332;
   margin-bottom: 16px;
 }
 
-.notice-text {
+.land-notice-text {
   font-size: 15px;
   color: #4a5568;
   line-height: 1.8;
   margin-bottom: 16px;
 }
 
-.notice-text:last-child {
+.land-notice-text:last-child {
   margin-bottom: 0;
 }
 
 /* Policy Contact */
-.policy-contact {
+.land-policy-contact {
   background-color: #0a0a0a;
   padding: 80px 24px;
   text-align: center;
   color: #ffffff;
 }
 
-.contact-card {
+.land-contact-card {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.contact-title {
+.land-contact-title {
   font-size: 40px;
   font-weight: 700;
   margin-bottom: 16px;
   letter-spacing: -0.5px;
 }
 
-.contact-subtitle {
+.land-contact-subtitle {
   font-size: 16px;
   color: #a8b0ba;
   margin-bottom: 40px;
   font-weight: 400;
 }
 
-.contact-buttons {
+.land-contact-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.contact-buttons .btn {
+.land-contact-buttons .land-btn {
   padding: 12px 32px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   /* Policy Page Responsive */
-  .policy-header {
+  .land-policy-header {
     padding: 60px 20px 48px;
   }
 
-  .policy-title {
+  .land-policy-title {
     font-size: 36px;
     line-height: 1.3;
   }
 
-  .policy-subtitle {
+  .land-policy-subtitle {
     font-size: 16px;
   }
 
-  .rules-section {
+  .land-rules-section {
     padding: 48px 20px;
   }
 
-  .rule-group {
+  .land-rule-group {
     padding: 24px;
     margin-bottom: 32px;
   }
 
-  .rule-group-header {
+  .land-rule-group-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .rule-group-title {
+  .land-rule-group-title {
     font-size: 20px;
   }
 
-  .notice-card {
+  .land-notice-card {
     flex-direction: column;
     text-align: center;
     gap: 20px;
     padding: 28px 24px;
   }
 
-  .notice-icon {
+  .land-notice-icon {
     font-size: 40px;
   }
 
-  .policy-contact {
+  .land-policy-contact {
     padding: 48px 20px;
   }
 
-  .contact-title {
+  .land-contact-title {
     font-size: 28px;
   }
 
   /* Hero Section */
-  .hero-section {
+  .land-hero-section {
     padding: 60px 20px;
   }
 
-  .hero-title {
+  .land-hero-title {
     font-size: 36px;
     line-height: 1.3;
   }
 
-  .hero-subtitle {
+  .land-hero-subtitle {
     font-size: 16px;
   }
 
-  .hero-buttons {
+  .land-hero-buttons {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .hero-buttons .btn {
+  .land-hero-buttons .land-btn {
     width: 100%;
     padding: 12px 24px;
   }
 
-  .who-section {
+  .land-who-section {
     padding: 48px 20px;
   }
 
-  .who-title {
+  .land-who-title {
     font-size: 28px;
   }
 
-  .category-cards {
+  .land-category-cards {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 16px;
   }
 
-  .category-card {
+  .land-category-card {
     padding: 20px 16px;
   }
 
-  .form-section {
+  .land-form-section {
     padding: 48px 20px;
   }
 
-  .form-container {
+  .land-form-container {
     padding: 32px 24px;
     border-radius: 12px;
   }
 
-  .form-title {
+  .land-form-title {
     font-size: 24px;
   }
 
-  .form-row {
+  .land-form-row {
     grid-template-columns: 1fr;
     gap: 16px;
     margin-bottom: 16px;
   }
 
-  .form-actions {
+  .land-form-actions {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .form-actions .btn-secondary {
+  .land-form-actions .land-btn-secondary {
     width: 100%;
   }
 
-  .support-section {
+  .land-support-section {
     padding: 48px 20px;
   }
 
-  .support-title {
+  .land-support-title {
     font-size: 28px;
   }
 
-  .support-cards {
+  .land-support-cards {
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 16px;
   }
 
-  .platform-section {
+  .land-platform-section {
     padding: 48px 20px;
   }
 
-  .platform-content {
+  .land-platform-content {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
-  .platform-map {
+  .land-platform-map {
     height: 250px;
   }
 
-  .faq-section {
+  .land-faq-section {
     padding: 48px 20px;
   }
 
-  .faq-title {
+  .land-faq-title {
     font-size: 28px;
   }
 
-  .faq-cards {
+  .land-faq-cards {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 16px;
   }
 
-  .privacy-section {
+  .land-privacy-section {
     padding: 48px 20px;
   }
 
-  .privacy-card {
+  .land-privacy-card {
     padding: 28px 24px;
   }
 
-  .footer-section {
+  .land-footer-section {
     padding: 48px 20px;
   }
 
-  .footer-title {
+  .land-footer-title {
     font-size: 28px;
   }
 
-  .footer-buttons {
+  .land-footer-buttons {
     flex-direction: column;
     gap: 12px;
   }
 
-  .footer-buttons .btn {
+  .land-footer-buttons .land-btn {
     width: 100%;
     padding: 12px 24px;
   }
 
-  .success-message {
+  .land-success-message {
     width: 90%;
     max-width: 340px;
     padding: 32px 24px;
@@ -1256,344 +1256,344 @@ input[type="file"]::file-selector-button:hover {
 
 @media (max-width: 480px) {
   /* Policy Page Mobile Responsive */
-  .policy-header {
+  .land-policy-header {
     padding: 40px 16px 32px;
   }
 
-  .policy-icon {
+  .land-policy-icon {
     font-size: 40px;
     margin-bottom: 20px;
   }
 
-  .policy-title {
+  .land-policy-title {
     font-size: 28px;
     margin-bottom: 12px;
   }
 
-  .policy-subtitle {
+  .land-policy-subtitle {
     font-size: 14px;
   }
 
-  .rules-section {
+  .land-rules-section {
     padding: 32px 16px;
   }
 
-  .rules-content {
+  .land-rules-content {
     padding: 0;
   }
 
-  .rule-group {
+  .land-rule-group {
     padding: 20px 16px;
     margin-bottom: 16px;
     border-left-width: 3px;
   }
 
-  .rule-group-header {
+  .land-rule-group-header {
     margin-bottom: 16px;
   }
 
-  .rule-group-icon {
+  .land-rule-group-icon {
     font-size: 32px;
   }
 
-  .rule-group-title {
+  .land-rule-group-title {
     font-size: 18px;
   }
 
-  .rule-item {
+  .land-rule-item {
     padding: 10px 8px;
     margin-bottom: 12px;
   }
 
-  .rule-item:hover {
+  .land-rule-item:hover {
     padding-left: 12px;
   }
 
-  .rule-text {
+  .land-rule-text {
     font-size: 14px;
   }
 
-  .policy-notice {
+  .land-policy-notice {
     padding: 32px 16px;
   }
 
-  .notice-card {
+  .land-notice-card {
     padding: 20px 16px;
     gap: 16px;
   }
 
-  .notice-icon {
+  .land-notice-icon {
     font-size: 36px;
   }
 
-  .notice-title {
+  .land-notice-title {
     font-size: 18px;
     margin-bottom: 12px;
   }
 
-  .notice-text {
+  .land-notice-text {
     font-size: 14px;
     margin-bottom: 12px;
   }
 
-  .policy-contact {
+  .land-policy-contact {
     padding: 40px 16px;
   }
 
-  .contact-title {
+  .land-contact-title {
     font-size: 24px;
     margin-bottom: 12px;
   }
 
-  .contact-subtitle {
+  .land-contact-subtitle {
     font-size: 14px;
     margin-bottom: 28px;
   }
 
-  .contact-buttons {
+  .land-contact-buttons {
     flex-direction: column;
     gap: 12px;
   }
 
-  .contact-buttons .btn {
+  .land-contact-buttons .land-btn {
     width: 100%;
     padding: 10px 20px;
   }
 
-  .hero-section {
+  .land-hero-section {
     padding: 40px 16px;
   }
 
-  .hero-icon {
+  .land-hero-icon {
     font-size: 40px;
     margin-bottom: 20px;
   }
 
-  .hero-title {
+  .land-hero-title {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 14px;
     line-height: 1.3;
   }
 
-  .hero-subtitle {
+  .land-hero-subtitle {
     font-size: 14px;
     margin-bottom: 28px;
   }
 
-  .hero-buttons {
+  .land-hero-buttons {
     gap: 10px;
   }
 
-  .btn {
+  .land-btn {
     padding: 10px 20px;
     font-size: 14px;
     border-radius: 5px;
   }
 
-  .who-section {
+  .land-who-section {
     padding: 32px 16px;
   }
 
-  .who-title {
+  .land-who-title {
     font-size: 22px;
     margin-bottom: 10px;
   }
 
-  .who-subtitle {
+  .land-who-subtitle {
     font-size: 14px;
     margin-bottom: 32px;
   }
 
-  .category-cards {
+  .land-category-cards {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .category-card {
+  .land-category-card {
     padding: 16px 12px;
   }
 
-  .category-icon {
+  .land-category-icon {
     font-size: 32px;
     margin-bottom: 12px;
   }
 
-  .category-name {
+  .land-category-name {
     font-size: 14px;
     margin-bottom: 6px;
   }
 
-  .category-description {
+  .land-category-description {
     font-size: 12px;
   }
 
-  .form-section {
+  .land-form-section {
     padding: 32px 16px;
   }
 
-  .form-container {
+  .land-form-container {
     padding: 20px 16px;
   }
 
-  .form-title {
+  .land-form-title {
     font-size: 20px;
     margin-bottom: 10px;
   }
 
-  .form-subtitle {
+  .land-form-subtitle {
     font-size: 13px;
     margin-bottom: 24px;
   }
 
-  .form-label {
+  .land-form-label {
     font-size: 13px;
   }
 
-  .form-input,
-  .form-select,
-  .form-textarea {
+  .land-form-input,
+  .land-form-select,
+  .land-form-textarea {
     padding: 10px 12px;
     font-size: 14px;
   }
 
-  .form-textarea {
+  .land-form-textarea {
     min-height: 100px;
   }
 
-  .form-checkbox {
+  .land-form-checkbox {
     font-size: 12px;
     gap: 10px;
   }
 
-  .support-section {
+  .land-support-section {
     padding: 32px 16px;
   }
 
-  .support-title {
+  .land-support-title {
     font-size: 22px;
   }
 
-  .support-cards {
+  .land-support-cards {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .support-icon {
+  .land-support-icon {
     font-size: 40px;
     width: 60px;
     height: 60px;
   }
 
-  .platform-section {
+  .land-platform-section {
     padding: 32px 16px;
   }
 
-  .platform-list {
+  .land-platform-list {
     margin-bottom: 24px;
   }
 
-  .platform-item {
+  .land-platform-item {
     margin-bottom: 16px;
   }
 
-  .platform-map {
+  .land-platform-map {
     height: 200px;
   }
 
-  .faq-section {
+  .land-faq-section {
     padding: 32px 16px;
   }
 
-  .faq-title {
+  .land-faq-title {
     font-size: 20px;
   }
 
-  .faq-cards {
+  .land-faq-cards {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .faq-card {
+  .land-faq-card {
     padding: 16px;
   }
 
-  .faq-icon {
+  .land-faq-icon {
     font-size: 20px;
     margin-bottom: 10px;
   }
 
-  .faq-card-title {
+  .land-faq-card-title {
     font-size: 14px;
   }
 
-  .faq-card-description {
+  .land-faq-card-description {
     font-size: 12px;
   }
 
-  .privacy-section {
+  .land-privacy-section {
     padding: 32px 16px;
   }
 
-  .privacy-card {
+  .land-privacy-card {
     padding: 20px 16px;
     border: 2px solid #e63946;
   }
 
-  .privacy-title {
+  .land-privacy-title {
     font-size: 18px;
   }
 
-  .privacy-description {
+  .land-privacy-description {
     font-size: 12px;
   }
 
-  .privacy-list {
+  .land-privacy-list {
     margin-bottom: 16px;
   }
 
-  .privacy-item {
+  .land-privacy-item {
     font-size: 12px;
     margin-bottom: 10px;
   }
 
-  .footer-section {
+  .land-footer-section {
     padding: 32px 16px;
   }
 
-  .footer-icon {
+  .land-footer-icon {
     font-size: 32px;
     margin-bottom: 16px;
   }
 
-  .footer-title {
+  .land-footer-title {
     font-size: 20px;
     margin-bottom: 10px;
   }
 
-  .footer-subtitle {
+  .land-footer-subtitle {
     font-size: 13px;
     margin-bottom: 24px;
   }
 
-  .success-message {
+  .land-success-message {
     width: 85%;
     max-width: 300px;
     padding: 24px 16px;
     border-radius: 10px;
   }
 
-  .success-icon {
+  .land-success-icon {
     font-size: 48px;
     margin-bottom: 16px;
   }
 
-  .success-title {
+  .land-success-title {
     font-size: 20px;
     margin-bottom: 10px;
   }
 
-  .success-message-text {
+  .land-success-message-text {
     font-size: 13px;
     margin-bottom: 16px;
   }

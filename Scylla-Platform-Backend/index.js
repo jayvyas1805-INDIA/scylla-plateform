@@ -10,9 +10,9 @@ const chatRoutes = require("./routes/chat");
 
 dotenv.config();
 
-if (process.env.NODE_ENV === "production") {
-  console.log = () => {};
-}
+// if (process.env.NODE_ENV === "production") {
+//   console.log = () => {};
+// }
 
 
 

@@ -23,25 +23,25 @@ function EventsNotification() {
   ];
 
   return (
-    <section className="events-notification">
-      <div className="container">
-        <h2 className="section-title">Don't Miss These Events</h2>
+    <section className="land-events-notification">
+      <div className="land-container">
+        <h2 className="land-section-title">Don't Miss These Events</h2>
 
-        <div className="notifications-grid">
+        <div className="land-notifications-grid">
           {notifications.map((notification) => (
-            <div key={notification.id} className="notification-card">
-              <div className="notification-icon">{notification.icon}</div>
+            <div key={notification.id} className="land-notification-card">
+              <div className="land-notification-icon">{notification.icon}</div>
 
-              <div className="notification-content">
-                <h3 className="notification-title">{notification.title}</h3>
-                <p className="notification-description">
+              <div className="land-notification-content">
+                <h3 className="land-notification-title">{notification.title}</h3>
+                <p className="land-notification-description">
                   {notification.description}
                 </p>
-                <p className="notification-remaining">{notification.remaining}</p>
+                <p className="land-notification-remaining">{notification.remaining}</p>
               </div>
 
               <button
-                className="notification-btn"
+                className="land-notification-btn"
                 style={{ backgroundColor: notification.buttonColor }}
               >
                 {notification.buttonText}

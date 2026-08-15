@@ -1,11 +1,11 @@
-.footer {
+.land-footer {
   background-color: #1a1a1a;
   color: #ffffff;
   padding: 3rem 1.5rem 2rem;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.footer-content {
+.land-footer-content {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
@@ -14,12 +14,12 @@
   margin-bottom: 2rem;
 }
 
-.footer-section {
+.land-footer-section {
   display: flex;
   flex-direction: column;
 }
 
-.footer-logo {
+.land-footer-logo {
   font-size: 1.25rem;
   font-weight: 700;
   color: #ffffff;
@@ -27,13 +27,13 @@
   letter-spacing: 0.5px;
 }
 
-.footer-description {
+.land-footer-description {
   font-size: 0.85rem;
   color: #999999;
   line-height: 1.6;
 }
 
-.footer-title {
+.land-footer-title {
   font-size: 0.95rem;
   font-weight: 600;
   color: #ffffff;
@@ -41,7 +41,7 @@
   text-transform: capitalize;
 }
 
-.footer-links {
+.land-footer-links {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -50,22 +50,22 @@
   gap: 0.75rem;
 }
 
-.footer-links li {
+.land-footer-links li {
   margin: 0;
 }
 
-.footer-links a {
+.land-footer-links a {
   color: #999999;
   text-decoration: none;
   font-size: 0.85rem;
   transition: color 0.3s ease;
 }
 
-.footer-links a:hover {
+.land-footer-links a:hover {
   color: #ffffff;
 }
 
-.footer-bottom {
+.land-footer-bottom {
   max-width: 1200px;
   margin: 0 auto;
   padding-top: 2rem;
@@ -77,18 +77,18 @@
   gap: 1rem;
 }
 
-.footer-bottom p {
+.land-footer-bottom p {
   font-size: 0.8rem;
   color: #999999;
   margin: 0;
 }
 
-.social-links {
+.land-social-links {
   display: flex;
   gap: 1rem;
 }
 
-.social-links a {
+.land-social-links a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -103,49 +103,49 @@
   transition: all 0.3s ease;
 }
 
-.social-links a:hover {
+.land-social-links a:hover {
   background-color: #d32f2f;
   color: #ffffff;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .footer {
+  .land-footer {
     padding: 2rem 1rem 1.5rem;
   }
 
-  .footer-content {
+  .land-footer-content {
     gap: 1.5rem;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .footer-bottom {
+  .land-footer-bottom {
     flex-direction: column;
     align-items: flex-start;
   }
 }
 
 @media (max-width: 480px) {
-  .footer-content {
+  .land-footer-content {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .footer-bottom {
+  .land-footer-bottom {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .footer-logo {
+  .land-footer-logo {
     font-size: 1rem;
   }
 
-  .footer-title {
+  .land-footer-title {
     font-size: 0.9rem;
   }
 
-  .footer-links a,
-  .footer-bottom p {
+  .land-footer-links a,
+  .land-footer-bottom p {
     font-size: 0.8rem;
   }
 }
