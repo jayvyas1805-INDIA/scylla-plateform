@@ -1,12 +1,18 @@
 /* ================= EDIT HOURS FORM ================= */
 
-.edit-hours-form .hours-row {
+.hours-row {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.edit-hours-form input {
+.hours-row label {
+  flex: 0 0 150px;
+  margin: 0;
+}
+
+.hours-row input {
   flex: 1;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
@@ -16,8 +22,15 @@
   font-size: 13px;
 }
 
-.edit-hours-form input:focus {
+.hours-row input:focus {
   outline: none;
   border-color: var(--blue-primary);
   box-shadow: 0 0 8px rgba(37, 99, 235, 0.35);
+}
+
+.hours-loading {
+  color: var(--text-tertiary);
+  font-size: 13px;
+  text-align: center;
+  padding: 16px 0;
 }

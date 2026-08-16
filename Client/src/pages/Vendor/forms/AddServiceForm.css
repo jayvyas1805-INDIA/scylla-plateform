@@ -1,16 +1,21 @@
 /* ================= ADD SERVICE FORM ================= */
+/* VendorModal.css handles the shared modal input/label styling.
+   This file just adds the bits unique to this form (the icon <select>). */
 
-.add-service-form input {
+.add-member-modal select {
   width: 100%;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--text-primary);
+  background: #111a3a;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: #e6ecff;
+  font-size: 14px;
+  transition: all 0.25s ease;
 }
 
-.add-service-form input:focus {
+.add-member-modal select:focus {
   outline: none;
-  border-color: var(--blue-primary);
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+  background: #0f1733;
 }

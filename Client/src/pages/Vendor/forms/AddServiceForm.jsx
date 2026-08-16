@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { addService } from "../../../api/vendor.api";
+import "./VendorModal.css";
+import "./AddServiceForm.css";
 
 
 const AddServiceForm = ({ onClose, onAdd }) => {
@@ -22,15 +24,14 @@ const AddServiceForm = ({ onClose, onAdd }) => {
     navigate("/vendor/profile"); // go back
   } catch (err) {
     console.error(err);
-    console.log(err.data)
     alert("Failed to add service");
   }
 };
 
 
   return (
-    <div className="modal-overlay">
-      <div className="add-member-modal">
+    <div className="modal-overlay" onClick={() => navigate("/vendor/profile")}>
+      <div className="add-member-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Add New Service</h2>
           <button className="close-btn" onClick={() => navigate("/vendor/profile")}>

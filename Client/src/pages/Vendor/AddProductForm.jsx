@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AddProductForm.css";
 // import "../../index.css"
 import { addProduct } from "../../api/product.api";
@@ -48,6 +49,16 @@ const AddProductForm = ({ onClose, onAdd }) => {
     "Comfort Focus"
   ];
   const statusOptions = ["In Stock", "Limited", "Refurbished"];
+  const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      navigate("/vendor/product");
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -121,14 +132,25 @@ const AddProductForm = ({ onClose, onAdd }) => {
     // 🔥 MUST be "images"
     data.append("images", formData.imageFile);
 
-    await onAdd(data);   // 👈 send FormData
-
-    onClose();
+    setSubmitting(true);
+    try {
+      if (onAdd) {
+        await onAdd(data);
+      } else {
+        await addProduct(data);
+      }
+      handleClose();
+    } catch (err) {
+      console.error("Failed to add product", err);
+      alert("Failed to add product");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div className="add-product-overlay">
-      <div className="add-product-card">
+    <div className="add-product-overlay" onClick={handleClose}>
+      <div className="add-product-card" onClick={(e) => e.stopPropagation()}>
 
         <h2 className="form-title">Add New Tyre Product</h2>
 
@@ -281,11 +303,11 @@ const AddProductForm = ({ onClose, onAdd }) => {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="btn btn-secondary" onClick={handleClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
-              Add Product
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Adding..." : "Add Product"}
             </button>
           </div>
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { editVendorProfile } from '../../../api/vendor.api';
+import "./VendorModal.css";
+import "./EditAboutForm.css";
 
 
 const EditAboutForm = ({ initialValue, onClose, onSave }) => {
@@ -16,7 +18,7 @@ const EditAboutForm = ({ initialValue, onClose, onSave }) => {
   return (
     <div
       className="modal-overlay"
-      onClick={() => { onClose, navigate("/vendor/profile") }}   /* ✅ CLICK OUTSIDE CLOSE */
+      onClick={() => { onClose?.(); navigate("/vendor/profile"); }}   /* click outside closes */
     >
       <div
         className="add-member-modal"
@@ -28,7 +30,7 @@ const EditAboutForm = ({ initialValue, onClose, onSave }) => {
           <button
             type="button"
             className="close-btn"
-            onClick={() => { onClose, navigate("/vendor/profile") }}
+            onClick={() => { onClose?.(); navigate("/vendor/profile"); }}
           /* ✅ CLOSE WORKS */
           >
             <FaTimes />

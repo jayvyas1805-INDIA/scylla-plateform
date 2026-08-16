@@ -1,6 +1,6 @@
 /* ================= UPLOAD MEDIA FORM ================= */
 
-.upload-media-form input[type="file"] {
+.add-member-modal input[type="file"] {
   width: 100%;
   padding: 14px;
   border: 2px dashed var(--border-color);
@@ -11,7 +11,16 @@
   text-align: center;
 }
 
-.upload-media-form input[type="file"]:hover {
+.add-member-modal input[type="file"]:hover {
   border-color: var(--blue-neon);
   background: rgba(37, 99, 235, 0.15);
+}
+
+.media-upload-preview {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-top: 12px;
 }
