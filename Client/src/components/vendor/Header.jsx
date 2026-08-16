@@ -48,8 +48,11 @@ const Header = ({ currentPath }) => {
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="vendor-header-hamburger"
+          className={`vendor-header-hamburger ${mobileMenuOpen ? "vendor-header-hamburger-open" : ""
+            }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={mobileMenuOpen}
         >
           <span></span>
           <span></span>
