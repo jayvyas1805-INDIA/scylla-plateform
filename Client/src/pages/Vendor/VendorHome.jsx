@@ -82,7 +82,7 @@ const VendorHome = () => {
 
               {/* ✅ TITLE + FORMULA ICON */}
               <div className="vendor-title-row">
-                <h1 className="vendor-title">{vendor.businessName}</h1>
+                <h1 className="vendor-title">{vendor?.businessName}</h1>
                 <div className="vendor-title-icon">
                   {vendor?.logo ? (
                     <img
@@ -102,14 +102,14 @@ const VendorHome = () => {
                 </div>
               </div>
 
-              <p className="vendor-subtitle">{vendor.category}</p>
+              <p className="vendor-subtitle">{vendor?.category}</p>
 
               <p className="vendor-description">
-                {vendor.description}
+                {vendor?.description}
               </p>
 
               <div className="vendor-meta">
-                <span className="meta-item">📍 {vendor.location}</span>
+                <span className="meta-item">📍 {vendor?.location}</span>
                 <span className="meta-item">📅 Since {vendor?.createdAt?.slice(0, 4)}</span>
               </div>
 

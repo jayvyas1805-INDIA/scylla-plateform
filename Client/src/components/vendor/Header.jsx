@@ -30,27 +30,31 @@ const Header = ({ currentPath }) => {
     vendorData();
   }, []);
 
+  useEffect(() => {
+    if (!loading && !vendor) {
+      navigate("/vendor/login");
+    }
+  }, [loading, vendor, navigate]);
+
   if (loading) return <p>Loading...</p>;
- if (!vendor)[
-    navigate("/vendor/Not-Found")
-  ]; 
+  if (!vendor) return null;
 
   return (
-    <header className="vendor-header">
-      <div className="vendor-header-container">
+    <header className="header">
+      <div className="header-container">
 
         {/* Logo */}
-        <Link to="/" className="vendor-logo">
-          <div className="vendor-logo-icon">⚡</div>
-          <span className="vendor-logo-text">SCYLLA</span>
+        <Link to="/" className="logo">
+          <div className="logo-icon">⚡</div>
+          <span className="logo-text">SCYLLA</span>
         </Link>
 
         {/* Company Name */}
-        <div className="vendor-company-name">{vendor?.businessName}</div>
+        <div className="company-name">{vendor?.businessName}</div>
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="vendor-hamburger"
+          className="hamburger"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <span></span>
@@ -59,10 +63,10 @@ const Header = ({ currentPath }) => {
         </button>
 
         {/* Navigation */}
-        <nav className={`vendor-nav-links ${mobileMenuOpen ? "show" : ""}`}>
+        <nav className={`nav-links ${mobileMenuOpen ? "show" : ""}`}>
           <Link
             to="/vendor/home"
-            className={`vendor-nav-link ${currentPath === '/' ? 'active' : ''}`}
+            className={`nav-link ${currentPath === '/vendor/home' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Home
@@ -70,7 +74,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/profile"
-            className={`vendor-nav-link ${currentPath === '/vendor-profile' ? 'active' : ''}`}
+            className={`nav-link ${currentPath === '/vendor/profile' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Vendor Profile
@@ -78,7 +82,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/product"
-            className={`vendor-nav-link ${currentPath === '/product-listing' ? 'active' : ''}`}
+            className={`nav-link ${currentPath === '/vendor/product' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Product / Service Listing
@@ -86,7 +90,7 @@ const Header = ({ currentPath }) => {
 
           <Link
             to="/vendor/quote"
-            className={`vendor-nav-link ${currentPath === '/quotes-inquiries' ? 'active' : ''}`}
+            className={`nav-link ${currentPath === '/vendor/quote' ? 'active' : ''}`}
             onClick={() => setMobileMenuOpen(false)}
           >
             Quotes & Inquiries
@@ -94,26 +98,26 @@ const Header = ({ currentPath }) => {
         </nav>
 
         {/* Profile Dropdown */}
-        <div className="vendor-profile-section">
+        <div className="profile-section">
           <button
-            className="vendor-profile-avatar"
+            className="profile-avatar"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <img className="vendor-avatar-initials" src={vendor?.logo} alt="logo" />
+            <img className="avatar-initials" src={vendor?.logo} alt="logo" />
           </button>
 
           {isDropdownOpen && (
-            <div className="vendor-dropdown-menu">
+            <div className="dropdown-menu">
               <Link
                 to="/vendor/myProfile"
-                className="vendor-dropdown-item"
+                className="dropdown-item"
                 onClick={() => setIsDropdownOpen(false)}
               >
                 My Profile
               </Link>
 
               <button
-                className="vendor-dropdown-item logout"
+                className="dropdown-item logout"
                 onClick={() => {
                   handleLogout();
                   localStorage.removeItem("token");
