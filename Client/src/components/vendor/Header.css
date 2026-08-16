@@ -1,3 +1,13 @@
+/* =========================================================
+   Vendor Header — self-contained styles.
+   Every selector is prefixed `vendor-header-` (or `vendor-header`
+   itself) so nothing here collides with same-named classes in
+   other pages (e.g. `.logo`, `.profile-avatar`, `.hamburger`
+   are all reused elsewhere in the app, and since every stylesheet
+   compiles into one global CSS bundle, unscoped names silently
+   override each other depending on import order).
+   ========================================================= */
+
 .vendor-header {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
@@ -19,15 +29,17 @@
 }
 
 /* Logo */
-.vendor-logo {
+.vendor-header-logo {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   text-decoration: none;
   flex-shrink: 0;
+  height: auto;
+  padding: 0;
 }
 
-.vendor-logo-icon {
+.vendor-header-logo-icon {
   width: 32px;
   height: 32px;
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
@@ -37,21 +49,22 @@
   justify-content: center;
   font-size: 18px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
-.vendor-logo-text {
+.vendor-header-logo-text {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: 1px;
 }
 
-.vendor-logo:hover {
+.vendor-header-logo:hover {
   opacity: 0.8;
 }
 
 /* Company name */
-.vendor-company-name {
+.vendor-header-company {
   color: var(--text-secondary);
   font-size: 13px;
   white-space: nowrap;
@@ -59,7 +72,7 @@
 }
 
 /* Navigation */
-.vendor-nav-links {
+.vendor-header-nav {
   display: flex;
   gap: var(--spacing-xl);
   flex: 1;
@@ -67,7 +80,7 @@
   align-items: center;
 }
 
-.vendor-nav-link {
+.vendor-header-nav-link {
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
@@ -77,22 +90,22 @@
   border-bottom: 2px solid transparent;
 }
 
-.vendor-nav-link:hover {
+.vendor-header-nav-link:hover {
   color: var(--blue-neon);
 }
 
-.vendor-nav-link.active {
+.vendor-header-nav-link.vendor-header-nav-active {
   color: var(--blue-primary);
   border-bottom-color: var(--blue-primary);
 }
 
 /* Profile section */
-.vendor-profile-section {
+.vendor-header-profile {
   position: relative;
   flex-shrink: 0;
 }
 
-.vendor-profile-avatar {
+.vendor-header-avatar-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -106,24 +119,25 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  padding: 0;
 }
 
-.vendor-profile-avatar:hover {
+.vendor-header-avatar-btn:hover {
   box-shadow: 0 0 20px rgba(6, 181, 212, 0.4);
   border-color: var(--blue-neon);
 }
 
-.vendor-avatar-initials {
+.vendor-header-avatar-img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
   font-size: 13px;
   font-weight: 700;
-  min-width: none;
 }
 
 /* Dropdown menu */
-.vendor-dropdown-menu {
+.vendor-header-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
@@ -134,10 +148,10 @@
   margin-top: var(--spacing-sm);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  animation: slideDown 200ms ease-out;
+  animation: vendorHeaderSlideDown 200ms ease-out;
 }
 
-@keyframes slideDown {
+@keyframes vendorHeaderSlideDown {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -149,7 +163,7 @@
   }
 }
 
-.vendor-dropdown-item {
+.vendor-header-dropdown-item {
   display: block;
   width: 100%;
   padding: var(--spacing-md);
@@ -165,45 +179,21 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.vendor-dropdown-item:last-child {
+.vendor-header-dropdown-item:last-child {
   border-bottom: none;
 }
 
-.vendor-dropdown-item:hover {
+.vendor-header-dropdown-item:hover {
   background-color: var(--bg-secondary);
   color: var(--blue-neon);
 }
 
-.vendor-dropdown-item.logout:hover {
+.vendor-header-dropdown-item.vendor-header-dropdown-logout:hover {
   color: var(--red-danger);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .vendor-company-name {
-    display: none;
-  }
-
-  .vendor-nav-links {
-    gap: var(--spacing-lg);
-  }
-
-  .vendor-header-container {
-    gap: var(--spacing-lg);
-  }
-}
-
-@media (max-width: 768px) {
-  .vendor-nav-links {
-    display: none;
-  }
-
-  .vendor-header-container {
-    justify-content: space-between;
-  }
-}
-
-.vendor-hamburger {
+/* Hamburger (mobile) */
+.vendor-header-hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
@@ -213,33 +203,38 @@
   padding: 6px;
 }
 
-.vendor-hamburger span {
+.vendor-header-hamburger span {
   width: 26px;
   height: 3px;
   background-color: var(--text-primary);
   border-radius: 3px;
 }
-@media (max-width: 1024px) {
 
-  /* Show hamburger */
-  .vendor-hamburger {
+/* Responsive */
+@media (max-width: 1024px) {
+  .vendor-header-company {
+    display: none;
+  }
+
+  .vendor-header-nav {
+    gap: var(--spacing-lg);
+  }
+
+  .vendor-header-container {
+    gap: var(--spacing-lg);
+  }
+
+  .vendor-header-hamburger {
     display: flex;
   }
 
-  /* Group hamburger + profile on right */
-  .vendor-profile-section {
+  .vendor-header-profile {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  /* Hide center company name */
-  .vendor-company-name {
-    display: none;
-  }
-
-  /* Mobile dropdown menu */
-  .vendor-nav-links {
+  .vendor-header-nav {
     position: absolute;
     top: 100%;
     left: 0;
@@ -254,7 +249,21 @@
     border-top: 1px solid var(--border-color);
   }
 
-  .vendor-nav-links.show {
+  .vendor-header-nav.vendor-header-nav-show {
     display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .vendor-header-nav {
+    display: none;
+  }
+
+  .vendor-header-nav.vendor-header-nav-show {
+    display: flex;
+  }
+
+  .vendor-header-container {
+    justify-content: space-between;
   }
 }
