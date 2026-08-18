@@ -28,12 +28,13 @@ function Marketplace() {
     <div className="marketplace-grid">
 
       {products.map((product) => (
-        <div className="marketplace-card large" key={product._id}>
+        <div className="marketplace-card large" key={product._id} >
 
           <img
             src={product.images[0]}
             alt={product.title}
             className="product-img"
+            // style={{border:'1px solid white', margin:"0px 3px", borderRadius:"20px"}}
           />
 
           <h3> {product.title} </h3>

@@ -42,12 +42,13 @@ const ProductCard = ({ product }) => {
   };
   const conditionInfo = conditions[product.condition] || conditions['new'];
    return (
-      <div className="product-card-item">
+      <div className="product-card-item"style={{border:'1.5px solid white', padding:'8px',margin:"0px 10px", borderRadius:"20px"}}>
         <div className="product-card-image-wrapper">
           <img
             src={product?.image} // backend sends images[]
             alt={product.name}
             className="product-card-image"
+            style={{border:'1px solid white', margin:"0px 3px", borderRadius:"20px"}}
           />
           <div
             className="product-card-condition"
@@ -57,7 +58,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
 
-        <div className="product-card-content">
+        <div className="product-card-content" style={{margin:"5px"}}>
           <h3>{product.name}</h3>
           {product.model && <p>Model: {product.model}</p>}
           {product.brand && <p>Brand: {product.brand}</p>}
@@ -73,13 +74,13 @@ const ProductCard = ({ product }) => {
           {product.tags && product.tags.length > 0 && (
           <div className="product-card-tags">
               {product.tags.map((tag, i) => (
-                <span key={i} style={{ backgroundColor: getTagColor(tag) }}>{tag}</span>
+                <span key={i} style={{ backgroundColor: getTagColor(tag),borderRadius:"20px", padding:"4px", fontSize:"12px" }}>{tag}</span>
               ))}
           </div>
             )}
-          <div className="product-card-footer">
-            <span className="product-card-price">₹{Number(product.price || 0).toFixed(2)}</span>
-            <button className="product-card-btn">View Details</button>
+          <div className="product-card-footer" style={{borderTop:"1px solid"}}>
+            <span className="product-card-price" style={{color:"#53b738"}}>₹{Number(product.price || 0).toFixed(2)}</span>
+            <button className="product-card-btn" style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}>View Details</button>
           </div>
         </div>
       </div>
@@ -139,10 +140,11 @@ return(
       <main className="product-listing-main">
         <section className="tyre-catalog card">
           <div className="catalog-header">
-            <h2 className="section-title">Product Shop</h2>
+            <h2 className="section-title" style={{ marginBottom: '30px' }}>Product Shop</h2>
             <button
               className="btn btn-primary"
               onClick={() => setShowAddForm(true)}
+              style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '40px', cursor: 'pointer', marginRight: '10px' }}
             >
               + Add New / Old Product
             </button>

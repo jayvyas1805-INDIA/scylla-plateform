@@ -25,12 +25,13 @@ const ProductCard = ({ product }) => {
   const conditionInfo = conditions[product.condition] || conditions['new'];
 
   return (
-    <div className="product-card">
+    <div className="product-card"style={{border:'1.5px solid white', padding:'8px',margin:"0px 10px", borderRadius:"20px"}}>
       <div className="product-card-image-wrapper">
         <img
           src={product.image}
           alt={product.name}
           className="product-card-image"
+          style={{border:'1px solid white', margin:"0px 3px", borderRadius:"20px"}}
         />
 
 
@@ -42,7 +43,7 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      <div className="product-card-content">
+      <div className="product-card-content"style={{margin:"5px"}}>
         <h3 className="product-card-title">{product.name}</h3>
 
         {product.model && (
@@ -76,7 +77,7 @@ const ProductCard = ({ product }) => {
               <span
                 key={index}
                 className="product-card-tag"
-                style={{ backgroundColor: getTagColor(tag) }}
+                style={{ backgroundColor: getTagColor(tag),borderRadius:"20px", padding:"4px", fontSize:"12px"  }}
               >
                 {tag}
               </span>
@@ -84,11 +85,11 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        <div className="product-card-footer">
-          <span className="product-card-price">
+        <div className="product-card-footer"style={{borderTop:"1px solid"}}>
+          <span className="product-card-price"style={{color:"#53b738"}}>
             ₹{Number(product.price || 0).toFixed(2)}
           </span>
-          <button className="product-card-btn">View Details</button>
+          <button className="product-card-btn"style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}>View Details</button>
         </div>
       </div>
     </div>

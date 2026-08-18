@@ -6,7 +6,7 @@ import {
   uploadVendorMedia,
 } from '../../api/vendor.api';
 import Header from '../../components/vendor/Header';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 import './VendorProfile1.css';
 
 const DESCRIPTION_LIMIT = 400;

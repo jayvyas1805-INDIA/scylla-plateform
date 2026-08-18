@@ -35,7 +35,8 @@
 }
 
 .marketplace-controls {
-  display: flex;
+  display: sticky;
+  top: 0;
   gap: 12px;
   margin-bottom: 32px;
   align-items: center;

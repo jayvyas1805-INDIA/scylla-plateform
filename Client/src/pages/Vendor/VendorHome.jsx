@@ -51,8 +51,8 @@ const VendorHome = () => {
   // }, [vendor, navigate]);
 
 
-   
-  
+
+
 
 
   if (loading) return <p>Loading...</p>;
@@ -71,7 +71,6 @@ const VendorHome = () => {
 
               {/* ✅ TITLE + FORMULA ICON */}
               <div className="vendor-title-row">
-                <h1 className="vendor-title">{vendor?.businessName}</h1>
                 <div className="vendor-title-icon">
                   {vendor?.logo ? (
                     <img
@@ -89,9 +88,12 @@ const VendorHome = () => {
                   )}
 
                 </div>
+                <h1 className="vendor-title">{vendor?.businessName}</h1>
+                <p className="vendor-subtitle" style={{ border: '1px solid neon-blue', padding: '4px 8px', margin: '8px 3px', backgroundColor: 'rgba(0, 123, 255, 0.1)', borderRadius: '40px' }}>
+                  {vendor?.category}
+                </p>
               </div>
 
-              <p className="vendor-subtitle">{vendor?.category}</p>
 
               <p className="vendor-description">
                 {vendor?.description}
