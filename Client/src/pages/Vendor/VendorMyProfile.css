@@ -565,9 +565,26 @@
     padding: 20px;
   }
 
+  .vendor-page-title {
+    font-size: 1.35rem;
+  }
+
   .vendor-page-header-content {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .vendor-page-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .vendor-card {
+    padding: 18px;
+  }
+
+  .vendor-card-banner {
+    margin: -18px -18px 16px;
   }
 
   .vendor-info-grid,
@@ -578,5 +595,21 @@
 
   .vendor-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vendor-modal {
+    padding: 18px;
+  }
+
+  .vendor-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .vendor-modal-footer .vendor-btn {
+    width: 100%;
+  }
+
+  .vendor-document-item {
+    flex-wrap: wrap;
   }
 }

@@ -26,8 +26,8 @@
 
 /* ---------------- LOADING / ERROR ---------------- */
 
-.vendor-home > p,
-.vendor-home-main > p {
+.vendor-home>p,
+.vendor-home-main>p {
   text-align: center;
   padding: 60px 20px;
   color: var(--text-secondary, #6b7280);
@@ -43,16 +43,12 @@
   overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at 85% 20%,
+    radial-gradient(circle at 85% 20%,
       rgba(0, 128, 255, 0.16),
-      transparent 35%
-    ),
-    linear-gradient(
-      135deg,
+      transparent 35%),
+    linear-gradient(135deg,
       rgba(0, 128, 255, 0.08),
-      rgba(157, 0, 255, 0.05)
-    );
+      rgba(157, 0, 255, 0.05));
 
   border: 1px solid var(--border-color, #e5e7eb);
   border-radius: 22px;
@@ -275,11 +271,9 @@
 }
 
 .vendor-btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--primary, #0080ff),
-    var(--primary-dark, #0066cc)
-  );
+  background: linear-gradient(135deg,
+      var(--primary, #0080ff),
+      var(--primary-dark, #0066cc));
 
   color: #ffffff;
 
@@ -322,12 +316,10 @@
   justify-content: center;
 
   background:
-    radial-gradient(
-      circle,
+    radial-gradient(circle,
       rgba(0, 128, 255, 0.22),
       rgba(0, 128, 255, 0.04) 60%,
-      transparent 72%
-    );
+      transparent 72%);
 
   border: 1px solid rgba(0, 128, 255, 0.25);
 
@@ -346,6 +338,7 @@
 }
 
 @keyframes vendor-car-float {
+
   0%,
   100% {
     transform: translateY(0);
@@ -400,11 +393,9 @@
   width: 100%;
   height: 3px;
 
-  background: linear-gradient(
-    90deg,
-    var(--primary, #0080ff),
-    var(--primary-dark, #0066cc)
-  );
+  background: linear-gradient(90deg,
+      var(--primary, #0080ff),
+      var(--primary-dark, #0066cc));
 
   opacity: 0.7;
 }
@@ -837,6 +828,67 @@
   .vendor-action-btn {
     min-height: 95px;
   }
+
+  .vendor-home-hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .vendor-home-title-row {
+    flex-direction: column;
+  }
+
+  .vendor-home-meta,
+  .vendor-home-badges,
+  .vendor-home-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .vendor-home-main {
+    padding: 24px 16px 40px;
+  }
+
+  .vendor-home-hero {
+    padding: 24px;
+  }
+
+  .vendor-home-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vendor-home-title {
+    font-size: 1.5rem;
+  }
+
+  .vendor-home-icon-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .vendor-home-icon-inner {
+    font-size: 2.4rem;
+  }
+
+  .vendor-home-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .vendor-home-actions .vendor-home-btn {
+    width: 100%;
+  }
+
+  .vendor-home-panel,
+  .vendor-home-quick-actions {
+    padding: 18px;
+  }
+
+  .vendor-home-footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* =========================================================
@@ -939,6 +991,12 @@
   }
 }
 
+@media (max-width: 400px) {
+  .vendor-home-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* =========================================================
    DARK MODE SUPPORT
    ========================================================= */
@@ -964,7 +1022,7 @@
 }
 
 
- /* =========================================================
+/* =========================================================
     VENDOR DARK CARD TEXT FIX
     ========================================================= */
 

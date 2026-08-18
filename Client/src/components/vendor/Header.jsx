@@ -44,15 +44,17 @@ const Header = ({ currentPath }) => {
         </Link>
 
         {/* Company Name */}
-        <div className="vendor-header-company">{loading ? '' : (vendor?.businessName || '')}</div>
+        {!loading && vendor?.businessName && (
+          <div className="vendor-header-company">
+            <span className="vendor-header-company-divider" aria-hidden="true" />
+            <span className="vendor-header-company-name">{vendor.businessName}</span>
+          </div>
+        )}
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className={`vendor-header-hamburger ${mobileMenuOpen ? "vendor-header-hamburger-open" : ""
-            }`}
+          className="vendor-header-hamburger"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={mobileMenuOpen}
         >
           <span></span>
           <span></span>

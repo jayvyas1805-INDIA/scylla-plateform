@@ -39,7 +39,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // import Header from '../../components/Vendor/Header';
-import '../../Vendor/VendorQuotes.css';
+import '../../team/marketplace/Messages.css';
 
 const Messages = () => {
   const location = useLocation();
@@ -187,7 +187,7 @@ const Messages = () => {
   };
 
   return (
-    <div className="vendor-quotes">
+    <div className="messages-page">
       {/* <Header currentPath={location.pathname} /> */}
       
       <main className="quotes-main">

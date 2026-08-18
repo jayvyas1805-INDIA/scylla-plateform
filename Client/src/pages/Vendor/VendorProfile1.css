@@ -1,542 +1,449 @@
-.vendor-profile1 {
+/* =========================================================
+   Vendor Profile (main /vendor/profile page) — self-contained.
+   Every selector is prefixed `vendor-profile-` so nothing here
+   collides with other pages (this app bundles all CSS into one
+   global file). Only global.css design tokens are used — no
+   other page's stylesheet is imported (previously this file
+   pulled in the Team module's TeamProfile.css).
+   ========================================================= */
+
+.vendor-profile-page {
   min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.vendor-profile-loading {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 60px 20px;
+}
+
+.vendor-profile-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-primary);
+  gap: 22px;
 }
 
-.vendor-profile1 {
-  overflow-x: hidden;
-}
+/* ---------------- Hero ---------------- */
 
-
-.profile1-main {
-  flex: 1;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: var(--spacing-lg);
-  box-sizing: border-box;
-}
-
-/* Profile Header */
-.profile-header {
-  background: linear-gradient(135deg, rgba(30, 58, 138, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
+.vendor-profile-hero {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.25), rgba(6, 182, 212, 0.1));
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  padding: 32px;
 }
 
-.profile-header-content {
+.vendor-profile-hero-content {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: var(--spacing-xl);
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
-.header-info {
+.vendor-profile-hero-info {
   flex: 1;
+  min-width: 220px;
 }
 
-.company-badge {
-  width: 50px;
-  height: 50px;
+.vendor-profile-badge {
+  width: 56px;
+  height: 56px;
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-lg);
-  font-size: 28px;
+  margin-bottom: 16px;
+  font-size: 26px;
+  overflow: hidden;
 }
 
-.profile-company-name {
-  font-size: 2.5rem;
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-sm);
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-}
-
-.profile-meta {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-bottom: var(--spacing-sm);
-}
-
-.profile-location {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin-bottom: 0;
-}
-
-/* Team Gallery */
-.team-gallery-section {
-  margin-bottom: var(--spacing-xl);
-}
-
-.gallery-label {
-  color: var(--text-secondary);
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--spacing-md);
-}
-
-.team-gallery {
-  display: flex;
-  gap: var(--spacing-lg);
-  align-items: center;
-}
-
-.team-member-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 18px;
-  border: 2px solid var(--border-color);
-  transition: all var(--transition-normal);
-}
-
-.team-member-circle.blue {
-  background: linear-gradient(135deg, #3b82f6, #0ea5e9);
-}
-
-.team-member-circle.purple {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-}
-
-.team-member-circle.cyan {
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-}
-
-.team-member-circle.green {
-  background: linear-gradient(135deg, #10b981, #059669);
-}
-
-.team-member-circle.orange {
-  background: linear-gradient(135deg, #f97316, #ea580c);
-}
-
-.team-member-circle:hover {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-  transform: scale(1.05);
-}
-
-/* Sections */
-
-.profile-header,
-.about-section,
-.services-section,
-.business-hours-section,
-.projects-section,
-.gallery-section,
-.reviews-section {
+.vendor-profile-badge img {
   width: 100%;
-  box-sizing: border-box;
+  height: 100%;
+  object-fit: cover;
 }
 
-
-.about-section,
-.services-section,
-.business-hours-section,
-.projects-section,
-.gallery-section,
-.reviews-section {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
-  transition: all var(--transition-normal);
-}
-
-.about-section:hover,
-.services-section:hover,
-.business-hours-section:hover,
-.projects-section:hover,
-.gallery-section:hover,
-.reviews-section:hover {
-  border-color: var(--blue-neon);
-  box-shadow: 0 0 30px rgba(6, 181, 212, 0.15);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.section-title {
-  font-size: 1.25rem;
+.vendor-profile-name {
+  font-size: 2.1rem;
+  font-weight: 800;
   color: var(--text-primary);
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.vendor-profile-meta {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin: 0 0 6px;
+}
+
+.vendor-profile-location {
+  color: var(--blue-neon);
+  font-size: 0.88rem;
   margin: 0;
 }
 
-.edit-btn,
-.add-btn,
-.reply-btn {
-  background: none;
+/* ---------------- Buttons ---------------- */
+
+.vendor-profile-btn {
   border: none;
-  color: var(--blue-primary);
-  font-family: var(--font-family);
-  cursor: pointer;
-  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 11px 20px;
+  font-size: 0.88rem;
   font-weight: 600;
-  transition: color var(--transition-fast);
-  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.edit-btn:hover,
-.add-btn:hover,
-.reply-btn:hover {
+.vendor-profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.vendor-profile-btn-primary {
+  background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
+  color: #fff;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
+}
+
+.vendor-profile-btn-primary:hover {
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.5);
+  transform: translateY(-1px);
+}
+
+.vendor-profile-edit-link,
+.vendor-profile-add-link {
+  background: none;
+  border: none;
+  color: var(--blue-neon);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.vendor-profile-edit-link:hover,
+.vendor-profile-add-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- Media strip ---------------- */
+
+.vendor-profile-media-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.vendor-profile-media-thumb {
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.vendor-profile-add-media {
+  width: 140px;
+  height: 100px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+}
+
+.vendor-profile-add-media:hover:not(:disabled) {
+  border-color: var(--blue-neon);
   color: var(--blue-neon);
 }
 
-/* About Section */
-.about-text {
-  color: var(--text-secondary);
-  line-height: 1.8;
-  font-size: 14px;
-  margin: 0;
-}
+/* ---------------- Card ---------------- */
 
-/* Services Grid */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-.service-card {
-  background-color: var(--bg-tertiary);
+.vendor-profile-card {
+  background: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-  text-align: center;
-  transition: all var(--transition-normal);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.vendor-profile-card-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
-}
-
-.service-card:hover {
-  border-color: var(--blue-primary);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-}
-
-.service-icon {
-  font-size: 2.5rem;
-}
-
-.service-label {
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0;
-}
-
-/* Business Hours */
-.business-hours-grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.hours-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
-}
-
-.hours-item {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md);
-  background-color: var(--bg-tertiary);
-  border-radius: var(--radius-md);
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.day-name {
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.hours-time {
+.vendor-profile-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 500;
+  margin: 0 0 16px;
 }
 
-/* Projects Grid */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-.project-card {
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: all var(--transition-normal);
-  height: 100%
-}
-
-
-
-.project-card:hover {
-  border-color: var(--blue-neon);
-  box-shadow: 0 0 20px rgba(6, 181, 212, 0.2);
-}
-
-.project-image {
-  width: 100%;
-  height: 275px; /* fixed height */
-   /* crop images nicely without distortion */
-  border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1)); /* fallback */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem; /* if using icon placeholder inside image */
-}
-
-.project-placeholder {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.project-title {
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  margin: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
-}
-
-.project-description {
-  color: var(--text-secondary);
-  font-size: 12px;
-  margin: 0 var(--spacing-md) var(--spacing-md);
-  line-height: 1.5;
-   flex-grow: 1;
-}
-
-/* Gallery */
-.workshop-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: var(--spacing-md);
-}
-
-.gallery-item {
-  aspect-ratio: 1;
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-normal);
-}
-
-.gallery-item:hover {
-  border-color: var(--blue-primary);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-}
-
-.gallery-item.add-media {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  border: 2px dashed var(--border-color);
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-}
-
-.gallery-item.add-media:hover {
-  border-color: var(--blue-primary);
-}
-
-.add-icon {
-  font-size: 2rem;
-  color: var(--blue-primary);
-  
-}
-
-.gallery-item.add-media p {
-  color: var(--text-secondary);
-  font-size: 12px;
+.vendor-profile-card-header .vendor-profile-card-title {
   margin: 0;
 }
 
-.image-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.05));
+.vendor-profile-empty-note {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-style: italic;
+  margin: 0;
 }
 
-/* Reviews Section */
-.rating-summary {
+/* ---------------- About ---------------- */
+
+.vendor-profile-about-text {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.vendor-profile-empty {
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.vendor-profile-view-toggle {
+  background: none;
+  border: none;
+  color: var(--blue-neon);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 0 0;
+}
+
+.vendor-profile-view-toggle:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- Services ---------------- */
+
+.vendor-profile-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+}
+
+.vendor-profile-service-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-xl);
-  border-bottom: 1px solid var(--border-color);
+  gap: 8px;
+  padding: 18px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all 0.2s ease;
 }
 
-.rating-score {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--blue-primary);
+.vendor-profile-service-card:hover {
+  border-color: var(--blue-neon);
+  transform: translateY(-2px);
 }
 
-.rating-stars {
+.vendor-profile-service-icon {
   font-size: 1.5rem;
 }
 
-.rating-count {
-  color: var(--text-secondary);
-  font-size: 13px;
+.vendor-profile-service-label {
+  font-size: 0.82rem;
+  color: var(--text-primary);
   margin: 0;
 }
 
-.rating-bars {
+/* ---------------- Business hours ---------------- */
+
+.vendor-profile-hours-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.vendor-profile-hours-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.vendor-profile-day-name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.vendor-profile-hours-time {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+/* ---------------- Projects ---------------- */
+
+.vendor-profile-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.vendor-profile-project-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.vendor-profile-project-card:hover {
+  border-color: var(--blue-neon);
+  transform: translateY(-3px);
+}
+
+.vendor-profile-project-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.vendor-profile-project-title {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 12px 14px 4px;
+}
+
+.vendor-profile-project-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 0 14px 14px;
+  line-height: 1.5;
+}
+
+/* ---------------- Gallery ---------------- */
+
+.vendor-profile-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.vendor-profile-gallery-item {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.vendor-profile-upload-tile {
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.rating-bar-row {
-  display: grid;
-  grid-template-columns: 60px 1fr;
   align-items: center;
-  gap: var(--spacing-md);
-}
-
-.star-label {
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-tertiary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 12px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
 }
 
-.rating-bar {
-  width: 100%;
-  height: 8px;
-  background-color: var(--bg-tertiary);
-  border-radius: 4px;
-  overflow: hidden;
+.vendor-profile-upload-tile:hover:not(:disabled) {
+  border-color: var(--blue-neon);
+  color: var(--blue-neon);
 }
 
-.bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--blue-primary), var(--blue-neon));
-  transition: width var(--transition-normal);
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .profile-header-content {
-    flex-direction: column;
-  }
-
-  .services-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-
-  .hours-row {
-    grid-template-columns: 1fr;
-  }
-
-  .projects-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-}
+/* ---------------- Responsive ---------------- */
 
 @media (max-width: 768px) {
-  .profile1-main {
-    padding: var(--spacing-md);
+  .vendor-profile-main {
+    padding: 28px 18px 48px;
   }
 
-  .profile-company-name {
-    font-size: 1.75rem;
+  .vendor-profile-hero {
+    padding: 24px;
   }
 
-  .team-gallery {
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
-  }
-
-  .team-member-circle {
-    width: 60px;
-    height: 60px;
-    font-size: 16px;
-  }
-
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .section-header {
+  .vendor-profile-hero-content {
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-md);
+    align-items: stretch;
   }
 
-  .projects-grid {
+  .vendor-profile-btn-primary {
+    width: 100%;
+  }
+
+  .vendor-profile-name {
+    font-size: 1.7rem;
+  }
+
+  .vendor-profile-card {
+    padding: 20px;
+  }
+
+  .vendor-profile-hours-grid {
     grid-template-columns: 1fr;
-  }
-
-  .workshop-gallery {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .profile-header {
-    padding: var(--spacing-lg);
+  .vendor-profile-main {
+    padding: 20px 14px 40px;
   }
 
-  .services-grid {
+  .vendor-profile-hero {
+    padding: 18px;
+  }
+
+  .vendor-profile-badge {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  .vendor-profile-name {
+    font-size: 1.4rem;
+  }
+
+  .vendor-profile-media-thumb,
+  .vendor-profile-add-media {
+    width: 110px;
+    height: 80px;
+  }
+
+  .vendor-profile-services-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
   }
 
-  .service-card {
-    padding: var(--spacing-md);
-  }
-
-  .service-icon {
-    font-size: 2rem;
-  }
-
-  .workshop-gallery {
+  .vendor-profile-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-.about-text{
-  overflow-wrap: break-word;
-}
-

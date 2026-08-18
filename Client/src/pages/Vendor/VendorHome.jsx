@@ -51,19 +51,8 @@ const VendorHome = () => {
   // }, [vendor, navigate]);
 
 
-    useEffect(() => {
-    const fetchProductCount = async () => {
-      try {
-        const res = await getMyProduct();
-        setProductCount(res.data.productCount || 0); // ✅ dynamic
-      } catch (err) {
-        console.log(err.message);
-        setError("Failed to load product count");
-      }
-    };
-
-    fetchProductCount();
-  }, []);
+   
+  
 
 
   if (loading) return <p>Loading...</p>;

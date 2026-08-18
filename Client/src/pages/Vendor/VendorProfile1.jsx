@@ -1,407 +1,297 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   getVendorProfile,
   uploadGallery,
   uploadVendorMedia,
-  addProject
 } from '../../api/vendor.api';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
+import { FaPlus } from 'react-icons/fa';
 import './VendorProfile1.css';
-// import '../team/TeamMembers.css';
-// import '../../../globle.css'
-// import '../../index.css'
-import "../team/TeamProfile.css"
-import {
-  FaPlus,
-  FaTimes,
-} from "react-icons/fa";
-import AddProjectForm from './forms/AddProjectForm';
 
+const DESCRIPTION_LIMIT = 400;
 
 const VendorProfile1 = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
-  const maxLength = 2000;
-  const businessHours = [
-    { days: 'Monday', hours: '08:00 - 18:00', days2: 'Tuesday', hours2: '08:00 - 18:00' },
-    { days: 'Wednesday', hours: '08:00 - 18:00', days2: 'Thursday', hours2: '08:00 - 18:00' },
-    { days: 'Friday', hours: '08:00 - 18:00', days2: 'Saturday', hours2: '09:00 - 14:00' },
-    { days: 'Sunday', hours: 'Closed', days2: '', hours2: '' },
-  ];
 
   const [loading, setLoading] = useState(true);
   const [vendor, setVendor] = useState(null);
-  // const [showAddModal, setShowAddModal] = useState(false);
-  const [newCompanyDesc, setNewCompanyDesc] = useState("");
-  const [uploading, setUploading] = useState(false);
   const [gallery, setGallery] = useState([]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [media, setMedia] = useState([]);
-  const [isEditingHours, setIsEditingHours] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
 
-  const projects = vendor?.projects || [];
-  const vendorData = async () => {
+  const fetchVendor = async () => {
     try {
       setLoading(true);
       const res = await getVendorProfile();
       setVendor(res.data);
-      setGallery(res.data.gallery || []);
-      setMedia(res.data.media || []);
+      setGallery(res.data?.gallery || []);
+      setMedia(res.data?.media || []);
     } catch (err) {
-      alert("something went wrong", err.message);
-      console.log(err);
+      console.error('Failed to load vendor profile', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    vendorData();
+    fetchVendor();
   }, []);
 
+  useEffect(() => {
+    if (!loading && !vendor) {
+      navigate('/vendor/login');
+    }
+  }, [loading, vendor, navigate]);
 
-  const handleFileSelect = async (e) => {
+  const handleMediaSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      alert("Only image files allowed!");
+    if (!file.type.startsWith('image/')) {
+      alert('Only image files are allowed!');
       return;
     }
 
     const formData = new FormData();
-    formData.append("media", file);
+    formData.append('media', file);
 
     try {
-      await uploadVendorMedia(formData); // upload file
-      const res = await getVendorProfile(); // 🔹 refresh full team data
-      setMedia(res.data.media || []);      // update media state
-      setVendor(res.data);
-    } catch (err) {
-      console.error("Upload failed:", err);
-    }
-  };
-
-  // Trigger hidden file input
-
-  const triggerFileInput = () => document.getElementById("mediaInput").click();
-
-
-  // upload media gallery
-  //   // select file
-  const handleFileSelect1 = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      alert("Only image files allowed!");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("gallery", file);
-
-    try {
-      setUploading(true)
-      await uploadGallery(formData); // upload file
-      const res = await getVendorProfile(); // 🔹 refresh full team data
-      setGallery(res.data.gallery || []);      // update gallery state
-    } catch (err) {
-      console.error("Upload failed:", err);
-    }
-    finally {
-      setUploading(false);
-    }
-  };
-
-  const triggerFileInput1 = () => document.getElementById("galleryInput").click();
-
-
-  const handleAddProject = async (project) => {
-    try {
-      const formData = new FormData();
-      formData.append("title", project.title);
-      formData.append("desc", project.desc);
-
-      if (project.image) {
-        formData.append("image", project.image);
-      } else if (project.imageUrl) {
-        formData.append("imageUrl", project.imageUrl);
-      }
-
-      await addProject(formData);
-
-      // refresh vendor data
+      setUploadingMedia(true);
+      await uploadVendorMedia(formData);
       const res = await getVendorProfile();
+      setMedia(res.data?.media || []);
       setVendor(res.data);
-
-      setShowAddModal(false); // 🔑 close modal
-
     } catch (err) {
-      console.error(err);
-      alert("Failed to add project");
+      console.error('Media upload failed', err);
+      alert('Failed to upload media');
+    } finally {
+      setUploadingMedia(false);
+      e.target.value = '';
     }
   };
 
-  const isLong = vendor?.companyDesc.length > maxLength;
-  const shortText = vendor?.companyDesc.slice(0, maxLength) + "...";
+  const handleGallerySelect = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Only image files are allowed!');
+      return;
+    }
 
-  if (loading) return <p>Loading...</p>;
-  if (!vendor) [
-    navigate("/vendor/login")
-  ];
+    const formData = new FormData();
+    formData.append('gallery', file);
+
+    try {
+      setUploadingGallery(true);
+      await uploadGallery(formData);
+      const res = await getVendorProfile();
+      setGallery(res.data?.gallery || []);
+    } catch (err) {
+      console.error('Gallery upload failed', err);
+      alert('Failed to upload image');
+    } finally {
+      setUploadingGallery(false);
+      e.target.value = '';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="vendor-profile-page">
+        <Header currentPath={location.pathname} />
+        <p className="vendor-profile-loading">Loading profile…</p>
+      </div>
+    );
+  }
+
+  if (!vendor) return null;
+
+  const description = vendor.companyDesc || vendor.description || '';
+  const isLong = description.length > DESCRIPTION_LIMIT;
+  const visibleDescription = expanded || !isLong
+    ? description
+    : `${description.slice(0, DESCRIPTION_LIMIT)}...`;
+
+  const businessHours = Array.isArray(vendor.businessHours) && vendor.businessHours.length > 0
+    ? vendor.businessHours
+    : null;
 
   return (
-    <div className="vendor-profile1">
+    <div className="vendor-profile-page">
       <Header currentPath={location.pathname} />
 
-      <main className="profile1-main">
-
+      <main className="vendor-profile-main">
         {/* HEADER */}
-        <section className="profile-header">
-          <div className="profile-header-content">
-            <div className="header-info">
-              <div className="company-badge">
-                <span className="badge-icon">⚡</span>
+        <section className="vendor-profile-hero">
+          <div className="vendor-profile-hero-content">
+            <div className="vendor-profile-hero-info">
+              <div className="vendor-profile-badge">
+                {vendor.logo ? <img src={vendor.logo} alt={vendor.businessName} /> : <span>⚡</span>}
               </div>
-              <h1 className="profile-company-name">{vendor?.businessName}</h1>
-              <p className="profile-meta">
-                {vendor?.category} | Founded {vendor?.createdAt?.slice(0, 4)}
+              <h1 className="vendor-profile-name">{vendor.businessName || 'Your Business'}</h1>
+              <p className="vendor-profile-meta">
+                {vendor.category || 'Vendor'}
+                {vendor.createdAt && ` · Founded ${vendor.createdAt.slice(0, 4)}`}
               </p>
-              <p className="profile-location">📍 {vendor?.location}</p>
+              <p className="vendor-profile-location">📍 {vendor.location || 'Location not set'}</p>
             </div>
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate('/vendor/profile/edit')}
-            >
+            <button className="vendor-profile-btn vendor-profile-btn-primary" onClick={() => navigate('/vendor/profile/edit')}>
               ✏️ Edit Profile
             </button>
           </div>
         </section>
 
-        {/* MEDIA */}
-        <section className="team-media">
-          {/* add media */}
+        {/* MEDIA STRIP */}
+        <section className="vendor-profile-media-strip">
           {media.map((url, i) => (
-            <img
-              key={i}
-              src={url} // full URL from API
-              alt="Team Media"
-            />
+            <img key={i} src={url} alt={`Media ${i + 1}`} className="vendor-profile-media-thumb" />
           ))}
 
-          <div className="add-media" onClick={triggerFileInput}>
-            <FaPlus />
-          </div>
-
-          {/* Hidden file input */}
           <input
             type="file"
-            id="mediaInput"
-            style={{ display: "none" }}
-            onChange={handleFileSelect}
+            id="vendorMediaInput"
+            style={{ display: 'none' }}
+            onChange={handleMediaSelect}
             accept="image/*"
           />
+          <button
+            className="vendor-profile-add-media"
+            onClick={() => document.getElementById('vendorMediaInput').click()}
+            disabled={uploadingMedia}
+            aria-label="Add media"
+          >
+            <FaPlus />
+          </button>
         </section>
 
         {/* ABOUT */}
-        {/* <section className="about-section card">
-          <div className="section-header">
-            <h2 className="section-title">About the Company</h2>
-            <button
-              className="edit-btn"
-              onClick={() => navigate('/vendor/profile/edit/about')}
-            >
-              ✏️
+        <section className="vendor-profile-card">
+          <div className="vendor-profile-card-header">
+            <h2 className="vendor-profile-card-title">About the Company</h2>
+            <button className="vendor-profile-edit-link" onClick={() => navigate('/vendor/profile/edit/about')}>
+              ✏️ Edit
             </button>
           </div>
-          <p className="about-text">{vendor?.companyDesc}</p>
-        </section> */}
-        <section className="about-section card">
-      <div className="section-header">
-        <h2 className="section-title">About the Company</h2>
-        <button
-          className="edit-btn"
-          onClick={() => navigate("/vendor/profile/edit/about")}
-        >
-          ✏️
-        </button>
-      </div>
 
-      {/* Top View More / View Less (optional for UX) */}
-      {isLong && expanded && (
-        <button className="view-toggle top" onClick={() => setExpanded(false)}>
-          View Less ▲
-        </button>
-      )}
+          <p className={`vendor-profile-about-text ${!description ? 'vendor-profile-empty' : ''}`}>
+            {description ? visibleDescription : 'No company description added yet.'}
+          </p>
 
-      <p className="about-text">
-        {expanded || !isLong ? vendor?.companyDesc : shortText}
-      </p>
+          {isLong && (
+            <button className="vendor-profile-view-toggle" onClick={() => setExpanded(!expanded)}>
+              {expanded ? 'View Less ▲' : 'View More ▼'}
+            </button>
+          )}
+        </section>
 
-      {/* Bottom View More / View Less */}
-      {isLong && (
-        <button className="view-toggle bottom" onClick={() => setExpanded(!expanded)}>
-          {expanded ? "View Less ▼" : "View More ▼"}
-        </button>
-      )}
-    </section>
         {/* SERVICES */}
-        <section className="services-section card">
-          <div className="section-header">
-            <h2 className="section-title">Services Offered</h2>
-            <button
-              className="add-btn"
-              onClick={() => navigate("/vendor/profile/edit/services/add")}
-            >
+        <section className="vendor-profile-card">
+          <div className="vendor-profile-card-header">
+            <h2 className="vendor-profile-card-title">Services Offered</h2>
+            <button className="vendor-profile-add-link" onClick={() => navigate('/vendor/profile/edit/services/add')}>
               + Add New Service
             </button>
           </div>
-          <div className="services-grid">
-            {vendor?.services?.length > 0 ? (
-              vendor.services.map((service, index) => (
-                <div key={index} className="service-card">
-                  <div className="service-icon">{service.icon}</div>
-                  <p className="service-label">{service.name}</p>
+
+          {vendor.services?.length > 0 ? (
+            <div className="vendor-profile-services-grid">
+              {vendor.services.map((service, index) => (
+                <div key={index} className="vendor-profile-service-card">
+                  <div className="vendor-profile-service-icon">{service.icon || '🔧'}</div>
+                  <p className="vendor-profile-service-label">{service.name}</p>
                 </div>
-              ))
-            ) : (
-              <p>No services added yet</p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="vendor-profile-empty-note">No services added yet.</p>
+          )}
         </section>
 
         {/* BUSINESS HOURS */}
-        <section className="business-hours-section card">
-          <div className="section-header">
-            <h2 className="section-title">Business Hours</h2>
-            <button
-              className="edit-btn"
-              onClick={() => navigate('/vendor/profile/edit/hours')}
-            >
+        <section className="vendor-profile-card">
+          <div className="vendor-profile-card-header">
+            <h2 className="vendor-profile-card-title">Business Hours</h2>
+            <button className="vendor-profile-edit-link" onClick={() => navigate('/vendor/profile/edit/hours')}>
               ✏️ Edit Hours
             </button>
           </div>
 
-          <div className="business-hours-grid">
-            {businessHours.map((row, index) => (
-              <div key={index} className="hours-row">
-                <div className="hours-item">
-                  <span className="day-name">{row.days}</span>
-                  <span className="hours-time">{row.hours}</span>
+          {businessHours ? (
+            <div className="vendor-profile-hours-grid">
+              {businessHours.map((h, i) => (
+                <div key={i} className="vendor-profile-hours-item">
+                  <span className="vendor-profile-day-name">{h.days || h.day || `Day ${i + 1}`}</span>
+                  <span className="vendor-profile-hours-time">
+                    {h.hours || (h.start && h.end ? `${h.start} - ${h.end}` : 'Closed')}
+                  </span>
                 </div>
-                {row.days2 && (
-                  <div className="hours-item">
-                    <span className="day-name">{row.days2}</span>
-                    <span className="hours-time">{row.hours2}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="vendor-profile-empty-note">
+              No business hours set yet — click "Edit Hours" to add them.
+            </p>
+          )}
         </section>
 
         {/* PROJECTS */}
-        <section className="projects-section card">
-          <div className="section-header">
-            <h2 className="section-title">Projects Completed</h2>
-            <button
-              className="add-btn"
-              onClick={() => navigate("/vendor/profile/edit/projects/add")}
-            >
+        <section className="vendor-profile-card">
+          <div className="vendor-profile-card-header">
+            <h2 className="vendor-profile-card-title">Projects Completed</h2>
+            <button className="vendor-profile-add-link" onClick={() => navigate('/vendor/profile/edit/projects/add')}>
               + Add Project
             </button>
           </div>
 
-          <div className="projects-grid">
-            {vendor?.projects?.length > 0 ? (
-              vendor.projects.map((project, index) => (
-                <div key={index} className="project-card">
-                  {/* show image if exists */}
+          {vendor.projects?.length > 0 ? (
+            <div className="vendor-profile-projects-grid">
+              {vendor.projects.map((project, index) => (
+                <div key={index} className="vendor-profile-project-card">
                   {project.image && (
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="project-image"
-                    />
+                    <img src={project.image} alt={project.title} className="vendor-profile-project-image" />
                   )}
-                  <h4 className="project-title">{project.title}</h4>
-                  <p className="project-description">{project.desc}</p>
+                  <h4 className="vendor-profile-project-title">{project.title}</h4>
+                  <p className="vendor-profile-project-desc">{project.desc}</p>
                 </div>
-              ))
-            ) : (
-              <p>No projects added yet</p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="vendor-profile-empty-note">No projects added yet.</p>
+          )}
         </section>
 
         {/* GALLERY */}
-        <section className="team-section">
-          <h2>Media Gallery</h2>
+        <section className="vendor-profile-card">
+          <h2 className="vendor-profile-card-title">Media Gallery</h2>
 
-          {/* 🔹 TOP ROW – 4 ITEMS */}
-          <div className="gallery-grid top-row">
-            {gallery.map((g, i) => (
-              <img
-                key={i}
-                src={g}
-                alt="gallery"
-                className="gallery-item image-placeholder"
-              />
+          <div className="vendor-profile-gallery-grid">
+            {gallery.map((src, i) => (
+              <img key={i} src={src} alt={`Gallery ${i + 1}`} className="vendor-profile-gallery-item" />
             ))}
-            <button className="upload-tile" onClick={triggerFileInput1}>
+
+            <input
+              type="file"
+              id="vendorGalleryInput"
+              style={{ display: 'none' }}
+              onChange={handleGallerySelect}
+              accept="image/*"
+            />
+            <button
+              className="vendor-profile-upload-tile"
+              onClick={() => document.getElementById('vendorGalleryInput').click()}
+              disabled={uploadingGallery}
+            >
               <FaPlus />
-              <span>Upload Media</span>
-              <input
-                type="file"
-                name="gallery"
-                id="galleryInput"
-                style={{ display: "none" }}
-                onChange={handleFileSelect1}
-                accept="image/*"
-              />
+              <span>{uploadingGallery ? 'Uploading…' : 'Upload Media'}</span>
             </button>
           </div>
         </section>
-
-        {/* ADD MODAL */}
-        {/* {showAddModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h3>Add Project</h3>
-                <button
-                  className="close-button"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  <FaTimes />
-                </button>
-              </div>
-              <div className="modal-body">
-                <label htmlFor="projectTitle">Project Title</label>
-                <input
-                  type="text"
-                  id="projectTitle"
-                  placeholder="Enter project title"
-                />
-                <label htmlFor="projectDesc">Description</label>
-                <textarea
-                  id="projectDesc"
-                  placeholder="Enter project description"
-                ></textarea>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-primary">Add Project</button>
-              </div>
-            </div>
-          </div>
-        )} */}
-
       </main>
     </div>
   );
 };
 
 export default VendorProfile1;
-
