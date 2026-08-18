@@ -72,14 +72,14 @@ const VendorHome = () => {
               {/* ✅ TITLE + FORMULA ICON */}
               <div className="vendor-title-row">
                 <div className="vendor-title-icon">
-                  {vendor?.logo ? (
+                  {vendor.logo ? (
                     <img
                       src={vendor.logo}
                       alt="Vendor Logo"
                       style={{
                         width: "100%",
                         height: "100%",
-                        objectFit: "contain",
+                        objectFit: "fill",
                         borderRadius: "50%",
                       }}
                     />
@@ -88,15 +88,15 @@ const VendorHome = () => {
                   )}
 
                 </div>
-                <h1 className="vendor-title">{vendor?.businessName}</h1>
+                <h1 className="vendor-title">{vendor.businessName}</h1>
                 <p className="vendor-subtitle" style={{ border: '1px solid neon-blue', padding: '4px 8px', margin: '8px 3px', backgroundColor: 'rgba(0, 123, 255, 0.1)', borderRadius: '40px' }}>
-                  {vendor?.category}
+                  {vendor.category}
                 </p>
               </div>
 
 
               <p className="vendor-description">
-                {vendor?.description}
+                {vendor.description}
               </p>
 
               <div className="vendor-meta">
