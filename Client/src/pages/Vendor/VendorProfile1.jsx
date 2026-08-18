@@ -251,7 +251,13 @@ const VendorProfile1 = () => {
               {vendor.projects.map((project, index) => (
                 <div key={index} className="vendor-profile-project-card">
                   {project.image && (
-                    <img src={project.image} alt={project.title} className="vendor-profile-project-image" />
+                    <div className="vendor-profile-project-image-wrap">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="vendor-profile-project-image"
+                      />
+                    </div>
                   )}
                   <h4 className="vendor-profile-project-title">{project.title}</h4>
                   <p className="vendor-profile-project-desc">{project.desc}</p>
