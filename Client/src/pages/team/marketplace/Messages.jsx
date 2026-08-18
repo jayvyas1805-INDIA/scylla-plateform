@@ -40,6 +40,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // import Header from '../../components/Vendor/Header';
 import '../../team/marketplace/Messages.css';
+import NavBar from '../../../components/team/MarketPlaceNavbar';
 
 const Messages = () => {
   const location = useLocation();
@@ -189,8 +190,9 @@ const Messages = () => {
   return (
     <div className="messages-page">
       {/* <Header currentPath={location.pathname} /> */}
+      <NavBar />
       
-      <main className="quotes-main">
+      <main className="quotes-main" style={{marginTop:"10px"}}>
         <div className="quotes-container">
           {/* Left Sidebar - Inquiries List */}
           <aside className="inquiries-sidebar">
@@ -248,7 +250,7 @@ const Messages = () => {
                         </span>
                       </div>
                       <p className="inquiry-category">{inquiry.category}</p>
-                      <p className="inquiry-message">{inquiry.message}</p>
+                      {/* <p className="inquiry-message">{inquiry.message}</p> */}
                       <p className="inquiry-time">{inquiry.timestamp}</p>
                     </div>
                   </div>

@@ -159,7 +159,7 @@ const FilterDrawer = ({ isOpen, onClose, filters, setFilters, filterOptions }) =
         </div>
 
         <div className="filter-footer">
-          <button className="filter-reset-btn" onClick={resetFilters}>
+          <button className="filter-reset-btn" onClick={resetFilters}style={{border:"1px solid  rgba(0, 128, 255, 0.15)"}}>
             Reset Filters
           </button>
         </div>

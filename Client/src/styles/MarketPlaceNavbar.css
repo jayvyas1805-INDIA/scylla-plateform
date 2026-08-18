@@ -40,13 +40,13 @@
 }
 
 .navbar-link:hover {
-  color: var(--primary);
-  background-color: var(--primary-light);
+  color: #0080ff;
+  background-color:rgba(0, 128, 255, 0.15);
 }
 
 .navbar-link.active {
-  color: var(--primary);
-  background-color: var(--primary-light);
+  color: #0080ff;
+  background-color:rgba(0, 128, 255, 0.15);
 }
 
 .navbar-link.active::after {

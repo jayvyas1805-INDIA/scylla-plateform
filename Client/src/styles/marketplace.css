@@ -3,6 +3,9 @@
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--bg-secondary);
+  /* Force the main viewport window to handle the scroll container context */
+  overflow: visible; 
+  
 }
 
 .marketplace-main {
@@ -11,6 +14,9 @@
   width: 100%;
   margin: 0 auto;
   padding: 24px 20px 40px;
+  
+  /* CRITICAL: Must be visible so the sticky child can track the page scroll */
+  overflow: visible; 
 }
 
 .marketplace-header {
@@ -35,11 +41,16 @@
 }
 
 .marketplace-controls {
-  display: sticky;
-  top: 0;
+  display: flex;
   gap: 12px;
-  margin-bottom: 32px;
   align-items: center;
+  margin-bottom: 32px;
+  
+  /* STICKY CONFIGURATION */
+  position: sticky;
+  z-index: 50;                       /* Keeps buttons stacked cleanly above the product grid */
+  background-color: var(--bg-secondary); /* Matches container background to block out scrolling text */
+  padding: 12px 0;                   /* Keeps layout padded nicely when stuck to the top */
 }
 
 .filter-toggle-btn,
@@ -57,14 +68,14 @@
 }
 
 .filter-toggle-btn {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color:#0f1535;
+  color:#6b7d9e;
 }
 
 .filter-toggle-btn:hover {
-  background-color: var(--primary-light);
-  border-color: var(--primary);
-  color: var(--primary);
+  background-color: rgba(0, 128, 255, 0.15);
+  border-color: #0080ff;
+  color: #0080ff;
 }
 
 .add-product-btn {

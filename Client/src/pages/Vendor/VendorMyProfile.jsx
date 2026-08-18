@@ -142,7 +142,7 @@ const VendorMyProfile = () => {
           {/* LEFT COLUMN */}
           <aside className="vendor-col vendor-col-left">
             {/* Business Information */}
-            <div className="vendor-card">
+            <div className="vendor-card" style={{border:"1px solid white",borderRadius:"20px"}}>
               <div className="vendor-card-banner">
                 <span className="vendor-card-banner-icon">🏢</span>
               </div>
@@ -190,8 +190,8 @@ const VendorMyProfile = () => {
             </div>
 
             {/* Business Hours */}
-            <div className="vendor-card">
-              <div className="vendor-card-header">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
+              <div className="vendor-card-header" style={{borderBottom:"1px solid white"}}>
                 <h2 className="vendor-card-title">Business Hours</h2>
                 <button className="vendor-edit-link" onClick={() => navigate('/vendor/profile/edit/hours')}>
                   Edit Hours
@@ -217,8 +217,8 @@ const VendorMyProfile = () => {
             </div>
 
             {/* Social Media */}
-            <div className="vendor-card">
-              <div className="vendor-card-header">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
+              <div className="vendor-card-header"style={{borderBottom:"1px solid white"}}>
                 <h2 className="vendor-card-title">Social Media</h2>
                 <button className="vendor-edit-link" onClick={() => navigate('/vendor/profile/edit')}>
                   Edit Links
@@ -253,7 +253,7 @@ const VendorMyProfile = () => {
             </div>
 
             {/* Gallery */}
-            <div className="vendor-card">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
               <div className="vendor-card-header">
                 <h2 className="vendor-card-title">Gallery</h2>
               </div>
@@ -277,13 +277,14 @@ const VendorMyProfile = () => {
                 className="vendor-btn vendor-btn-secondary vendor-full-width"
                 onClick={() => document.getElementById('vendorGalleryInput').click()}
                 disabled={uploading}
+                style={{border:"1px solid white", borderRadius:"10px"}}
               >
                 {uploading ? 'Uploading…' : '+ Add Photo'}
               </button>
             </div>
 
             {/* Products & Services Summary */}
-            <div className="vendor-card">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
               <h2 className="vendor-card-title">Products & Services Summary</h2>
 
               <div className="vendor-summary-stats">
@@ -309,7 +310,7 @@ const VendorMyProfile = () => {
           {/* RIGHT COLUMN */}
           <section className="vendor-col vendor-col-right">
             {/* Document & Compliance Management */}
-            <div className="vendor-card">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
               <h2 className="vendor-card-title">Document & Compliance Management</h2>
               <p className="vendor-card-hint">
                 Compliance document tracking is coming soon — this section is a preview of what's planned.
@@ -343,15 +344,15 @@ const VendorMyProfile = () => {
             </div>
 
             {/* Marketplace Activity */}
-            <div className="vendor-card">
+            <div className="vendor-card"style={{border:"1px solid white",borderRadius:"20px"}}>
               <h2 className="vendor-card-title">Marketplace Activity</h2>
 
               <div className="vendor-activity-stats">
-                <div className="vendor-activity-stat">
+                <div className="vendor-activity-stat"style={{border:"1px solid white",borderRadius:"20px"}}>
                   <span className="vendor-activity-number">{vendor.pendingInquiries ?? 0}</span>
                   <span className="vendor-activity-name">Pending Inquiries</span>
                 </div>
-                <div className="vendor-activity-stat">
+                <div className="vendor-activity-stat"style={{border:"1px solid white",borderRadius:"20px"}}>
                   <span className="vendor-activity-number">{vendor.openChats ?? 0}</span>
                   <span className="vendor-activity-name">Open Chats</span>
                 </div>

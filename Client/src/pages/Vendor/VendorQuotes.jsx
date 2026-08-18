@@ -247,7 +247,7 @@ const VendorQuotes = () => {
                         </span>
                       </div>
                       <p className="vendor-quotes-inquiry-category">{inquiry.category}</p>
-                      <p className="vendor-quotes-inquiry-message">{inquiry.message}</p>
+                      {/* <p className="vendor-quotes-inquiry-message">{inquiry.message}</p> */}
                       <p className="vendor-quotes-inquiry-time">{inquiry.timestamp}</p>
                     </div>
                   </div>
