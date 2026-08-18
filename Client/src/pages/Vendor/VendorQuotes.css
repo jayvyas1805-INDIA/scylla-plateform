@@ -1,15 +1,31 @@
 /* =========================================================
-   Vendor Quotes & Inquiries — self-contained styles.
+   VENDOR QUOTES & INQUIRIES
+   Cyber-Neon Motorsport theme — pit-wall telemetry styling.
    Every selector is prefixed `vendor-quotes-` so nothing here
-   collides with other pages (this app bundles all CSS into one
-   global file — the old version used bare `.message`, `.card`,
-   `.btn` etc. which actively collided with the Team module's
-   Messages/Marketplace CSS on the same bundle).
+   collides with other pages sharing the same CSS bundle.
+
+   MODULE 1  →  Inquiries list      (left)
+   MODULE 2  →  Inquiry details     (center)
+   MODULE 3  →  Messaging thread    (right)
    ========================================================= */
+
+@keyframes vq-pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.55); }
+  50%      { box-shadow: 0 0 0 5px rgba(0, 255, 136, 0); }
+}
+
+@keyframes vq-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 .vendor-quotes {
   min-height: 100vh;
-  background: var(--bg-secondary);
+  position: relative;
+  background:
+    radial-gradient(900px 420px at 12% -8%, rgba(0, 128, 255, 0.12), transparent 60%),
+    radial-gradient(700px 380px at 96% 8%, rgba(157, 0, 255, 0.10), transparent 55%),
+    var(--bg-secondary);
 }
 
 .vendor-quotes-loading {
@@ -19,66 +35,104 @@
 }
 
 .vendor-quotes-main {
-  padding: 24px;
+  padding: 28px 24px;
 }
 
 .vendor-quotes-container {
-  max-width: 1500px;
+  max-width: 1600px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 300px 1fr 320px;
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: 320px minmax(0, 1fr) 340px;
+  gap: 16px;
+  align-items: stretch;
 }
 
-/* ---------------- Shared card ---------------- */
 
+/* ---------------- Shared panel look ---------------- */
+
+.vendor-quotes-sidebar,
+.vendor-quotes-messaging-sidebar,
+.vendor-quotes-details-header,
 .vendor-quotes-detail-card,
 .vendor-quotes-contact-card {
-  background: var(--bg-primary);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 16px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, var(--shadow-sm);
 }
 
 .vendor-quotes-card-title {
-  font-size: 0.98rem;
-  font-weight: 700;
+  position: relative;
+  padding-left: 12px;
+  font-size: 0.92rem;
+  font-weight: 750;
+  letter-spacing: 0.2px;
   color: var(--text-primary);
   margin: 0 0 14px;
 }
 
-/* ---------------- Left sidebar ---------------- */
+.vendor-quotes-card-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 3px;
+  height: 15px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--blue-neon), var(--secondary));
+}
+
+
+/* ---------------- MODULE 1 — Left sidebar ---------------- */
 
 .vendor-quotes-sidebar {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 18px;
+  padding: 20px;
+
   position: sticky;
-  top: 84px;
-  max-height: calc(100vh - 100px);
+  top: 28px;
+
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  z-index: 2;
 }
 
 .vendor-quotes-sidebar-header {
-  margin-bottom: 14px;
+  position: relative;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.vendor-quotes-sidebar-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 46px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue-neon), var(--secondary));
+  border-radius: 2px;
 }
 
 .vendor-quotes-sidebar-title {
   font-size: 1.02rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--text-light);
   margin: 0 0 6px;
 }
 
 .vendor-quotes-sidebar-subtitle {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .vendor-quotes-search-wrapper {
@@ -88,18 +142,26 @@
 
 .vendor-quotes-search-input {
   width: 100%;
+  height: 40px;
+  box-sizing: border-box;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 9px 12px 9px 34px;
+  padding: 0 12px 0 34px;
   color: var(--text-primary);
-  font-size: 0.85rem;
+  font-size: 0.83rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.vendor-quotes-search-input::placeholder {
+  color: var(--text-tertiary);
 }
 
 .vendor-quotes-search-input:focus {
   outline: none;
   border-color: var(--blue-primary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.14), var(--glow-sm);
 }
 
 .vendor-quotes-search-icon {
@@ -113,61 +175,122 @@
   pointer-events: none;
 }
 
+.vendor-quotes-search-input:focus + .vendor-quotes-search-icon {
+  color: var(--blue-neon);
+}
+
 .vendor-quotes-filter-dropdown {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .vendor-quotes-filter-select {
   width: 100%;
-  background: var(--bg-tertiary);
+  height: 38px;
+  background: #151b26;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 8px 10px;
-  color: var(--text-primary);
-  font-size: 0.85rem;
+  padding: 0 10px;
+  color: #ffffff;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.vendor-quotes-filter-select:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.14);
+}
+
+.vendor-quotes-filter-select option {
+  background-color: #151b26;
+  color: #ffffff;
+}
+
+.vendor-quotes-filter-select option:checked {
+  background: var(--blue-primary);
+  color: #ffffff;
 }
 
 .vendor-quotes-inquiries-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  padding-right: 3px;
 }
 
 .vendor-quotes-empty {
   text-align: center;
   color: var(--text-tertiary);
-  font-size: 0.82rem;
-  padding: 20px 8px;
+  font-size: 0.8rem;
+  padding: 30px 10px;
+  margin: 0;
 }
 
 .vendor-quotes-inquiry-item {
+  position: relative;
   display: flex;
   gap: 10px;
-  padding: 12px;
+  padding: 11px;
+  min-height: 76px;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s ease;
   border: 1px solid transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .vendor-quotes-inquiry-item:hover {
   background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  transform: translateX(1px);
 }
 
 .vendor-quotes-inquiry-active {
-  background: rgba(37, 99, 235, 0.1);
-  border-color: var(--blue-primary);
+  background: linear-gradient(135deg, rgba(0, 128, 255, 0.14), rgba(157, 0, 255, 0.08));
+  border-color: rgba(0, 128, 255, 0.4);
+  box-shadow: inset 3px 0 0 var(--blue-primary), var(--glow-sm);
 }
 
-.vendor-quotes-inquiry-unread {
-  border-left: 3px solid var(--blue-neon);
+.vendor-quotes-inquiry-unread:not(.vendor-quotes-inquiry-active) {
+  border-left: 3px solid var(--tertiary);
+}
+
+.vendor-quotes-inquiry-unread:not(.vendor-quotes-inquiry-active) .vendor-quotes-inquiry-name {
+  color: var(--text-light);
 }
 
 .vendor-quotes-inquiry-avatar {
-  font-size: 1.4rem;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.vendor-quotes-inquiry-active .vendor-quotes-inquiry-avatar {
+  border-color: rgba(0, 128, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.12);
+}
+
+.vendor-quotes-inquiry-unread .vendor-quotes-inquiry-avatar::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tertiary);
+  border: 2px solid var(--bg-primary);
+  animation: vq-pulse-dot 2.2s ease-in-out infinite;
 }
 
 .vendor-quotes-inquiry-content {
@@ -183,74 +306,138 @@
 }
 
 .vendor-quotes-inquiry-name {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-primary);
   margin: 0;
-  font-weight: 600;
+  font-weight: 650;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .vendor-quotes-inquiry-category {
-  font-size: 0.75rem;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
   color: var(--blue-neon);
-  margin: 2px 0;
+  margin: 3px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .vendor-quotes-inquiry-message {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  margin: 0 0 4px;
+  margin: 0 0 3px;
+  line-height: 1.35;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .vendor-quotes-inquiry-time {
-  font-size: 0.7rem;
+  font-size: 0.67rem;
   color: var(--text-tertiary);
   margin: 0;
 }
 
 /* Status badges */
 .vendor-quotes-badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 3px 8px;
   border-radius: 999px;
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+}
+
+.vendor-quotes-badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .vendor-quotes-badge-new {
-  background: rgba(6, 182, 212, 0.15);
-  color: var(--blue-neon);
+  background: rgba(0, 255, 136, 0.12);
+  color: var(--tertiary);
+}
+
+.vendor-quotes-badge-new::before {
+  animation: vq-pulse-dot 2s ease-in-out infinite;
 }
 
 .vendor-quotes-badge-open {
-  background: rgba(255, 165, 0, 0.15);
+  background: rgba(255, 165, 0, 0.14);
   color: var(--orange-pending);
 }
 
 .vendor-quotes-badge-closed {
-  background: rgba(107, 114, 128, 0.2);
+  background: rgba(107, 114, 128, 0.18);
   color: var(--text-secondary);
 }
 
-/* ---------------- Center - details ---------------- */
+
+/* ---------------- MODULE 2 — Center details ---------------- */
 
 .vendor-quotes-details {
   min-width: 0;
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
+  padding: 2px 4px;
 }
 
 .vendor-quotes-details-header {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  margin-bottom: 16px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vendor-quotes-details-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-primary), var(--secondary), var(--tertiary));
+}
+
+/* SEPARATOR — splits the vendor/team identity block above from the
+   request content cards below it. */
+.vendor-quotes-details-header + .vendor-quotes-detail-card {
+  position: relative;
+  margin-top: 30px;
+}
+
+.vendor-quotes-details-header + .vendor-quotes-detail-card::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+}
+
+.vendor-quotes-details-header + .vendor-quotes-detail-card::after {
+  content: "";
+  position: absolute;
+  top: -19px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--blue-neon);
+  box-shadow: 0 0 8px rgba(0, 128, 255, 0.65);
 }
 
 .vendor-quotes-contact-info {
@@ -260,14 +447,22 @@
 }
 
 .vendor-quotes-contact-avatar {
-  font-size: 2rem;
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  font-size: 1.65rem;
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.10);
 }
 
 .vendor-quotes-contact-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--text-light);
   margin: 0 0 6px;
 }
 
@@ -279,41 +474,55 @@
 }
 
 .vendor-quotes-received-date {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--text-secondary);
+}
+
+.vendor-quotes-detail-card {
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  margin-bottom: 14px;
 }
 
 .vendor-quotes-detail-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 12px;
 }
 
 .vendor-quotes-detail-item {
   background: var(--bg-tertiary);
+  border: 1px solid rgba(127, 127, 127, 0.10);
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  padding: 12px 14px;
+  transition: border-color var(--transition-fast);
+}
+
+.vendor-quotes-detail-item:hover {
+  border-color: rgba(0, 128, 255, 0.25);
 }
 
 .vendor-quotes-detail-label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  margin-bottom: 4px;
+  font-weight: 700;
+  margin-bottom: 5px;
 }
 
 .vendor-quotes-detail-value {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
+  font-weight: 650;
   color: var(--text-primary);
   margin: 0;
 }
 
 .vendor-quotes-detail-text {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -327,13 +536,28 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 11px;
   background: var(--bg-tertiary);
+  border: 1px solid rgba(127, 127, 127, 0.10);
   border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.vendor-quotes-attachment-item:hover {
+  border-color: rgba(0, 128, 255, 0.25);
+  background: rgba(0, 128, 255, 0.05);
 }
 
 .vendor-quotes-attachment-icon {
-  font-size: 1.3rem;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  font-size: 1rem;
 }
 
 .vendor-quotes-attachment-info {
@@ -342,7 +566,7 @@
 }
 
 .vendor-quotes-attachment-name {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-primary);
   margin: 0;
   overflow: hidden;
@@ -351,53 +575,66 @@
 }
 
 .vendor-quotes-attachment-size {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-tertiary);
   margin: 0;
 }
 
 .vendor-quotes-attachment-download {
-  background: none;
+  background: transparent;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 6px 12px;
   color: var(--blue-neon);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
+  font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .vendor-quotes-attachment-download:hover {
+  background: rgba(0, 128, 255, 0.1);
   border-color: var(--blue-neon);
 }
 
 .vendor-quotes-action-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .vendor-quotes-btn {
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  padding: 10px 18px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  padding: 9px 16px;
+  min-height: 42px;
+  font-size: 0.8rem;
+  font-weight: 650;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.vendor-quotes-btn:hover {
+  transform: translateY(-1px);
+}
+
+.vendor-quotes-btn:active {
+  transform: translateY(0);
 }
 
 .vendor-quotes-btn-primary {
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
   color: #fff;
-  box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 128, 255, 0.28);
 }
 
 .vendor-quotes-btn-primary:hover {
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 128, 255, 0.42);
 }
 
 .vendor-quotes-btn-secondary {
@@ -412,63 +649,118 @@
 }
 
 .vendor-quotes-btn-danger {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--red-danger);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(255, 92, 92, 0.09);
+  color: var(--danger);
+  border: 1px solid rgba(255, 92, 92, 0.28);
 }
 
 .vendor-quotes-btn-danger:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(255, 92, 92, 0.16);
 }
 
-/* ---------------- Right sidebar - messaging ---------------- */
+
+/* ---------------- MODULE 3 — Right sidebar messaging ---------------- */
 
 .vendor-quotes-messaging-sidebar {
   position: sticky;
-  top: 84px;
+  top: 28px;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 100px);
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+  border-radius: var(--radius-lg);
+  padding: 20px;
 }
 
 .vendor-quotes-contact-card {
   text-align: center;
+  flex-shrink: 0;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-md);
 }
 
 .vendor-quotes-card-avatar {
-  font-size: 2rem;
-  margin-bottom: 8px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.1);
 }
 
 .vendor-quotes-card-contact-name {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 750;
   color: var(--text-primary);
   margin: 0 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .vendor-quotes-card-contact-status {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-tertiary);
   margin: 0;
 }
 
+/* SEPARATOR — splits the contact card above from the message thread
+   below it. */
+.vendor-quotes-contact-card + .vendor-quotes-messages-container {
+  position: relative;
+  margin-top: 24px;
+}
+
+.vendor-quotes-contact-card + .vendor-quotes-messages-container::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+}
+
+.vendor-quotes-contact-card + .vendor-quotes-messages-container::after {
+  content: "";
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--tertiary);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.65);
+}
+
 .vendor-quotes-messages-container {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  background: var(--bg-primary);
+  background:
+    radial-gradient(420px 220px at 100% 0%, rgba(157, 0, 255, 0.06), transparent 60%),
+    var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 16px;
+  border-radius: var(--radius-md);
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .vendor-quotes-message {
   display: flex;
-  gap: 8px;
-  max-width: 90%;
+  gap: 7px;
+  max-width: 88%;
+  min-width: 0;
+  animation: vq-msg-in 0.22s ease both;
 }
 
 .vendor-quotes-message-incoming {
@@ -481,30 +773,44 @@
 }
 
 .vendor-quotes-message-avatar {
-  font-size: 1.1rem;
-  flex-shrink: 0;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
 .vendor-quotes-message-content {
   min-width: 0;
+  max-width: 100%;
 }
 
 .vendor-quotes-message-bubble {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-md);
-  padding: 8px 12px;
+  max-width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 13px 13px 13px 4px;
+  padding: 9px 12px;
 }
 
 .vendor-quotes-message-outgoing .vendor-quotes-message-bubble {
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
+  border-color: transparent;
+  border-radius: 13px 13px 4px 13px;
+  box-shadow: 0 4px 14px rgba(0, 128, 255, 0.25);
 }
 
 .vendor-quotes-message-text {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.5;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .vendor-quotes-message-outgoing .vendor-quotes-message-text {
@@ -512,7 +818,7 @@
 }
 
 .vendor-quotes-message-time {
-  font-size: 0.68rem;
+  font-size: 0.63rem;
   color: var(--text-tertiary);
   margin: 4px 4px 0;
 }
@@ -522,47 +828,92 @@
 }
 
 .vendor-quotes-message-input-wrapper {
+  flex-shrink: 0;
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  padding: 5px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.vendor-quotes-message-input-wrapper:focus-within {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.14);
 }
 
 .vendor-quotes-message-input {
   flex: 1;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  min-width: 0;
+  height: 38px;
+  background: transparent;
+  border: none;
+  padding: 0 12px;
   color: var(--text-primary);
-  font-size: 0.85rem;
+  font-size: 0.83rem;
+}
+
+.vendor-quotes-message-input::placeholder {
+  color: var(--text-tertiary);
 }
 
 .vendor-quotes-message-input:focus {
   outline: none;
-  border-color: var(--blue-primary);
 }
 
 .vendor-quotes-message-send {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
   background: linear-gradient(135deg, var(--blue-primary), var(--blue-neon));
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .vendor-quotes-message-send svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .vendor-quotes-message-send:hover {
-  box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+  transform: scale(1.06);
+  box-shadow: 0 0 16px rgba(0, 128, 255, 0.5);
 }
+
+.vendor-quotes-message-send:active {
+  transform: scale(0.97);
+}
+
+
+/* ---------------- Scrollbars ---------------- */
+
+.vendor-quotes-inquiries-list,
+.vendor-quotes-details,
+.vendor-quotes-messages-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 128, 255, 0.35) transparent;
+}
+
+.vendor-quotes-inquiries-list::-webkit-scrollbar,
+.vendor-quotes-details::-webkit-scrollbar,
+.vendor-quotes-messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vendor-quotes-inquiries-list::-webkit-scrollbar-thumb,
+.vendor-quotes-details::-webkit-scrollbar-thumb,
+.vendor-quotes-messages-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 128, 255, 0.3);
+  border-radius: 4px;
+}
+
 
 /* ---------------- Responsive ---------------- */
 
@@ -575,11 +926,14 @@
 @media (max-width: 1024px) {
   .vendor-quotes-container {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .vendor-quotes-sidebar,
-  .vendor-quotes-messaging-sidebar {
+  .vendor-quotes-messaging-sidebar,
+  .vendor-quotes-details {
     position: static;
+    height: auto;
     max-height: none;
   }
 
