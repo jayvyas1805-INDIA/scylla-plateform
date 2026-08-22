@@ -1,0 +1,171 @@
+.teams-dir-hero {
+  text-align: center;
+  padding-top: 72px;
+}
+
+.teams-dir-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--lp-text);
+  margin: 18px 0 14px;
+}
+
+.teams-dir-subtitle {
+  max-width: 560px;
+  margin: 0 auto 28px;
+}
+
+.teams-dir-search {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border-strong);
+  border-radius: var(--lp-radius-sm);
+  padding: 12px 18px;
+  color: var(--lp-text);
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+.teams-dir-search:focus {
+  outline: none;
+  border-color: var(--lp-accent);
+}
+
+.teams-dir-search::placeholder {
+  color: var(--lp-text-muted);
+}
+
+.teams-dir-list-section {
+  border-bottom: none;
+}
+
+.teams-dir-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-content: start;
+}
+
+.teams-dir-card {
+  padding: 24px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.teams-dir-card-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.teams-dir-card-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teams-dir-card-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 6px;
+}
+
+.teams-dir-card-tagline {
+  font-size: 0.84rem;
+  color: var(--lp-text-muted);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.teams-dir-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.teams-dir-card-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--lp-accent);
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.teams-dir-card-location {
+  font-size: 0.76rem;
+  color: var(--lp-text-muted);
+}
+
+.teams-dir-card-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--lp-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.teams-dir-card-achievements {
+  font-size: 0.76rem;
+  color: var(--lp-text-muted);
+}
+
+.teams-dir-card-view {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--lp-accent);
+}
+
+.teams-dir-empty {
+  text-align: center;
+  color: var(--lp-text-muted);
+  font-size: 0.95rem;
+  padding: 40px 0;
+}
+
+.teams-dir-skeleton-card {
+  padding: 24px;
+}
+
+.teams-dir-skeleton-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+
+.teams-dir-skeleton-line {
+  height: 12px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 640px) {
+  .teams-dir-hero {
+    padding-top: 48px;
+  }
+
+  .teams-dir-title {
+    font-size: 1.8rem;
+  }
+}

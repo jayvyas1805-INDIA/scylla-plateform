@@ -13,9 +13,6 @@ function FeaturedTeams() {
     const fetchTeams = async () => {
       try {
         const res = await getAllTeams();
-
-        console.log(res.data);
-        setTeams(res.data);
         setTeams(res.data);
       } catch (error) {
         console.error("Failed to fetch teams", error);
@@ -28,32 +25,47 @@ function FeaturedTeams() {
 
   if (loading || teams.length === 0) return null;
 
+  // Homepage only teases a handful of teams — the full roster lives on
+  // the dedicated directory page.
+  const featured = teams.slice(0, 6);
+
   return (
     <section className="lp-section lp-featured-teams">
       <div className="lp-container">
-        <div className="lp-section-heading">
-          <h2 className="lp-section-title">Featured Teams</h2>
-          <p className="lp-section-subtitle">Teams making waves in the community right now</p>
+        <div className="lp-featured-teams-header">
+          <div>
+            <h2 className="lp-section-title">Featured Teams</h2>
+            <p className="lp-section-subtitle lp-featured-teams-subtitle">
+              Teams making waves in the community right now
+            </p>
+          </div>
+          <button className="lp-btn lp-btn-outline" onClick={() => navigate("/teams-directory")}>
+            Explore All Teams →
+          </button>
         </div>
 
         <div className="lp-teams-grid">
-          {teams.map((team) => (
-            <div key={team._id} className="lp-card lp-team-card">
+          {featured.map((team) => (
+            <button
+              key={team._id}
+              className="lp-card lp-team-card"
+              onClick={() => navigate(`/teams-directory/${team._id}`)}
+            >
               <div className="lp-team-icon">
                 {team.logo ? (
-                  <img src={team?.logo} />
+                  <img src={team.logo} alt={team.name} />
                 ) : (
                   <span>🏁</span>
                 )}
               </div>
 
               <h3 className="lp-team-name">{team.name}</h3>
-              <p className="lp-team-category">{team.tagline || team.location}</p>
+              <p className="lp-team-category">
+                {team.tagline || team.location?.address || team.category || "Racing Team"}
+              </p>
 
-              <button className="lp-btn lp-btn-outline lp-full-width" onClick={() => navigate("/teams")}>
-                View Team Page
-              </button>
-            </div>
+              <span className="lp-team-card-cta">View Team Page →</span>
+            </button>
           ))}
         </div>
       </div>

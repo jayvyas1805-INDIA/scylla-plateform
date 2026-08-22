@@ -102,6 +102,25 @@
   box-shadow: var(--lp-shadow-md);
 }
 
+/* Clickable cards (rendered as <button>) get a visible lift + accent
+   border on hover, distinct from static informational cards, so it's
+   obvious the whole card is interactive. */
+button.lp-card {
+  cursor: pointer;
+  text-align: inherit;
+  font-family: inherit;
+  color: inherit;
+}
+
+button.lp-card:hover {
+  border-color: var(--lp-accent);
+  transform: translateY(-3px);
+}
+
+button.lp-card:active {
+  transform: translateY(-1px);
+}
+
 /* Buttons */
 .lp-btn {
   display: inline-flex;

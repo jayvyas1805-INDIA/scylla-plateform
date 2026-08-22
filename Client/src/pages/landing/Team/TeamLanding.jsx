@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../components/navbar/Navbar';
 import Footer from '../../../components/navbar/Footer';
-import FeatureTeams from "../../../components/navbar/FeaturedTeams"
 import '../../../styles/landing-theme.css';
+import FeatureTeams from "../../../components/navbar/FeaturedTeams"
 import './TeamLanding.css';
 
 const BENEFITS = [
@@ -68,6 +68,9 @@ export default function TeamLanding() {
                   Sign In
                 </button>
               </div>
+              <button className="team-lp-browse-link" onClick={() => navigate('/teams-directory')}>
+                Browse existing teams →
+              </button>
               <p className="team-lp-fineprint">Free to join · Set up your profile in minutes</p>
             </div>
 
@@ -95,7 +98,7 @@ export default function TeamLanding() {
             </div>
           </div>
         </section>
-      <FeatureTeams />
+    <FeatureTeams />
         {/* BENEFITS */}
         <section className="lp-section">
           <div className="lp-container">

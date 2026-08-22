@@ -111,7 +111,7 @@ export default function AboutUs() {
                   verified vendors, and showcase their achievements to the community.
                 </p>
               </div>
-              <button className="lp-btn lp-btn-outline" onClick={() => navigate('/teams')}>
+              <button className="lp-btn lp-btn-outline" onClick={() => navigate('/teams-directory')}>
                 View All Teams
               </button>
             </div>

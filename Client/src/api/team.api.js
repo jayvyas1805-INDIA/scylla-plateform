@@ -106,3 +106,7 @@ export const getSocialLinksApi = () => api.get("/api/teams/social");
 export const getAllTeams = () => {
   return api.get("/api/teams");
 };
+
+export const getPublicTeamProfile = (teamId) => {
+  return api.get(`/api/teams/${teamId}`);
+};

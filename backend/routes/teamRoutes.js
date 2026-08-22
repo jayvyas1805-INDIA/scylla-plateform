@@ -67,7 +67,7 @@ router.delete("/profile/gallery", teamAuth, teamCtrl.deleteGalleryMedia);
 
 
 router.get("/", teamCtrl.getAllTeams);
-// router.get("/:teamId", teamCtrl.getPublicTeamProfile);
+router.get("/:teamId", teamCtrl.getPublicTeamProfile);
 
 
 // ADD social link

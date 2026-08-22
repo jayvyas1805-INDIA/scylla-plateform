@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const Member = require("../models/Member")
 const Vehicle = require("../models/Vehicle")
 const Admin = require("../models/Admin")
+const SocialLink = require("../models/SocialLink");
 
 
 
@@ -719,9 +720,12 @@ exports.deleteGalleryMedia = async (req, res) => {
 
 // fetch the teams list in landing page
 exports.getAllTeams = async (req, res) => {
+  console.log("GET /api/teams HIT");
   try {
-    const teams = await Team.find({})
-      .select("name tagline logo location achievements createdAt")
+    const teams = await Team.find({ status: "approved" })
+      .select(
+        "name tagline logo location achievements createdAt category" // only public fields
+      )
       .sort({ createdAt: -1 })
       .lean();
 
@@ -743,35 +747,47 @@ exports.getAllTeams = async (req, res) => {
 };
 
 
-// fetch all team data in the landing page:
-// exports.getPublicTeamProfile = async (req, res) => {
-//   try {
-//     const { teamId } = req.params;
 
-//     const team = await Team.findById(teamId).lean();
-//     if (!team) return res.status(404).json({ error: "Team not found" });
+// fetch a single team's full public profile (used by the landing site's
+// team detail page — includes vehicles and members alongside the team's
+// own public fields).
+exports.getPublicTeamProfile = async (req, res) => {
+  try {
+    const { teamId } = req.params;
 
-//     const mediaUrls = (team.media || []).map(
-//       file => `${req.protocol}://${req.get("host")}/${file}`
-//     );
+    const team = await Team.findOne({ _id: teamId, status: "approved" }).lean();
+    if (!team) return res.status(404).json({ error: "Team not found" });
 
-//     const members = await Member.find({ team: teamId })
-//       .select("-password -email") // hide sensitive data
-//       .lean();
+    const galleryUrls = (team.gallery || []).map(file =>
+      file.startsWith("http") ? file : `${req.protocol}://${req.get("host")}/${file}`
+    );
 
-//     res.json({
-//       ...team,
-//       media: mediaUrls,
-//       members
-//     });
+    const logoUrl = team.logo
+      ? (team.logo.startsWith("http") ? team.logo : `${req.protocol}://${req.get("host")}/${team.logo}`)
+      : null;
 
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// };
+    const [members, vehicles, socialLinks] = await Promise.all([
+      Member.find({ team: teamId })
+        .select("-password -email -certificates -passwordSetupToken -passwordSetupExpires")
+        .lean(),
+      Vehicle.find({ team: teamId }).lean(),
+      SocialLink.find({ team: teamId }).lean(),
+    ]);
 
-const SocialLink = require("../models/SocialLink");
+    res.json({
+      ...team,
+      logo: logoUrl,
+      gallery: galleryUrls,
+      members,
+      vehicles,
+      socialLinks,
+    });
+
+  } catch (err) {
+    console.error("Get public team profile error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 // ================= ADD SOCIAL LINK =================
 exports.addSocialLink = async (req, res) => {
