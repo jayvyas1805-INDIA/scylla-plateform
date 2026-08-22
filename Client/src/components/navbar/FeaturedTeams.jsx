@@ -13,6 +13,9 @@ function FeaturedTeams() {
     const fetchTeams = async () => {
       try {
         const res = await getAllTeams();
+
+        console.log(res.data);
+        setTeams(res.data);
         setTeams(res.data);
       } catch (error) {
         console.error("Failed to fetch teams", error);
@@ -38,7 +41,7 @@ function FeaturedTeams() {
             <div key={team._id} className="lp-card lp-team-card">
               <div className="lp-team-icon">
                 {team.logo ? (
-                  <img src={team.logo} alt={team.name} />
+                  <img src={team?.logo} />
                 ) : (
                   <span>🏁</span>
                 )}

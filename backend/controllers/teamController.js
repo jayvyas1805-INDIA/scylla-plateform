@@ -719,19 +719,18 @@ exports.deleteGalleryMedia = async (req, res) => {
 
 // fetch the teams list in landing page
 exports.getAllTeams = async (req, res) => {
-  console.log("GET /api/teams HIT");
   try {
     const teams = await Team.find({})
-      .select(
-        "name tagline logo location achievements createdAt" // only public fields
-      )
+      .select("name tagline logo location achievements createdAt")
       .sort({ createdAt: -1 })
       .lean();
 
-    const formattedTeams = teams.map(team => ({
+    const formattedTeams = teams.map((team) => ({
       ...team,
       logo: team.logo
-        ? `${req.protocol}://${req.get("host")}/${team.logo}`
+        ? team.logo.startsWith("http")
+          ? team.logo
+          : `${req.protocol}://${req.get("host")}/${team.logo}`
         : null
     }));
 
@@ -742,7 +741,6 @@ exports.getAllTeams = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
 
 
 // fetch all team data in the landing page:
