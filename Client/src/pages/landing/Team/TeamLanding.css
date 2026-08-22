@@ -1,0 +1,211 @@
+/* =========================================================
+   Team Landing — page-specific styles on top of the shared
+   landing-theme.css. Prefixed `team-lp-`.
+   ========================================================= */
+
+/* ---------------- Hero ---------------- */
+
+.team-lp-hero {
+  padding-top: 84px;
+}
+
+.team-lp-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.team-lp-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--lp-text);
+  margin: 18px 0 16px;
+}
+
+.team-lp-subtitle {
+  font-size: 1.02rem;
+  color: var(--lp-text-muted);
+  line-height: 1.7;
+  max-width: 52ch;
+  margin: 0 0 30px;
+}
+
+.team-lp-cta-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.team-lp-fineprint {
+  font-size: 0.82rem;
+  color: var(--lp-text-muted);
+  margin: 0;
+}
+
+.team-lp-hero-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.team-lp-stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.team-lp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--lp-surface-raised);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-md);
+}
+
+.team-lp-stat-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lp-accent);
+}
+
+.team-lp-stat-label {
+  font-size: 0.78rem;
+  color: var(--lp-text-muted);
+  line-height: 1.4;
+}
+
+/* ---------------- Benefits ---------------- */
+
+.team-lp-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.team-lp-benefit-card {
+  padding: 26px;
+}
+
+.team-lp-benefit-icon {
+  font-size: 1.7rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  border-radius: var(--lp-radius-md);
+  margin-bottom: 16px;
+}
+
+.team-lp-benefit-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 8px;
+}
+
+.team-lp-benefit-text {
+  font-size: 0.88rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------------- Steps ---------------- */
+
+.team-lp-steps-section {
+  background: var(--lp-surface);
+}
+
+.team-lp-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.team-lp-step-card {
+  padding: 28px;
+  background: var(--lp-bg);
+}
+
+.team-lp-step-number {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--lp-accent);
+  margin-bottom: 14px;
+}
+
+.team-lp-step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 8px;
+}
+
+.team-lp-step-text {
+  font-size: 0.86rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------------- Closing CTA ---------------- */
+
+.team-lp-closing {
+  text-align: center;
+  border-bottom: none;
+}
+
+.team-lp-closing-content {
+  max-width: 560px;
+}
+
+.team-lp-closing .team-lp-cta-row,
+.team-lp-closing .lp-btn {
+  margin-top: 24px;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 900px) {
+  .team-lp-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-lp-steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .team-lp-hero {
+    padding-top: 56px;
+  }
+
+  .lp-section {
+    padding: 48px 20px;
+  }
+
+  .team-lp-title {
+    font-size: 1.9rem;
+  }
+
+  .team-lp-stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .team-lp-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

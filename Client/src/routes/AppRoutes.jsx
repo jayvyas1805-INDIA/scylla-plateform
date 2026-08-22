@@ -6,6 +6,8 @@ import AboutUs from "../pages/landing/about/AboutUs";
 import ContactUs from "../pages/landing/contact/ContactUs";
 import MotorsportPolicy from "../pages/landing/contact/MotorsportPolicy";
 import NotFound from "../pages/landing/NotFound";
+import TeamLanding from "../pages/landing/Team/TeamLanding";
+import VendorLanding from "../pages/landing/vendor/VendorLanding";
 
 import TeamLayout from "../layouts/TeamLayout";
 
@@ -69,8 +71,8 @@ function AppRoutes() {
       <Route path="/about" element={<AboutUs />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/motorsport-policy" element={<MotorsportPolicy />} />
-      <Route path="/teams" element={<TeamRegister/>} />
-      <Route path="/vendor" element={<VendorRegister/>} />
+      <Route path="/teams" element={<TeamLanding/>} />
+      <Route path="/vendor" element={<VendorLanding/>} />
       <Route path="*" element={<NotFound />} />
   </Route>
 

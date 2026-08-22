@@ -77,10 +77,14 @@
 
 .team-vehicle-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  /* auto-fill (not auto-fit) so a single card keeps its natural card
+     width instead of stretching to fill the whole row — same pattern
+     used by the marketplace product grid. */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 30px;
   max-width: 100%;
   width: 100%;
+  justify-content: start;
 }
 
 .vehicle-card {
@@ -372,7 +376,7 @@
 /* Responsive Design */
 @media (max-width: 1280px) {
   .team-vehicle-grid {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 25px;
   }
 
@@ -397,7 +401,7 @@
   }
 
   .team-vehicle-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
   }
 

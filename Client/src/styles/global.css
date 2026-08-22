@@ -36,11 +36,22 @@
   --bg-tertiary: #1a1f3a;
 
   --border-color: #252d4f;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(0, 128, 255, 0.4);
   --shadow-sm: 0 1px 8px rgba(0, 128, 255, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 128, 255, 0.15);
   --shadow-lg: 0 10px 32px rgba(0, 128, 255, 0.2);
   --glow-sm: 0 0 10px rgba(0, 128, 255, 0.3);
   --glow-md: 0 0 20px rgba(0, 128, 255, 0.4);
+
+  /* Elevation scale — layered shadow + a 1px inner highlight so raised
+     surfaces read as physically lifted rather than just "has a border". */
+  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --elevation-2: 0 4px 12px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --elevation-3: 0 12px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --elevation-4: 0 24px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  --focus-ring: 0 0 0 3px rgba(0, 128, 255, 0.3);
 
   /* Aliases used across the Team module — kept in sync with the palette
      above so every card/modal/button shares one source of truth. */
@@ -80,6 +91,31 @@
 @keyframes neon-glow {
   0%, 100% { text-shadow: 0 0 8px rgba(0, 128, 255, 0.35); }
   50% { text-shadow: 0 0 16px rgba(0, 128, 255, 0.65), 0 0 2px rgba(255, 255, 255, 0.3); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Reusable skeleton-loading block. Usage: <div class="skeleton" style="width:120px;height:14px" /> */
+.skeleton {
+  display: inline-block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    rgba(0, 128, 255, 0.12) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Consistent keyboard focus ring across the app */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 body {

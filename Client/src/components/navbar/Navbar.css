@@ -1,262 +1,167 @@
-.land-navbar {
-  background-color: #2c2c2c;
-  padding: 16px 0;
+/* =========================================================
+   Landing Navbar — flat "lp-" landing theme (no neon glow,
+   real borders, matches Team/Vendor landing pages and the
+   rest of the marketing site).
+   ========================================================= */
+
+.lp-navbar {
+  background: var(--lp-bg);
+  border-bottom: 1px solid var(--lp-border);
+  padding: 14px 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.land-navbar-container {
-  max-width: 1200px;
+.lp-navbar-container {
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
-.land-navbar-logo {
+.lp-navbar-logo {
   display: flex;
   align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.land-logo-text {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
+.lp-logo-mark {
+  font-size: 1.05rem;
 }
 
-.land-logo-text:hover {
-  color: #ff4444;
+.lp-logo-text {
+  color: var(--lp-text);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
 }
 
-.land-nav-menu {
+.lp-nav-menu {
   display: flex;
   list-style: none;
-  gap: 32px;
+  gap: 4px;
   flex: 1;
-  margin-left: 40px;
+  margin: 0;
+  padding: 0;
 }
 
-.land-nav-item {
+.lp-nav-item {
   position: relative;
 }
 
-.land-nav-link {
-  color: #ffffff;
+.lp-nav-link {
+  color: var(--lp-text-muted);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  padding: 8px 12px;
-  transition: all 0.3s ease;
-  position: relative;
+  padding: 8px 14px;
+  border-radius: var(--lp-radius-sm);
+  transition: all 0.15s ease;
   display: inline-block;
 }
 
-.land-nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #ff4444;
-  transition: width 0.3s ease;
+.lp-nav-link:hover {
+  color: var(--lp-text);
+  background: var(--lp-surface);
 }
 
-.land-nav-link:hover {
-  color: #ff4444;
+.lp-nav-link.active {
+  color: var(--lp-accent);
+  background: var(--lp-accent-soft);
 }
 
-.land-nav-link:hover::after,
-.land-nav-link.active::after {
-  width: 100%;
-}
-
-.land-nav-link.active {
-  color: #ff4444;
-}
-
-.land-signin-container {
+.lp-signin-container {
   position: relative;
+  flex-shrink: 0;
 }
 
-.land-signin-button {
-  background-color: #ff4444;
-  color: #ffffff;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 4px;
+.lp-signin-button {
+  padding: 9px 22px;
   font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 90px;
 }
 
-.land-signin-button:hover {
-  background-color: #cc3333;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+.lp-signin-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
 }
 
-.land-signin-dropdown {
+.lp-signin-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   right: 0;
-  width: 180px;
-  background: #181818;
-  border: 1px solid #333;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  animation: slideDown 0.2s ease;
-  z-index: 1000;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-md);
+  min-width: 170px;
+  margin-top: 10px;
+  padding: 6px;
+  box-shadow: var(--lp-shadow-md);
+  z-index: 150;
 }
 
-/* Common style for links + button */
-.land-signin-option {
+.lp-signin-option {
+  display: block;
   width: 100%;
-  display: block;
-  box-sizing: border-box;
-
-  padding: 13px 18px;
-
-  background: transparent;
+  padding: 10px 14px;
+  color: var(--lp-text-muted);
+  background: none;
   border: none;
-  border-left: 3px solid transparent;
-
-  color: #f5f5f5;
   text-decoration: none;
-
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
   text-align: left;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    padding-left 0.2s ease;
-}
-
-/* Hover */
-.land-signin-option:hover {
-  background: #252525;
-  color: #ff4d4d;
-  border-left-color: #ff4444;
-  padding-left: 22px;
-}
-
-/* First item */
-.land-signin-option:first-child {
-  border-radius: 8px 8px 0 0;
-}
-
-/* Last item */
-.land-signin-option:last-child {
-  border-radius: 0 0 8px 8px;
-}
-
-/* Admin Login */
-.land-signin-option.admin-login {
-  border-top: 1px solid #303030;
-  color: #ff6b6b;
-}
-
-.land-signin-option.admin-login:hover {
-  background: #2a1c1c;
-  color: #ff4444;
-  border-left-color: #ff4444;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* .land-signin-option {
-  display: block;
-  padding: 12px 16px;
-  color: #ffffff;
-  text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s ease;
-  border-left: 3px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--lp-radius-sm);
+  transition: all 0.15s ease;
 }
 
-.land-signin-option:hover {
-  background-color: #2c2c2c;
-  color: #ff4444;
-  border-left-color: #ff4444;
-  padding-left: 20px;
+.lp-signin-option:hover {
+  background: var(--lp-accent-soft);
+  color: var(--lp-accent);
 }
-
-.land-signin-option:first-child {
-  border-radius: 4px 4px 0 0;
-}
-
-.land-signin-option:last-child {
-  /* border-radius: 0 0 4px 4px; */
-  /* color: #ffffff; */
-  /* display: black; */
-/* }  */
 
 /* Responsive */
-@media (max-width: 768px) {
-  .land-navbar-container {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .land-nav-menu {
-    margin-left: 0;
-    gap: 16px;
-    flex: 1 1 100%;
-    flex-wrap: wrap;
-    order: 3;
-  }
-
-  .land-nav-link {
+@media (max-width: 900px) {
+  .lp-nav-link {
+    padding: 8px 10px;
     font-size: 13px;
   }
+}
 
-  .land-signin-button {
-    padding: 6px 16px;
+@media (max-width: 768px) {
+  .lp-navbar-container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lp-nav-menu {
+    order: 3;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .lp-signin-button {
+    padding: 7px 18px;
     font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  .land-logo-text {
-    font-size: 14px;
+  .lp-logo-text {
+    font-size: 15px;
   }
 
-  .land-nav-menu {
-    gap: 12px;
-  }
-
-  .land-nav-link {
+  .lp-nav-link {
     font-size: 12px;
     padding: 6px 8px;
-  }
-
-  .land-signin-button {
-    padding: 6px 12px;
-    font-size: 12px;
-    min-width: 80px;
   }
 }

@@ -9,7 +9,7 @@ import CTAFooter from "../../../components/navbar/CTAFooter";
 
 function Home() {
   return (
-    <div className="home-page">
+    <div className="home-page lp-page">
       <Navbar />
       <HeroSection />
       <UpcomingEvents />

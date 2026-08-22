@@ -1,0 +1,292 @@
+/* =========================================================
+   About Us — flat "lp-" landing theme, matching Home/Navbar/
+   Team/Vendor landing pages. Every content block sits inside
+   an `.lp-card` (real 1px border + flat surface) so the page
+   has clear visual structure instead of text running directly
+   into the background.
+   ========================================================= */
+
+/* ---------------- Hero ---------------- */
+
+.about-hero {
+  text-align: center;
+  padding-top: 72px;
+}
+
+.about-hero-content {
+  max-width: 720px;
+}
+
+.about-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--lp-text);
+  margin: 18px 0 16px;
+}
+
+.about-description {
+  font-size: 1rem;
+  color: var(--lp-text-muted);
+  line-height: 1.7;
+  margin: 0 auto;
+  max-width: 60ch;
+}
+
+/* ---------------- Sections ---------------- */
+
+.about-section-alt {
+  background: var(--lp-surface);
+}
+
+.about-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.about-header-subtitle {
+  text-align: left;
+  margin: 8px 0 0;
+  max-width: 60ch;
+}
+
+.about-text {
+  font-size: 0.95rem;
+  color: var(--lp-text-muted);
+  line-height: 1.8;
+  margin: 0 0 16px;
+}
+
+.about-text:last-child {
+  margin-bottom: 0;
+}
+
+.about-overview-box {
+  padding: 28px 32px;
+}
+
+/* ---------------- Team cards ---------------- */
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-content: start;
+}
+
+.about-team-card {
+  padding: 24px;
+}
+
+.about-card-active {
+  border-color: var(--lp-accent);
+}
+
+.about-team-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.about-team-icon {
+  font-size: 1.6rem;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  border-radius: var(--lp-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-team-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 4px;
+}
+
+.about-team-desc {
+  font-size: 0.8rem;
+  color: var(--lp-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.about-team-stats {
+  display: flex;
+  gap: 26px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.about-team-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.about-stat-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--lp-accent);
+}
+
+.about-stat-label {
+  font-size: 0.68rem;
+  color: var(--lp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ---------------- Vendor cards ---------------- */
+
+.about-vendors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  justify-content: start;
+}
+
+.about-vendor-card {
+  padding: 20px;
+}
+
+.about-vendor-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.about-vendor-icon {
+  font-size: 1.2rem;
+}
+
+.about-vendor-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.about-vendor-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 0.78rem;
+}
+
+.about-vendor-category {
+  color: var(--lp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.about-vendor-rating {
+  color: var(--lp-text);
+  font-weight: 700;
+}
+
+/* ---------------- Pillars ---------------- */
+
+.about-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.about-pillar-card {
+  padding: 26px;
+}
+
+.about-pillar-icon {
+  font-size: 1.6rem;
+  margin-bottom: 14px;
+}
+
+.about-pillar-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 10px;
+}
+
+.about-pillar-text {
+  font-size: 0.86rem;
+  color: var(--lp-text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ---------------- Vision ---------------- */
+
+.about-vision {
+  border-bottom: none;
+}
+
+.about-vision-box {
+  max-width: 720px;
+  padding: 40px;
+  text-align: center;
+}
+
+.about-vision-text {
+  text-align: left;
+}
+
+.about-vision-box .lp-btn {
+  margin-top: 8px;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 768px) {
+  .about-hero {
+    padding-top: 48px;
+  }
+
+  .about-title {
+    font-size: 1.9rem;
+  }
+
+  .about-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .about-section-header .lp-btn {
+    width: 100%;
+  }
+
+  .about-overview-box,
+  .about-vision-box {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-title {
+    font-size: 1.55rem;
+  }
+
+  .about-vendors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-team-stats {
+    gap: 18px;
+  }
+}

@@ -1,164 +1,61 @@
-.land-featured-teams {
-  background-color: #f5f5f5;
-  padding: 60px 20px;
+.lp-featured-teams {
+  background: var(--lp-surface);
 }
 
-.land-featured-teams .land-section-title {
-  color: #1a1a1a;
-}
-
-.land-teams-grid {
+.lp-teams-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 20px;
+  justify-content: start;
 }
 
-.land-team-card {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border-radius: 8px;
-  padding: 30px 20px;
+.lp-team-card {
+  padding: 28px 22px;
   text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: var(--lp-bg);
 }
 
-.land-team-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid #3366ff;
-}
-
-.land-team-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
-}
-
-.land-team-card:hover .land-team-icon {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.land-team-name {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.land-team-category {
-  font-size: 13px;
-  color: #bbbbbb;
-  margin-bottom: 20px;
-}
-
-.land-view-team-btn {
-  background-color: #3366ff;
-  color: #ffffff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-.land-view-team-btn:hover {
-  background-color: #254fbf;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(51, 102, 255, 0.3);
-}
-
-.land-view-team-btn:active {
-  transform: translateY(0);
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .land-teams-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .land-featured-teams {
-    padding: 40px 20px;
-  }
-
-  .land-teams-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .land-team-card {
-    padding: 20px;
-  }
-
-  .land-team-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-  }
-
-  .land-team-name {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .land-featured-teams {
-    padding: 30px 16px;
-  }
-
-  .land-teams-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .land-team-card {
-    padding: 16px;
-  }
-
-  .land-team-icon {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-  }
-
-  .land-team-name {
-    font-size: 14px;
-  }
-
-  .land-team-category {
-    font-size: 12px;
-  }
-}
-
-.land-team-icon {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 14px;
+.lp-team-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
   border-radius: 50%;
-  background: transparent;   /* ❗ IMPORTANT */
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  font-size: 1.6rem;
 }
 
-.land-team-icon img {
+.lp-team-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;       /* ❗ NOT cover */
-  display: block;            /* ❗ IMPORTANT */
+  object-fit: cover;
+}
+
+.lp-team-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 6px;
+}
+
+.lp-team-category {
+  font-size: 0.83rem;
+  color: var(--lp-text-muted);
+  margin: 0 0 20px;
+  min-height: 1.2em;
+}
+
+@media (max-width: 640px) {
+  .lp-teams-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .lp-team-card {
+    padding: 18px 14px;
+  }
 }

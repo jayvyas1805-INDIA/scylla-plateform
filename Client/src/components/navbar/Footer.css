@@ -1,0 +1,123 @@
+/* =========================================================
+   Shared Footer — flat "lp-" landing theme. Fixes the old
+   double-wrapper bug (<footer class="land-footer">
+   <section class="land-footer">) and replaces every dead
+   href="#" link with real navigation.
+   ========================================================= */
+
+.lp-footer {
+  background: var(--lp-surface);
+  border-top: 1px solid var(--lp-border);
+  padding: 56px 24px 24px;
+}
+
+.lp-footer-content {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 36px;
+}
+
+.lp-footer-brand {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--lp-text);
+  margin: 0 0 12px;
+}
+
+.lp-footer-description {
+  font-size: 0.85rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 32ch;
+}
+
+.lp-footer-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 16px;
+}
+
+.lp-footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-footer-links button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--lp-text-muted);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.lp-footer-links button:hover {
+  color: var(--lp-accent);
+}
+
+.lp-social-links {
+  display: flex;
+  gap: 10px;
+}
+
+.lp-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lp-surface-raised);
+  border: 1px solid var(--lp-border);
+  color: var(--lp-text);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: all 0.15s ease;
+}
+
+.lp-social-link:hover {
+  border-color: var(--lp-accent);
+  color: var(--lp-accent);
+}
+
+.lp-footer-bottom {
+  border-top: 1px solid var(--lp-border);
+  padding-top: 20px;
+  text-align: center;
+}
+
+.lp-footer-copyright {
+  font-size: 0.8rem;
+  color: var(--lp-text-muted);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .lp-footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .lp-footer {
+    padding: 40px 18px 20px;
+  }
+
+  .lp-footer-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

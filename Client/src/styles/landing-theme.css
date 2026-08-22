@@ -1,0 +1,151 @@
+/* =========================================================
+   Landing design system — a clean, bordered "marketing site"
+   look, deliberately DIFFERENT from the neon-glow dashboard
+   theme used in Team/Vendor. No glow/blur effects, no gradient
+   text, no radial backgrounds — just clear borders, flat
+   surfaces, and confident typography, the way a modern SaaS
+   marketing site looks (crisp cards with visible edges,
+   generous whitespace, one accent color used sparingly).
+
+   Reuses the app's --primary blue so the brand still feels
+   connected, but everything else here is its own system.
+   Prefix: `lp-` (landing-page) so nothing collides with the
+   dashboard's `land-` classes or any other module.
+   ========================================================= */
+
+:root {
+  --lp-bg: #0b0f1a;
+  --lp-surface: #12182a;
+  --lp-surface-raised: #161d33;
+  --lp-border: #232b45;
+  --lp-border-strong: #313c5e;
+  --lp-text: #f4f6fb;
+  --lp-text-muted: #9aa3bd;
+  --lp-accent: var(--primary, #0080ff);
+  --lp-accent-dark: var(--primary-dark, #0060e0);
+  --lp-accent-soft: rgba(0, 128, 255, 0.1);
+  --lp-radius-sm: 8px;
+  --lp-radius-md: 12px;
+  --lp-radius-lg: 16px;
+  --lp-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --lp-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.lp-page {
+  background: var(--lp-bg);
+  color: var(--lp-text);
+}
+
+.lp-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.lp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--lp-accent);
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.lp-section {
+  padding: 72px 24px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-section:last-of-type {
+  border-bottom: none;
+}
+
+.lp-section-heading {
+  max-width: 640px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.lp-section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  color: var(--lp-text);
+}
+
+.lp-section-subtitle {
+  font-size: 1rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Card — the core reusable surface: flat fill + a real 1px border,
+   not a glow. This is what was missing on the About page. */
+.lp-card {
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  box-shadow: var(--lp-shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lp-card:hover {
+  border-color: var(--lp-border-strong);
+  box-shadow: var(--lp-shadow-md);
+}
+
+/* Buttons */
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--lp-radius-sm);
+  padding: 13px 26px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.lp-btn-primary {
+  background: var(--lp-accent);
+  color: #fff;
+  box-shadow: var(--lp-shadow);
+}
+
+.lp-btn-primary:hover {
+  background: var(--lp-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--lp-shadow-md);
+}
+
+.lp-btn-outline {
+  background: transparent;
+  color: var(--lp-text);
+  border-color: var(--lp-border-strong);
+}
+
+.lp-btn-outline:hover {
+  border-color: var(--lp-accent);
+  color: var(--lp-accent);
+}
+
+.lp-btn-lg {
+  padding: 15px 32px;
+  font-size: 1rem;
+}
+
+.lp-full-width {
+  width: 100%;
+}

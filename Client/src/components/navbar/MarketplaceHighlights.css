@@ -1,59 +1,42 @@
-.land-marketplace-highlights {
-  background-color: #f5f5f5;
-  padding: 60px 20px;
+.lp-marketplace-highlights {
+  background: var(--lp-surface);
 }
 
-.land-marketplace-highlights .land-section-title {
-  color: #1a1a1a;
-}
-
-.land-marketplace-header {
+.lp-marketplace-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.land-marketplace-header .land-section-title {
+.lp-marketplace-header .lp-section-title {
   margin: 0;
 }
 
-.land-explore-link {
-  color: #ff4444;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.land-explore-link:hover {
-  color: #cc3333;
-  transform: translateX(4px);
-}
-
-.land-products-grid {
+/* auto-fill (not a fixed 3-column grid) so 1-2 product cards keep
+   their natural width instead of stretching to fill the row —
+   same fix applied to the Vehicle module grid. */
+.lp-products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
+  justify-content: start;
 }
 
-.land-marketplace-loading,
-.land-marketplace-empty {
+.lp-marketplace-loading,
+.lp-marketplace-empty {
   text-align: center;
-  color: #6b6b6b;
+  color: var(--lp-text-muted);
   font-size: 14px;
   padding: 40px 0;
 }
 
-.land-description-toggle {
+.lp-description-toggle {
   background: none;
   border: none;
-  color: #6699ff;
+  color: var(--lp-accent);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -61,162 +44,62 @@
   margin-left: 2px;
 }
 
-.land-description-toggle:hover {
+.lp-description-toggle:hover {
   text-decoration: underline;
 }
 
-.land-product-card {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border-radius: 8px;
+.lp-product-card {
   overflow: hidden;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  padding: 0;
   display: flex;
   flex-direction: column;
 }
 
-.land-product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid #3366ff;
-}
-
-.land-product-image-wrapper {
+.lp-product-image-wrapper {
   width: 100%;
-  height: 200px;
-  overflow: hidden;
+  height: 190px;
+  border-bottom: 1px solid var(--lp-border);
 }
 
-.land-product-image {
+.lp-product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.land-product-card:hover .land-product-image {
-  transform: scale(1.05);
-}
-
-.land-product-content {
-  padding: 20px;
+.lp-product-content {
+  padding: 18px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.land-product-header {
-  margin-bottom: 12px;
-}
-
-.land-product-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 18px;
+.lp-product-title {
+  font-size: 15px;
   font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--lp-text);
 }
 
-.land-product-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: #ffffff;
-}
-
-.land-product-description {
+.lp-product-description {
   font-size: 13px;
-  color: #bbbbbb;
+  color: var(--lp-text-muted);
   margin-bottom: 16px;
   flex: 1;
+  line-height: 1.6;
 }
 
-.land-view-products-btn {
-  background-color: #3366ff;
-  color: #ffffff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
+.lp-product-content .lp-btn {
   margin-top: auto;
 }
 
-.land-view-products-btn:hover {
-  background-color: #254fbf;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(51, 102, 255, 0.3);
-}
-
-.land-view-products-btn:active {
-  transform: translateY(0);
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .land-products-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
-  .land-marketplace-highlights {
-    padding: 40px 20px;
-  }
-
-  .land-marketplace-header {
+  .lp-marketplace-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .land-products-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .land-product-image-wrapper {
-    height: 180px;
-  }
-
-  .land-product-content {
-    padding: 16px;
-  }
-
-  .land-product-title {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .land-marketplace-highlights {
-    padding: 30px 16px;
-  }
-
-  .land-marketplace-header {
-    gap: 12px;
-  }
-
-  .land-explore-link {
-    font-size: 12px;
-  }
-
-  .land-product-image-wrapper {
-    height: 150px;
-  }
-
-  .land-product-title {
-    font-size: 14px;
-  }
-
-  .land-product-description {
-    font-size: 12px;
+  .lp-product-image-wrapper {
+    height: 160px;
   }
 }
