@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../components/navbar/Navbar';
 import Footer from '../../../components/navbar/Footer';
+import FeatureTeams from "../../../components/navbar/FeaturedTeams"
 import '../../../styles/landing-theme.css';
 import './TeamLanding.css';
 
@@ -94,7 +95,7 @@ export default function TeamLanding() {
             </div>
           </div>
         </section>
-
+      <FeatureTeams />
         {/* BENEFITS */}
         <section className="lp-section">
           <div className="lp-container">
