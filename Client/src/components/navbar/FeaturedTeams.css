@@ -104,4 +104,8 @@
   .lp-featured-teams-header .lp-btn {
     width: 100%;
   }
+
+  .lp-team-card-cta {
+  padding-left: 50px;
+}
 }
