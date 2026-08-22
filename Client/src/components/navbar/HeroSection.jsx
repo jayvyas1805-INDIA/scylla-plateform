@@ -86,7 +86,7 @@ function HeroSection() {
             One place to manage your team, connect with vendors, and follow the
             motorsports community.
           </p>
-          <button className="lp-btn lp-btn-primary lp-btn-lg" onClick={() => navigate("/teams")}>
+          <button className="lp-btn lp-btn-primary lp-btn-lg" onClick={() => navigate("/teams-directory")}>
             Explore Teams →
           </button>
         </div>
