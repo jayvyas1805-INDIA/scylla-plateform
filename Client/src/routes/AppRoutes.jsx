@@ -10,6 +10,8 @@ import TeamLanding from "../pages/landing/team/TeamLanding";
 import VendorLanding from "../pages/landing/vendor/VendorLanding";
 import TeamsDirectory from "../pages/landing/team/TeamsDirectory";
 import PublicTeamProfile from "../pages/landing/team/PublicTeamProfile";
+import VendorsDirectory from "../pages/landing/vendor/VendorsDirectory";
+import PublicVendorProfile from "../pages/landing/vendor/PublicVendorProfile";
 
 import TeamLayout from "../layouts/TeamLayout";
 
@@ -77,6 +79,8 @@ function AppRoutes() {
       <Route path="/teams-directory" element={<TeamsDirectory/>} />
       <Route path="/teams-directory/:teamId" element={<PublicTeamProfile/>} />
       <Route path="/vendor" element={<VendorLanding/>} />
+      <Route path="/vendors-directory" element={<VendorsDirectory/>} />
+      <Route path="/vendors-directory/:vendorId" element={<PublicVendorProfile/>} />
       <Route path="*" element={<NotFound />} />
   </Route>
 

@@ -54,3 +54,12 @@ export const addProject = (formData) =>{
     headers : { 'Content-Type': 'multipart/form-data'}
   });
 }
+
+// public vendor directory (landing site) — list + single profile
+export const getAllVendors = () => {
+  return api.get("/api/vendors");
+};
+
+export const getPublicVendorProfile = (vendorId) => {
+  return api.get(`/api/vendors/${vendorId}`);
+};

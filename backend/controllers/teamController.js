@@ -687,8 +687,8 @@ exports.uploadGallery = async (req, res) => {
       message: "Gallery uploaded successfully",
       gallery: team.gallery
     });
-    console.log("REQ FILES:", req.files);
-    console.log("REQ BODY:", req.body);
+    // console.log("REQ FILES:", req.files);
+    // console.log("REQ BODY:", req.body);
 
 
   } catch (err) {
@@ -720,7 +720,7 @@ exports.deleteGalleryMedia = async (req, res) => {
 
 // fetch the teams list in landing page
 exports.getAllTeams = async (req, res) => {
-  console.log("GET /api/teams HIT");
+  // console.log("GET /api/teams HIT");
   try {
     const teams = await Team.find({ status: "approved" })
       .select(

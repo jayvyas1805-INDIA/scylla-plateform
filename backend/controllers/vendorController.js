@@ -1,4 +1,5 @@
 const Vendor = require("../models/Vendor");
+const Product = require("../models/Product");
 const cloudinary = require("../config/cloudinary");
 const multer = require("multer");
 const fs = require("fs");
@@ -315,8 +316,7 @@ exports.uploadGallery = async (req, res) => {
       message: "Gallery uploaded successfully",
       gallery: vendor.gallery
     });
-    console.log("REQ FILES:", req.files);
-    console.log("REQ BODY:", req.body);
+    
 
 
   } catch (err) {
@@ -362,15 +362,17 @@ exports.uploadVendorMedia = async (req, res) => {
 // fetch the list of vendor in landing page
 exports.getAllVendors = async (req, res) => {
   try {
-    const vendors = await Vendor.find({})
-      .select("name category logo location createdAt")
+    const vendors = await Vendor.find({ status: "approved" })
+      .select("businessName category logo location createdAt")
       .sort({ createdAt: -1 })
       .lean();
 
-    const formattedVendors = vendors.map(vendor => ({
+     const formattedVendors = vendors.map((vendor) => ({
       ...vendor,
       logo: vendor.logo
-        ? `${req.protocol}://${req.get("host")}/${vendor.logo}`
+        ? vendor.logo.startsWith("http")
+          ? vendor.logo
+          : `${req.protocol}://${req.get("host")}/${vendor.logo}`
         : null
     }));
 
@@ -388,18 +390,41 @@ exports.getPublicVendorProfile = async (req, res) => {
   try {
     const { vendorId } = req.params;
 
-    const vendor = await Vendor.findById(vendorId).lean();
+    // Never expose password, verificationDoc (private compliance
+    // document), gstNumber, or email on a public, unauthenticated route.
+    const vendor = await Vendor.findOne({ _id: vendorId, status: "approved" })
+      .select("-password -verificationDoc -gstNumber -email")
+      .lean();
     if (!vendor) return res.status(404).json({ error: "Vendor not found" });
 
+    // `media` is stored as local relative paths and needs the host
+    // prefixed; `gallery` is already full Cloudinary URLs.
     const mediaUrls = (vendor.media || []).map(
-      file => `${req.protocol}://${req.get("host")}/${file}`
+      file => file.startsWith("http") ? file : `${req.protocol}://${req.get("host")}/${file}`
     );
 
+    const logoUrl = vendor.logo
+      ? (vendor.logo.startsWith("http") ? vendor.logo : `${req.protocol}://${req.get("host")}/${vendor.logo}`)
+      : null;
+
+    const bannerUrl = vendor.banner
+      ? (vendor.banner.startsWith("http") ? vendor.banner : `${req.protocol}://${req.get("host")}/${vendor.banner}`)
+      : null;
+
+    const products = await Product.find({
+      createdBy: vendorId,
+      creatorModel: "Vendor",
+      status: "approved",
+    }).lean();
+    
     res.json({
       ...vendor,
-      media: mediaUrls
+      logo: logoUrl,
+      banner: bannerUrl,
+      media: mediaUrls,
+      products,
     });
-
+// 
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

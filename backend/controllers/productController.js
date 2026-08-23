@@ -59,7 +59,7 @@ exports.createProduct = async (req, res) => {
 
     });
 
-    console.log("ROLE:", req.user.role);
+    // console.log("ROLE:", req.user.role);
 
 
     res.status(201).json({
@@ -137,7 +137,7 @@ exports.getApprovedProducts = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    console.log("Fetched products:", products.length);
+    // console.log("Fetched products:", products.length);
 
     const formattedProducts = products.map(p => ({
       _id: p._id,

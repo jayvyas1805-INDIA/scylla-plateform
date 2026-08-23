@@ -67,6 +67,9 @@ export default function VendorLanding() {
                   Sign In
                 </button>
               </div>
+              <button className="vendor-lp-browse-link" onClick={() => navigate('/vendors-directory')}>
+                Browse existing vendors →
+              </button>
               <p className="vendor-lp-fineprint">Free to list · Get discovered by verified teams</p>
             </div>
 

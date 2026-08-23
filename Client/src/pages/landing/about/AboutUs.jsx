@@ -163,7 +163,7 @@ export default function AboutUs() {
                   suppliers and technical specialists across every motorsport category.
                 </p>
               </div>
-              <button className="lp-btn lp-btn-outline" onClick={() => navigate('/vendor')}>
+              <button className="lp-btn lp-btn-outline" onClick={() => navigate('/vendors-directory')}>
                 View All Vendors
               </button>
             </div>
@@ -179,7 +179,7 @@ export default function AboutUs() {
                     <span className="about-vendor-category">{vendor.category}</span>
                     <span className="about-vendor-rating">⭐ {vendor.rating}</span>
                   </div>
-                  <button className="lp-btn lp-btn-outline lp-full-width" onClick={() => navigate('/vendor')}>
+                  <button className="lp-btn lp-btn-outline lp-full-width" onClick={() => navigate('/vendors-directory')}>
                     View Vendor
                   </button>
                 </div>
