@@ -55,9 +55,17 @@ function Profilee() {
         setMember(memberRes.data.member)
 
       } catch (err) {
-        // alert("cannot be fetched" + err.message);
         console.log(err.message)
-        // navigate('team/login');
+
+        // This page is member-only. A team admin's own account doesn't
+        // have a member profile to fetch, so the API correctly returns
+        // 403/404 for them — send them back rather than show a broken
+        // "Data Not Found" screen.
+        if (err.response?.status === 403 || err.response?.status === 404) {
+          alert("This page is only available to team members.");
+          navigate("/team/home");
+          return;
+        }
 
         console.log(err)
       } finally {

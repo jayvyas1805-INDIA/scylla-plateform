@@ -316,7 +316,8 @@ exports.uploadGallery = async (req, res) => {
       message: "Gallery uploaded successfully",
       gallery: vendor.gallery
     });
-    
+    console.log("REQ FILES:", req.files);
+    console.log("REQ BODY:", req.body);
 
 
   } catch (err) {
@@ -367,12 +368,10 @@ exports.getAllVendors = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-     const formattedVendors = vendors.map((vendor) => ({
+    const formattedVendors = vendors.map(vendor => ({
       ...vendor,
       logo: vendor.logo
-        ? vendor.logo.startsWith("http")
-          ? vendor.logo
-          : `${req.protocol}://${req.get("host")}/${vendor.logo}`
+        ? `${req.protocol}://${req.get("host")}/${vendor.logo}`
         : null
     }));
 
@@ -392,7 +391,11 @@ exports.getPublicVendorProfile = async (req, res) => {
 
     // Never expose password, verificationDoc (private compliance
     // document), gstNumber, or email on a public, unauthenticated route.
-    const vendor = await Vendor.findOne({ _id: vendorId, status: "approved" })
+    const vendor = await Vendor.findOneAndUpdate(
+      { _id: vendorId, status: "approved" },
+      { $inc: { profileViews: 1 } },
+      { new: true }
+    )
       .select("-password -verificationDoc -gstNumber -email")
       .lean();
     if (!vendor) return res.status(404).json({ error: "Vendor not found" });
@@ -416,7 +419,7 @@ exports.getPublicVendorProfile = async (req, res) => {
       creatorModel: "Vendor",
       status: "approved",
     }).lean();
-    
+
     res.json({
       ...vendor,
       logo: logoUrl,
@@ -424,7 +427,7 @@ exports.getPublicVendorProfile = async (req, res) => {
       media: mediaUrls,
       products,
     });
-// 
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

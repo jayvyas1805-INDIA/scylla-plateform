@@ -59,7 +59,7 @@ exports.createProduct = async (req, res) => {
 
     });
 
-    // console.log("ROLE:", req.user.role);
+    console.log("ROLE:", req.user.role);
 
 
     res.status(201).json({
@@ -78,13 +78,14 @@ exports.createProduct = async (req, res) => {
 // product.controller.js
 exports.getMyProducts = async (req, res) => {
   try {
-    // Count how many products this vendor has uploaded
-    const productCount = await Product.countDocuments({
-      createdBy: req.user.id,
-      creatorModel: "Vendor"
-    });
+    const products = await Product.find({
+      createdBy: req.user._id,
+      creatorModel: "Vendor",
+    })
+      .sort({ createdAt: -1 })
+      .lean();
 
-    res.json({ productCount });
+    res.json({ productCount: products.length, products });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
@@ -137,7 +138,7 @@ exports.getApprovedProducts = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    // console.log("Fetched products:", products.length);
+    console.log("Fetched products:", products.length);
 
     const formattedProducts = products.map(p => ({
       _id: p._id,

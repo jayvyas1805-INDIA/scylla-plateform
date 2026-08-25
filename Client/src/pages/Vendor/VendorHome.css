@@ -8,8 +8,15 @@
 
 .vendor-home {
   min-height: 100vh;
-  background: var(--bg-secondary, #f5f7fa);
-  color: var(--text-primary, #111827);
+  background: #0a0e27;
+  color: #e5e7eb;
+}
+
+.vendor-home-loading {
+  text-align: center;
+  color: #9ca3af;
+  padding: 60px 20px;
+  font-size: 0.95rem;
 }
 
 .vendor-home-main {
@@ -30,7 +37,7 @@
 .vendor-home-main>p {
   text-align: center;
   padding: 60px 20px;
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
   font-size: 1rem;
 }
 
@@ -50,7 +57,7 @@
       rgba(0, 128, 255, 0.08),
       rgba(157, 0, 255, 0.05));
 
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid #232b45;
   border-radius: 22px;
 
   padding: 42px;
@@ -113,7 +120,7 @@
   font-weight: 800;
   letter-spacing: -0.5px;
 
-  color: var(--text-primary, #111827);
+  color: #e5e7eb;
 }
 
 .vendor-title-icon {
@@ -128,9 +135,9 @@
 
   border-radius: 50%;
 
-  background: var(--bg-primary, #ffffff);
+  background: #151c2b;
 
-  border: 2px solid var(--primary, #0080ff);
+  border: 2px solid #0080ff;
 
   box-shadow:
     0 0 0 5px rgba(0, 128, 255, 0.08),
@@ -155,13 +162,25 @@
 .vendor-subtitle {
   margin: 0 0 14px;
 
-  color: var(--primary, #0080ff);
+  color: #0080ff;
 
   font-size: 0.95rem;
   font-weight: 700;
 
   text-transform: uppercase;
   letter-spacing: 0.6px;
+}
+
+.vendor-subtitle-badge {
+  display: inline-block;
+  margin: 8px 3px;
+  padding: 4px 12px;
+  border: 1px solid #0080ff;
+  border-radius: 40px;
+  background: rgba(0, 123, 255, 0.1);
+  color: #0080ff;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 /* ---------------- DESCRIPTION ---------------- */
@@ -171,10 +190,15 @@
 
   margin: 0 0 18px;
 
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.95rem;
   line-height: 1.7;
+}
+
+.vendor-description-empty {
+  font-style: italic;
+  opacity: 0.75;
 }
 
 /* ---------------- META ---------------- */
@@ -194,7 +218,7 @@
   align-items: center;
   gap: 5px;
 
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.85rem;
   font-weight: 500;
@@ -223,7 +247,7 @@
 
   border: 1px solid rgba(0, 128, 255, 0.22);
 
-  color: var(--primary, #0080ff);
+  color: #0080ff;
 
   font-size: 0.75rem;
   font-weight: 600;
@@ -272,8 +296,8 @@
 
 .vendor-btn-primary {
   background: linear-gradient(135deg,
-      var(--primary, #0080ff),
-      var(--primary-dark, #0066cc));
+      #0080ff,
+      #0066cc);
 
   color: #ffffff;
 
@@ -394,8 +418,8 @@
   height: 3px;
 
   background: linear-gradient(90deg,
-      var(--primary, #0080ff),
-      var(--primary-dark, #0066cc));
+      #0080ff,
+      #0066cc);
 
   opacity: 0.7;
 }
@@ -429,7 +453,7 @@
 .vendor-stat-label {
   margin: 0 0 6px;
 
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.78rem;
   font-weight: 600;
@@ -441,10 +465,18 @@
 .vendor-stat-value {
   margin: 0;
 
-  color: var(--primary, #0080ff);
+  color: #0080ff;
 
   font-size: 1.65rem;
   font-weight: 800;
+}
+
+.vendor-stat-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.68rem;
+  color: #9ca3af;
+  font-style: italic;
 }
 
 /* =========================================================
@@ -479,7 +511,7 @@
 .vendor-section-title {
   margin: 0 0 18px;
 
-  color: var(--text-primary, #111827);
+  color: #e5e7eb;
 
   font-size: 1.05rem;
   font-weight: 750;
@@ -509,13 +541,83 @@
 
   background: #111827;
 
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.85rem;
 
   text-align: center;
 
-  border: 1px dashed var(--border-color, #dfe3e8);
+  border: 1px dashed #232b45;
+}
+
+/* ---------------- PRODUCT CARD (preview list) ---------------- */
+
+.product-card {
+  padding: 16px 18px;
+  border: 1px solid #232b45;
+  border-radius: 12px;
+  background: #111827;
+  margin-bottom: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.product-card:hover {
+  border-color: rgba(0, 128, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.product-card:last-child {
+  margin-bottom: 0;
+}
+
+.product-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.product-category {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+.product-price {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0080ff;
+}
+
+.badge {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.badge-active {
+  background: rgba(0, 200, 120, 0.12);
+  color: #22c07a;
+  border: 1px solid rgba(0, 200, 120, 0.3);
+}
+
+.badge-pending {
+  background: rgba(255, 165, 0, 0.12);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
 }
 
 /* ---------------- QUOTES ---------------- */
@@ -542,13 +644,25 @@
 
   background: #111827;
 
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.85rem;
 
   text-align: center;
 
-  border: 1px dashed var(--border-color, #dfe3e8);
+  border: 1px dashed #232b45;
+}
+
+.vendor-coming-soon-note {
+  margin: 0;
+  padding: 22px;
+  border-radius: 12px;
+  background: #111827;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: center;
+  border: 1px dashed #232b45;
 }
 
 /* ---------------- FULL WIDTH BUTTON ---------------- */
@@ -611,7 +725,7 @@
 .vendor-action-btn:hover {
   transform: translateY(-3px);
 
-  /* background: var(--bg-primary, #000000); */
+  /* background: #000000; */
 
   border-color: rgba(0, 128, 255, 0.4);
 
@@ -646,7 +760,7 @@
    ========================================================= */
 
 .vendor-footer {
-  border-top: 1px solid var(--border-color, #e5e7eb);
+  border-top: 1px solid #232b45;
 
   padding: 20px 4px 0;
 
@@ -688,7 +802,7 @@
 }
 
 .vendor-status-text {
-  color: var(--text-secondary, #6b7280);
+  color: #9ca3af;
 
   font-size: 0.8rem;
 }
@@ -700,7 +814,13 @@
 }
 
 .vendor-footer-link {
-  color: var(--text-secondary, #6b7280);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+
+  color: #9ca3af;
 
   font-size: 0.8rem;
 
@@ -710,7 +830,7 @@
 }
 
 .vendor-footer-link:hover {
-  color: var(--primary, #0080ff);
+  color: #0080ff;
 
   text-decoration: underline;
 }
@@ -1003,7 +1123,7 @@
 
 @media (prefers-color-scheme: dark) {
   .vendor-home {
-    background: var(--bg-secondary, #0f172a);
+    background: #0a0e27;
   }
 
   .vendor-stat-card,

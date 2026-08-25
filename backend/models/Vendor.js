@@ -86,6 +86,14 @@ const vendorSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
+    // Incremented each time this vendor's public profile is viewed
+    // (see getPublicVendorProfile) — a real, tracked stat rather than
+    // a hardcoded placeholder on the vendor dashboard.
+    profileViews: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

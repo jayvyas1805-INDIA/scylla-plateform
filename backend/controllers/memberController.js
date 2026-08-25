@@ -78,6 +78,18 @@ exports.addMember = async (req, res) => {
       return res.status(400).json({ error: "Member already exists" });
     }
 
+    // 🔒 A team's own login email must never double as a member account —
+    // whether that's this team or any other team registered on the platform.
+    const existingTeamWithEmail = await Team.findOne({
+      email: email.toLowerCase(),
+    });
+
+    if (existingTeamWithEmail) {
+      return res.status(400).json({
+        error: "This email is registered as a team account and cannot be added as a member.",
+      });
+    }
+
     // 🔐 Temporary password (cannot login until set-password)
     const tempPassword = crypto.randomBytes(8).toString("hex");
     const hashedPassword = await bcrypt.hash(tempPassword, 10);
@@ -357,33 +369,23 @@ exports.getMyProfile = async (req, res) => {
     if (!req.user)
       return res.status(401).json({ error: "Unauthorized" });
 
-    // TEAM ADMIN
-    if (req.user.role === "TEAM_ADMIN") {
-      const team = await Team.findById(req.user._id).lean();
-      if (!team) return res.status(404).json({ error: "Team not found" });
-
-      return res.status(200).json({
-        role: "TEAM_ADMIN",
-        team,
-      });
+    // Route-level auth already restricts this to MEMBER, but keep the
+    // guard here too in case the controller is ever reused elsewhere.
+    if (req.user.role !== "MEMBER") {
+      return res.status(403).json({ error: "Access denied" });
     }
 
-    // MEMBER
-    if (req.user.role === "MEMBER") {
-      const member = await Member.findById(req.user._id)
-        .populate("team", "name logo")
-        .lean();
+    const member = await Member.findById(req.user._id)
+      .populate("team", "name logo")
+      .lean();
 
-      if (!member) return res.status(404).json({ error: "Member not found" });
+    if (!member) return res.status(404).json({ error: "Member not found" });
 
-      return res.status(200).json({
-        role: "MEMBER",
-        member,
-        team: member.team,
-      });
-    }
-
-    return res.status(403).json({ error: "Invalid role" });
+    return res.status(200).json({
+      role: "MEMBER",
+      member,
+      team: member.team,
+    });
   } catch (err) {
     console.error("Profile fetch error:", err);
     res.status(500).json({ error: "Server error" });

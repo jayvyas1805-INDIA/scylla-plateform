@@ -135,15 +135,20 @@ function TeamNavbar() {
 
           {profileOpen && (
             <div className="profile-dropdown">
-              <button
-                onClick={() => {
-                  navigate("/team/profilee");
-                  handleNavClick();
-                }}
-              >
-
-                My Profile
-              </button>
+              {/* Only members have their own "Profilee" page — team admins
+                  manage the team via "Team Profile" instead, so this is
+                  hidden for them (backend also blocks the API for
+                  TEAM_ADMIN, this just keeps the UI honest). */}
+              {member && (
+                <button
+                  onClick={() => {
+                    navigate("/team/profilee");
+                    handleNavClick();
+                  }}
+                >
+                  My Profile
+                </button>
+              )}
 
               <button
                 className="logout"

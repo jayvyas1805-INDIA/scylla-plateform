@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import { getVendorProfile } from "../../api/vendor.api";
 import { getMyProduct } from "../../api/product.api";
@@ -11,52 +11,51 @@ const VendorHome = () => {
   const navigate = useNavigate();
 
   const [vendor, setVendor] = useState(null);
-  const [productCount, setProductCount] = useState(0);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
-    const vendorData = async () => {
+    const loadVendor = async () => {
       try {
         setLoading(true);
-
-        // ✅ Read updated data first
-        const storedVendor = localStorage.getItem("vendorProfile");
-
-        if (storedVendor) {
-          const parsed = JSON.parse(storedVendor);
-          if (parsed && parsed.logo) {
-            setVendor(parsed);
-            setLoading(false);
-            return;
-          }
-        }
-
+        const res = await getVendorProfile();
+        setVendor(res.data);
       } catch (err) {
-        console.log(err.message);
+        console.error("Failed to load vendor profile", err);
         setError("Failed to load vendor data");
       } finally {
         setLoading(false);
       }
     };
 
-    vendorData();
+    loadVendor();
   }, []);
 
-  // useEffect(() => {
-  //   if (!vendor) {
-  //     navigate("/vendor/login");
-  //   }
-  // }, [vendor, navigate]);
+  useEffect(() => {
+    if (!loading && !vendor && !error) {
+      navigate("/vendor/login");
+    }
+  }, [loading, vendor, error, navigate]);
 
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const res = await getMyProduct();
+        setProducts(res.data?.products || []);
+      } catch (err) {
+        console.error("Failed to load products", err);
+      }
+    };
 
+    loadProducts();
+  }, []);
 
+  if (loading) return <p className="vendor-home-loading">Loading...</p>;
+  if (error) return <p className="vendor-home-loading">{error}</p>;
+  if (!vendor) return null;
 
-
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  const previewProducts = products.slice(0, 3);
 
   return (
     <div className="vendor-home">
@@ -69,47 +68,38 @@ const VendorHome = () => {
           <div className="vendor-hero-content">
             <div className="vendor-hero-text">
 
-              {/* ✅ TITLE + FORMULA ICON */}
               <div className="vendor-title-row">
                 <div className="vendor-title-icon">
                   {vendor.logo ? (
-                    <img
-                      src={vendor.logo}
-                      alt="Vendor Logo"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "fill",
-                        borderRadius: "50%",
-                      }}
-                    />
+                    <img src={vendor.logo} alt="Vendor Logo" />
                   ) : (
                     <span>🏎️</span>
                   )}
-
                 </div>
                 <h1 className="vendor-title">{vendor.businessName}</h1>
-                <p className="vendor-subtitle" style={{ border: '1px solid neon-blue', padding: '4px 8px', margin: '8px 3px', backgroundColor: 'rgba(0, 123, 255, 0.1)', borderRadius: '40px' }}>
-                  {vendor.category}
-                </p>
+                {vendor.category && (
+                  <p className="vendor-subtitle-badge">{vendor.category}</p>
+                )}
               </div>
 
-
-              <p className="vendor-description">
-                {vendor.description}
+              <p className={`vendor-description ${!vendor.companyDesc && !vendor.description ? 'vendor-description-empty' : ''}`}>
+                {vendor.companyDesc || vendor.description || "Add a description so teams know what you offer."}
               </p>
 
               <div className="vendor-meta">
-                <span className="vendor-meta-item">📍 {vendor?.location}</span>
-                <span className="vendor-meta-item">📅 Since {vendor?.createdAt?.slice(0, 4)}</span>
+                <span className="vendor-meta-item">📍 {vendor?.location || 'Location not set'}</span>
+                <span className="vendor-meta-item">
+                  📅 Since {vendor?.createdAt ? vendor.createdAt.slice(0, 4) : '—'}
+                </span>
               </div>
 
-              <div className="vendor-skills-badges">
-                <span className="vendor-skill-badge">Race Parts</span>
-                <span className="vendor-skill-badge">Custom Fab</span>
-                <span className="vendor-skill-badge">Chassis Work</span>
-                <span className="vendor-skill-badge">Performance</span>
-              </div>
+              {vendor.services?.length > 0 && (
+                <div className="vendor-skills-badges">
+                  {vendor.services.slice(0, 4).map((s, i) => (
+                    <span className="vendor-skill-badge" key={i}>{s.name}</span>
+                  ))}
+                </div>
+              )}
 
               <div className="vendor-action-buttons">
                 <button
@@ -128,7 +118,6 @@ const VendorHome = () => {
               </div>
             </div>
 
-            {/* Hero icon (kept for glow balance) */}
             <div className="vendor-hero-icon">
               <div className="vendor-icon-circle">
                 <div className="vendor-icon-inner">🏎️</div>
@@ -142,25 +131,27 @@ const VendorHome = () => {
           <div className="vendor-stat-card">
             <div className="vendor-stat-icon">📦</div>
             <h3 className="vendor-stat-label">Products Listed</h3>
-            <p className="vendor-stat-value">{productCount}</p>
+            <p className="vendor-stat-value">{products.length}</p>
           </div>
 
           <div className="vendor-stat-card">
             <div className="vendor-stat-icon">💬</div>
             <h3 className="vendor-stat-label">Active Quotes</h3>
-            <p className="vendor-stat-value">0</p>
+            <p className="vendor-stat-value">—</p>
+            <span className="vendor-stat-note">Coming soon</span>
           </div>
 
           <div className="vendor-stat-card">
             <div className="vendor-stat-icon">⏱️</div>
             <h3 className="vendor-stat-label">Response Time</h3>
-            <p className="vendor-stat-value">0h</p>
+            <p className="vendor-stat-value">—</p>
+            <span className="vendor-stat-note">Coming soon</span>
           </div>
 
           <div className="vendor-stat-card">
             <div className="vendor-stat-icon">👁️</div>
             <h3 className="vendor-stat-label">Profile Views</h3>
-            <p className="vendor-stat-value">0</p>
+            <p className="vendor-stat-value">{vendor.profileViews ?? 0}</p>
           </div>
         </section>
 
@@ -172,18 +163,24 @@ const VendorHome = () => {
             <h2 className="vendor-section-title">Your Products & Services</h2>
 
             <div className="vendor-products-list">
-              {/* <div className="product-card"> */}
-              {/* <div className="product-header"> */}
-              {/* <h4 className="product-name">Carbon Fiber Splitter Kit</h4>
-                  <span className="badge badge-active">Active</span> */}
+              {previewProducts.map((product) => (
+                <div className="product-card" key={product._id}>
+                  <div className="product-header">
+                    <h4 className="product-name">{product.title}</h4>
+                    <span className={`badge badge-${product.status === 'approved' ? 'active' : 'pending'}`}>
+                      {product.status === 'approved' ? 'Active' : 'Pending'}
+                    </span>
+                  </div>
+                  <p className="product-category">{product.category || 'Uncategorized'}</p>
+                  <p className="product-price">${product.price}</p>
+                </div>
+              ))}
             </div>
-            {/* <p className="product-category">Aerodynamics / Body Parts</p>
-                <p className="product-price">$0</p>
-                <button className="btn btn-secondary btn-small">Request Quote</button> */}
-            {/* </div> */}
-            {/* </div> */}
 
-            <button className="vendor-btn vendor-btn-primary vendor-btn-full-width">
+            <button
+              className="vendor-btn vendor-btn-primary vendor-btn-full-width"
+              onClick={() => navigate('/vendor/product')}
+            >
               Manage All Listings
             </button>
           </section>
@@ -192,18 +189,16 @@ const VendorHome = () => {
           <section className="vendor-quotes-section">
             <h2 className="vendor-section-title">Recent Quotes & Inquiries</h2>
 
-            <div className="vendor-quotes-list">
-              {/* <div className="quote-card"> */}
-              {/* <div className="quote-header"> */}
-              {/* <h4 className="quote-client">Thunder Racing Team</h4>
-                  <span className="badge badge-new">New</span> */}
+            <div className="vendor-quotes-list vendor-quotes-list-placeholder">
+              <p className="vendor-coming-soon-note">
+                Quote and inquiry tracking is coming soon — this section is a preview of what's planned.
+              </p>
             </div>
-            {/* <p className="quote-product">Carbon Fiber Splitter Kit</p>
-                <p className="quote-date">2 hours ago</p> */}
-            {/* </div> */}
-            {/* </div> */}
 
-            <button className="vendor-btn vendor-btn-primary vendor-btn-full-width">
+            <button
+              className="vendor-btn vendor-btn-primary vendor-btn-full-width"
+              onClick={() => navigate('/vendor/quote')}
+            >
               View All Quotes & Inquiries
             </button>
           </section>
@@ -235,10 +230,11 @@ const VendorHome = () => {
           <div className="vendor-footer-content">
             <div className="vendor-footer-status">
               <span className="vendor-status-badge online">● ONLINE</span>
-              <span className="vendor-status-text">0 Teams Connected</span>
             </div>
             <div className="vendor-footer-links">
-              <a href="#support" className="vendor-footer-link">Support / Help</a>
+              <button className="vendor-footer-link" onClick={() => navigate('/contact')}>
+                Support / Help
+              </button>
             </div>
           </div>
         </footer>
