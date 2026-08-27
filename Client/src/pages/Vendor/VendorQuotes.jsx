@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import { getVendorProfile } from '../../api/vendor.api';
+import { getConversations, getMessages, sendMessage } from '../../api/chat.api';
 import './VendorQuotes.css';
 
 const VendorQuotes = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [loading, setLoading] = useState(true);
   const [vendor, setVendor] = useState(null);
 
-  const [selectedInquiry, setSelectedInquiry] = useState('scylla-racing');
+  const [conversations, setConversations] = useState([]);
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const [selectedId, setSelectedId] = useState(searchParams.get('conversation') || null);
+
+  const [thread, setThread] = useState([]);
+  const [loadingThread, setLoadingThread] = useState(false);
   const [messageInput, setMessageInput] = useState('');
+  const [sending, setSending] = useState(false);
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('All Inquiries');
 
   useEffect(() => {
     const loadVendor = async () => {
@@ -37,149 +45,97 @@ const VendorQuotes = () => {
     }
   }, [loading, vendor, navigate]);
 
-  // Demo inquiries — replace with a real API call once a quotes/inquiries
-  // endpoint exists on the backend.
-  const [inquiries] = useState([
-    {
-      id: 'scylla-racing',
-      name: 'Scylla Racing',
-      category: 'Tyres',
-      status: 'New',
-      message: 'Need quotation for front tyres...',
-      timestamp: '2 hours ago',
-      avatar: '🏎️',
-      isUnread: true,
-    },
-    {
-      id: 'astra-motorsports',
-      name: 'Astra Motorsports',
-      category: 'Suspension',
-      status: 'Open',
-      message: 'Custom exhaust system required...',
-      timestamp: '5 hours ago',
-      avatar: '⚙️',
-      isUnread: false,
-    },
-    {
-      id: 'team-agnite',
-      name: 'Team Agnite',
-      category: 'Kit',
-      status: 'New',
-      message: '3D modeling for aerodynamic...',
-      timestamp: '1 day ago',
-      avatar: '🎯',
-      isUnread: true,
-    },
-    {
-      id: 'velocity-racing',
-      name: 'Velocity Racing',
-      category: 'Safety Equipment',
-      status: 'Closed',
-      message: 'Racing harness specifications...',
-      timestamp: '3 days ago',
-      avatar: '⚡',
-      isUnread: false,
-    },
-    {
-      id: 'phoenix-motorsport',
-      name: 'Phoenix Motorsport',
-      category: 'Data acquisition system',
-      status: 'Open',
-      message: 'Data acquisition system...',
-      timestamp: '5 days ago',
-      avatar: '🔧',
-      isUnread: false,
-    },
-  ]);
+  const loadConversations = useCallback(async () => {
+    try {
+      setLoadingConversations(true);
+      const res = await getConversations();
+      const list = Array.isArray(res.data) ? res.data : [];
+      setConversations(list);
 
-  // Full hand-authored detail record — only Scylla Racing has one.
-  const [inquiryDetails] = useState({
-    'scylla-racing': {
-      name: 'Scylla Racing',
-      avatar: '🏎️',
-      received: 'Dec 8, 2024 at 11:30 AM',
-      requestDetails: {
-        categoryNeeded: '4 sets (16 tyres total)',
-        expectedLeadTime: '2 weeks',
-      },
-      specifications: 'Front: 235/40R18; Rear: 285/35R18, Compound: Medium, DOT approved',
-      description: 'High-performance racing tyres for upcoming championship series. Looking for consistent grip and durability over 200km races. Previous supplier had quality issues.',
-      specialInstructions: 'Must be delivered to Mumbai circuit facility. Temperature range: 15-45°C',
-      attachments: [
-        { name: 'tyre-specs.pdf', type: 'pdf', size: '2.4 MB' },
-        { name: 'car-setup.jpg', type: 'image', size: '1.8 MB' },
-        { name: 'requirements.docx', type: 'document', size: '450 KB' },
-      ],
-      messages: [
-        { sender: 'Scylla Racing', time: '11:30 AM', text: 'Hi, we need a quote for racing tyres as per the specifications uploaded.' },
-        { sender: 'You', time: '11:45 AM', text: "Thank you for reaching out! I've reviewed your requirements — could you confirm the compound preference?" },
-        { sender: 'Scylla Racing', time: '12:00 PM', text: 'Medium compound works for us.' },
-        { sender: 'You', time: '12:15 PM', text: 'Quote coming in 2 hours.' },
-      ],
-    },
-  });
+      const fromUrl = searchParams.get('conversation');
+      if (fromUrl && !selectedId) {
+        setSelectedId(fromUrl);
+      } else if (!fromUrl && !selectedId && list.length > 0) {
+        setSelectedId(list[0]._id);
+      }
+    } catch (err) {
+      console.error('Failed to load conversations', err);
+    } finally {
+      setLoadingConversations(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Editable per-inquiry message threads, seeded once so replying actually
-  // appends to the conversation instead of only logging to the console.
-  const [threads, setThreads] = useState(() => {
-    const seeded = {};
-    inquiries.forEach((inq) => {
-      seeded[inq.id] = inquiryDetails[inq.id]?.messages || [
-        { sender: inq.name, time: inq.timestamp, text: inq.message },
-      ];
-    });
-    return seeded;
-  });
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
 
-  const filteredInquiries = inquiries.filter((inquiry) => {
-    const matchesSearch =
-      !searchTerm.trim() ||
-      inquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inquiry.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterStatus === 'All Inquiries' || inquiry.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
+  useEffect(() => {
+    if (!selectedId) {
+      setThread([]);
+      return;
+    }
 
-  const selectedMeta = inquiries.find((i) => i.id === selectedInquiry);
-
-  // Falls back to the inquiry's list-card data when no full detail record
-  // exists, so every inquiry is clickable instead of only Scylla Racing.
-  const current = inquiryDetails[selectedInquiry] || (selectedMeta && {
-    name: selectedMeta.name,
-    avatar: selectedMeta.avatar,
-    received: selectedMeta.timestamp,
-    requestDetails: {
-      categoryNeeded: selectedMeta.category,
-      expectedLeadTime: 'Not specified yet',
-    },
-    specifications: 'No specifications provided yet.',
-    description: selectedMeta.message,
-    specialInstructions: 'None provided.',
-    attachments: [],
-  });
-
-  const handleSendMessage = () => {
-    if (!messageInput.trim() || !selectedInquiry) return;
-
-    const newMessage = {
-      sender: 'You',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      text: messageInput.trim(),
+    const loadThread = async () => {
+      try {
+        setLoadingThread(true);
+        const res = await getMessages(selectedId);
+        setThread(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        console.error('Failed to load messages', err);
+        setThread([]);
+      } finally {
+        setLoadingThread(false);
+      }
     };
 
-    setThreads((prev) => ({
-      ...prev,
-      [selectedInquiry]: [...(prev[selectedInquiry] || []), newMessage],
-    }));
+    loadThread();
+    setSearchParams({ conversation: selectedId }, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  const handleSendMessage = async () => {
+    if (!messageInput.trim() || !selectedId || sending) return;
+
+    const text = messageInput.trim();
     setMessageInput('');
+    setSending(true);
+
+    try {
+      const res = await sendMessage(selectedId, text);
+      setThread((prev) => [...prev, res.data]);
+      loadConversations();
+    } catch (err) {
+      console.error('Failed to send message', err);
+      alert('Failed to send message');
+      setMessageInput(text);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const filteredConversations = conversations.filter((c) => {
+    if (!searchTerm.trim()) return true;
+    const q = searchTerm.toLowerCase();
+    return (
+      c.otherParty?.name?.toLowerCase().includes(q) ||
+      c.product?.title?.toLowerCase().includes(q)
+    );
+  });
+
+  const current = conversations.find((c) => c._id === selectedId);
+
+  const formatTime = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
   if (loading) {
     return (
       <div className="vendor-quotes">
         <Header currentPath={location.pathname} />
-        <p className="vendor-quotes-loading">Loading inquiries…</p>
+        <p className="vendor-quotes-loading">Loading…</p>
       </div>
     );
   }
@@ -192,12 +148,12 @@ const VendorQuotes = () => {
 
       <main className="vendor-quotes-main">
         <div className="vendor-quotes-container">
-          {/* Left Sidebar - Inquiries List */}
+          {/* Left Sidebar - Conversations List */}
           <aside className="vendor-quotes-sidebar">
             <div className="vendor-quotes-sidebar-header">
-              <h2 className="vendor-quotes-sidebar-title">Team Inquiries & Messaging</h2>
+              <h2 className="vendor-quotes-sidebar-title">Messages & Inquiries</h2>
               <p className="vendor-quotes-sidebar-subtitle">
-                View requests, discuss requirements, and respond to teams
+                Conversations with teams about your products and services
               </p>
             </div>
 
@@ -205,7 +161,7 @@ const VendorQuotes = () => {
               <input
                 type="text"
                 className="vendor-quotes-search-input"
-                placeholder="Search inquiries..."
+                placeholder="Search conversations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -215,127 +171,90 @@ const VendorQuotes = () => {
               </svg>
             </div>
 
-            <div className="vendor-quotes-filter-dropdown">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="vendor-quotes-filter-select"
-              >
-                <option>All Inquiries</option>
-                <option>New</option>
-                <option>Open</option>
-                <option>Closed</option>
-              </select>
-            </div>
-
             <div className="vendor-quotes-inquiries-list">
-              {filteredInquiries.length > 0 ? (
-                filteredInquiries.map((inquiry) => (
+              {loadingConversations ? (
+                <p className="vendor-quotes-empty">Loading conversations…</p>
+              ) : filteredConversations.length > 0 ? (
+                filteredConversations.map((conv) => (
                   <div
-                    key={inquiry.id}
-                    className={`vendor-quotes-inquiry-item ${
-                      selectedInquiry === inquiry.id ? 'vendor-quotes-inquiry-active' : ''
-                    } ${inquiry.isUnread ? 'vendor-quotes-inquiry-unread' : ''}`}
-                    onClick={() => setSelectedInquiry(inquiry.id)}
+                    key={conv._id}
+                    className={`vendor-quotes-inquiry-item ${selectedId === conv._id ? 'vendor-quotes-inquiry-active' : ''}`}
+                    onClick={() => setSelectedId(conv._id)}
                   >
-                    <div className="vendor-quotes-inquiry-avatar">{inquiry.avatar}</div>
+                    <div className="vendor-quotes-inquiry-avatar">
+                      {conv.otherParty?.avatar ? (
+                        <img src={conv.otherParty.avatar} alt={conv.otherParty.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                      ) : (
+                        '🏁'
+                      )}
+                    </div>
                     <div className="vendor-quotes-inquiry-content">
                       <div className="vendor-quotes-inquiry-header">
-                        <h3 className="vendor-quotes-inquiry-name">{inquiry.name}</h3>
-                        <span className={`vendor-quotes-badge vendor-quotes-badge-${inquiry.status.toLowerCase()}`}>
-                          {inquiry.status}
-                        </span>
+                        <h3 className="vendor-quotes-inquiry-name">{conv.otherParty?.name || 'Unknown'}</h3>
                       </div>
-                      <p className="vendor-quotes-inquiry-category">{inquiry.category}</p>
-                      {/* <p className="vendor-quotes-inquiry-message">{inquiry.message}</p> */}
-                      <p className="vendor-quotes-inquiry-time">{inquiry.timestamp}</p>
+                      <p className="vendor-quotes-inquiry-category">
+                        {conv.product?.title ? `Re: ${conv.product.title}` : 'General inquiry'}
+                      </p>
+                      <p className="vendor-quotes-inquiry-time">
+                        {formatTime(conv.lastMessage?.createdAt || conv.updatedAt)}
+                      </p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="vendor-quotes-empty">No inquiries match your search.</p>
+                <p className="vendor-quotes-empty">
+                  {conversations.length === 0
+                    ? 'No inquiries yet — they will show up here once a team messages you about a listing.'
+                    : 'No inquiries match your search.'}
+                </p>
               )}
             </div>
           </aside>
 
-          {/* Center - Inquiry Details */}
+          {/* Center - Conversation details */}
           <div className="vendor-quotes-details">
-            {current && (
+            {current ? (
               <>
                 <div className="vendor-quotes-details-header">
                   <div className="vendor-quotes-contact-info">
-                    <span className="vendor-quotes-contact-avatar">{current.avatar}</span>
+                    <span className="vendor-quotes-contact-avatar">
+                      {current.otherParty?.avatar ? (
+                        <img src={current.otherParty.avatar} alt={current.otherParty.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                      ) : (
+                        '🏁'
+                      )}
+                    </span>
                     <div className="vendor-quotes-contact-details">
-                      <h2 className="vendor-quotes-contact-name">{current.name}</h2>
+                      <h2 className="vendor-quotes-contact-name">{current.otherParty?.name || 'Unknown'}</h2>
                       <p className="vendor-quotes-contact-status">
-                        <span className={`vendor-quotes-badge vendor-quotes-badge-${selectedMeta?.status.toLowerCase() || 'new'}`}>
-                          {selectedMeta?.status || 'New'}
+                        <span className="vendor-quotes-badge vendor-quotes-badge-new">
+                          {current.otherParty?.role || 'Team'}
                         </span>
-                        <span className="vendor-quotes-received-date">Received: {current.received}</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="vendor-quotes-detail-card">
-                  <h3 className="vendor-quotes-card-title">Request Details</h3>
-                  <div className="vendor-quotes-detail-grid">
-                    <div className="vendor-quotes-detail-item">
-                      <label className="vendor-quotes-detail-label">Category Needed</label>
-                      <p className="vendor-quotes-detail-value">{current.requestDetails.categoryNeeded}</p>
-                    </div>
-                    <div className="vendor-quotes-detail-item">
-                      <label className="vendor-quotes-detail-label">Expected Lead Time</label>
-                      <p className="vendor-quotes-detail-value">{current.requestDetails.expectedLeadTime}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="vendor-quotes-detail-card">
-                  <h3 className="vendor-quotes-card-title">Specifications</h3>
-                  <p className="vendor-quotes-detail-text">{current.specifications}</p>
-                </div>
-
-                <div className="vendor-quotes-detail-card">
-                  <h3 className="vendor-quotes-card-title">Requirement Description</h3>
-                  <p className="vendor-quotes-detail-text">{current.description}</p>
-                </div>
-
-                <div className="vendor-quotes-detail-card">
-                  <h3 className="vendor-quotes-card-title">Special Instructions</h3>
-                  <p className="vendor-quotes-detail-text">{current.specialInstructions}</p>
-                </div>
-
-                {current.attachments && current.attachments.length > 0 && (
+                {current.product && (
                   <div className="vendor-quotes-detail-card">
-                    <h3 className="vendor-quotes-card-title">Attachments</h3>
-                    <div className="vendor-quotes-attachments-grid">
-                      {current.attachments.map((attachment, index) => (
-                        <div key={index} className="vendor-quotes-attachment-item">
-                          <div className="vendor-quotes-attachment-icon">
-                            {attachment.type === 'pdf' && '📄'}
-                            {attachment.type === 'image' && '🖼️'}
-                            {attachment.type === 'document' && '📋'}
-                          </div>
-                          <div className="vendor-quotes-attachment-info">
-                            <p className="vendor-quotes-attachment-name">{attachment.name}</p>
-                            <p className="vendor-quotes-attachment-size">{attachment.size}</p>
-                          </div>
-                          <button className="vendor-quotes-attachment-download">Download</button>
-                        </div>
-                      ))}
+                    <h3 className="vendor-quotes-card-title">About this product</h3>
+                    <div className="vendor-quotes-detail-grid">
+                      <div className="vendor-quotes-detail-item">
+                        <label className="vendor-quotes-detail-label">Product</label>
+                        <p className="vendor-quotes-detail-value">{current.product.title}</p>
+                      </div>
+                      <div className="vendor-quotes-detail-item">
+                        <label className="vendor-quotes-detail-label">Price</label>
+                        <p className="vendor-quotes-detail-value">${current.product.price}</p>
+                      </div>
                     </div>
                   </div>
                 )}
-
-                <div className="vendor-quotes-action-buttons">
-                  <button className="vendor-quotes-btn vendor-quotes-btn-primary">
-                    <span>📤</span> Send Quote
-                  </button>
-                  <button className="vendor-quotes-btn vendor-quotes-btn-secondary">Mark as Open</button>
-                  <button className="vendor-quotes-btn vendor-quotes-btn-danger">Mark as Closed</button>
-                </div>
               </>
+            ) : (
+              <p className="vendor-quotes-empty">
+                {loadingConversations ? 'Loading…' : 'Select a conversation to view details.'}
+              </p>
             )}
           </div>
 
@@ -344,30 +263,42 @@ const VendorQuotes = () => {
             {current && (
               <>
                 <div className="vendor-quotes-contact-card">
-                  <div className="vendor-quotes-card-avatar">{current.avatar}</div>
-                  <h3 className="vendor-quotes-card-contact-name">{current.name}</h3>
+                  <div className="vendor-quotes-card-avatar">
+                    {current.otherParty?.avatar ? (
+                      <img src={current.otherParty.avatar} alt={current.otherParty.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+                    ) : (
+                      '🏁'
+                    )}
+                  </div>
+                  <h3 className="vendor-quotes-card-contact-name">{current.otherParty?.name || 'Unknown'}</h3>
                   <p className="vendor-quotes-card-contact-status">Contact</p>
                 </div>
 
                 <div className="vendor-quotes-messages-container">
-                  {(threads[selectedInquiry] || []).map((msg, index) => (
-                    <div
-                      key={index}
-                      className={`vendor-quotes-message ${
-                        msg.sender === 'You' ? 'vendor-quotes-message-outgoing' : 'vendor-quotes-message-incoming'
-                      }`}
-                    >
-                      {msg.sender !== 'You' && (
-                        <div className="vendor-quotes-message-avatar">{current.avatar}</div>
-                      )}
-                      <div className="vendor-quotes-message-content">
-                        <div className="vendor-quotes-message-bubble">
-                          <p className="vendor-quotes-message-text">{msg.text}</p>
+                  {loadingThread ? (
+                    <p className="vendor-quotes-empty">Loading messages…</p>
+                  ) : thread.length > 0 ? (
+                    thread.map((msg) => (
+                      <div
+                        key={msg._id}
+                        className={`vendor-quotes-message ${
+                          msg.sender?.role === 'VENDOR' ? 'vendor-quotes-message-outgoing' : 'vendor-quotes-message-incoming'
+                        }`}
+                      >
+                        {msg.sender?.role !== 'VENDOR' && (
+                          <div className="vendor-quotes-message-avatar">🏢</div>
+                        )}
+                        <div className="vendor-quotes-message-content">
+                          <div className="vendor-quotes-message-bubble">
+                            <p className="vendor-quotes-message-text">{msg.content}</p>
+                          </div>
+                          <p className="vendor-quotes-message-time">{formatTime(msg.createdAt)}</p>
                         </div>
-                        <p className="vendor-quotes-message-time">{msg.time}</p>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="vendor-quotes-empty">No messages yet — say hello to get started.</p>
+                  )}
                 </div>
 
                 <div className="vendor-quotes-message-input-wrapper">
@@ -378,8 +309,9 @@ const VendorQuotes = () => {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    disabled={sending}
                   />
-                  <button className="vendor-quotes-message-send" onClick={handleSendMessage}>
+                  <button className="vendor-quotes-message-send" onClick={handleSendMessage} disabled={sending}>
                     <svg viewBox="0 0 24 24" fill="currentColor">
                       <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
                     </svg>

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import AddProductForm from "./AddProductForm";
 import { getMarketPlace, addProduct } from '../../api/product.api';
+import { openConversation } from '../../api/chat.api';
 // import '../../index.css'
 // import '../../../globle.css'
 import './ProductListing.css';
@@ -35,12 +36,28 @@ const ProductListing = () => {
 
 
 const ProductCard = ({ product }) => {
+  const [messaging, setMessaging] = useState(false);
   const conditions = {
     'new': { label: 'New', color: '#10b981' },
     'refurbished': { label: 'Refurbished', color: '#f59e0b' },
     'used': { label: 'Used', color: '#ef4444' }
   };
   const conditionInfo = conditions[product.condition] || conditions['new'];
+
+  const handleViewDetails = async () => {
+    if (messaging) return;
+    try {
+      setMessaging(true);
+      const res = await openConversation(product._id);
+      navigate(`/vendor/quote?conversation=${res.data._id}`);
+    } catch (err) {
+      console.error('Failed to start conversation', err);
+      const message = err.response?.data?.error || 'Could not open a conversation for this product.';
+      alert(message);
+    } finally {
+      setMessaging(false);
+    }
+  };
    return (
       <div className="product-card-item"style={{border:'1.5px solid white', padding:'8px',margin:"0px 10px", borderRadius:"20px"}}>
         <div className="product-card-image-wrapper">
@@ -80,7 +97,14 @@ const ProductCard = ({ product }) => {
             )}
           <div className="product-card-footer" style={{borderTop:"1px solid"}}>
             <span className="product-card-price" style={{color:"#53b738"}}>₹{Number(product.price || 0).toFixed(2)}</span>
-            <button className="product-card-btn" style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}>View Details</button>
+            <button
+              className="product-card-btn"
+              style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}
+              onClick={handleViewDetails}
+              disabled={messaging}
+            >
+              {messaging ? 'Opening…' : 'View Details'}
+            </button>
           </div>
         </div>
       </div>

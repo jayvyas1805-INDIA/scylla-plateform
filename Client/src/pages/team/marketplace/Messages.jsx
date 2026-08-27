@@ -1,399 +1,272 @@
-// import "./Marketplace.css";
-
-// function Messages() {
-//   return (
-//     <div className="messages-layout">
-
-//       {/* LEFT LIST */}
-//       <div className="messages-list">
-//         <div className="message-item active">Scylla Racing</div>
-//         <div className="message-item">Astra Motorsports</div>
-//         <div className="message-item">Phoenix Motorsport</div>
-//       </div>
-
-//       {/* CHAT */}
-//       <div className="chat-window">
-
-//         <div className="chat-header">
-//           Scylla Racing <span className="online">Online</span>
-//         </div>
-
-//         <div className="chat-body">
-//           <div className="msg left">Hi, we need a quote for tyres.</div>
-//           <div className="msg right">Sure, checking specs.</div>
-//         </div>
-
-//         <div className="chat-input">
-//           <input placeholder="Type your message..." />
-//           <button>➤</button>
-//         </div>
-
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default Messages;
-
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-// import Header from '../../components/Vendor/Header';
-import '../../team/marketplace/Messages.css';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import './Messages.css';
 import NavBar from '../../../components/team/MarketPlaceNavbar';
+import { getConversations, getMessages, sendMessage } from '../../../api/chat.api';
 
 const Messages = () => {
   const location = useLocation();
-  const [selectedInquiry, setSelectedInquiry] = useState('scylla-racing');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [conversations, setConversations] = useState([]);
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const [selectedId, setSelectedId] = useState(searchParams.get('conversation') || null);
+
+  const [thread, setThread] = useState([]);
+  const [loadingThread, setLoadingThread] = useState(false);
   const [messageInput, setMessageInput] = useState('');
-  const [inquiries] = useState([
-    {
-      id: 'scylla-racing',
-      name: 'Scylla Racing',
-      category: 'Tyres',
-      status: 'New',
-      message: 'Need quotation for front tyres...',
-      timestamp: '2 hours ago',
-      avatar: '🏎️',
-      isUnread: true,
-    },
-    {
-      id: 'astra-motorsports',
-      name: 'Astra Motorsports',
-      category: 'Suspension',
-      status: 'Open',
-      message: 'Custom exhaust system required...',
-      timestamp: '5 hours ago',
-      avatar: '⚙️',
-      isUnread: false,
-    },
-    {
-      id: 'team-agnite',
-      name: 'Team Agnite',
-      category: 'Kit',
-      status: 'New',
-      message: '3D modeling for aerodynamic...',
-      timestamp: '1 day ago',
-      avatar: '🎯',
-      isUnread: true,
-    },
-    {
-      id: 'velocity-racing',
-      name: 'Velocity Racing',
-      category: 'Safety Equipment',
-      status: 'Closed',
-      message: 'Racing harness specifications...',
-      timestamp: '3 days ago',
-      avatar: '⚡',
-      isUnread: false,
-    },
-    {
-      id: 'phoenix-motorsport',
-      name: 'Phoenix Motorsport',
-      category: 'Data acquisition system',
-      status: 'Open',
-      message: 'Data acquisition system...',
-      timestamp: '5 days ago',
-      avatar: '🔧',
-      isUnread: false,
-    },
-  ]);
-
-  // Full detail record — kept for the one inquiry with rich sample data.
-  const [inquiryDetails] = useState({
-    'scylla-racing': {
-      name: 'Scylla Racing',
-      avatar: '🏎️',
-      status: 'Typed',
-      received: 'Dec 8, 2024 at 11:30 AM',
-      requestDetails: {
-        categoryNeeded: '4 sets (16 tyres total)',
-        expectedLeadTime: '2 weeks',
-      },
-      specifications: 'Front: 235/40R18; Rear: 285/35R18, Compound: Medium, DOT approved',
-      description: 'High-performance racing tyres for upcoming championship series. Looking for consistent grip and durability over 200km races. Previous supplier had quality issues.',
-      specialInstructions: 'Must be delivered to Mumbai circuit facility. Temperature range: 15-45°C',
-      attachments: [
-        { name: 'tyre-specs.pdf', type: 'pdf', size: '2.4 MB' },
-        { name: 'car-setup.jpg', type: 'image', size: '1.8 MB' },
-        { name: 'requirements.docx', type: 'document', size: '450 KB' },
-      ],
-      messages: [
-        { sender: 'Scylla Racing', time: '11:30 AM', text: 'Hi, we need a quote for racing tyres as per the specifications uploaded.' },
-        { sender: 'You', time: '11:45 AM', text: 'Thank you for reaching out! I\'ve reviewed your requirements and the compound preference?' },
-        { sender: 'Scylla Racing', time: '12:00 PM', text: 'Perfect! Based on this data, I can confirm the compound preference?' },
-        { sender: 'You', time: '12:15 PM', text: 'Quote coming in 2 hours.' },
-      ],
-    },
-  });
-
-  // Editable copy of every thread's messages, seeded once so sending a
-  // reply actually appends to the conversation instead of just logging.
-  const [threads, setThreads] = useState(() => {
-    const seeded = {};
-    inquiries.forEach((inq) => {
-      seeded[inq.id] = inquiryDetails[inq.id]?.messages || [
-        { sender: inq.name, time: inq.timestamp, text: inq.message },
-      ];
-    });
-    return seeded;
-  });
+  const [sending, setSending] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('All Inquiries');
 
-  const filteredInquiries = inquiries.filter((inquiry) => {
-    const matchesSearch =
-      !searchTerm.trim() ||
-      inquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inquiry.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterStatus === 'All Inquiries' || inquiry.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
+  const loadConversations = useCallback(async () => {
+    try {
+      setLoadingConversations(true);
+      const res = await getConversations();
+      const list = Array.isArray(res.data) ? res.data : [];
+      setConversations(list);
 
-  // Falls back to sensible placeholder details for inquiries that don't
-  // have the full hand-authored record, so every inquiry is clickable
-  // instead of only "Scylla Racing" rendering content.
-  const selectedInquiryMeta = inquiries.find((i) => i.id === selectedInquiry);
-  const current = inquiryDetails[selectedInquiry] || (selectedInquiryMeta && {
-    name: selectedInquiryMeta.name,
-    avatar: selectedInquiryMeta.avatar,
-    status: selectedInquiryMeta.status,
-    received: selectedInquiryMeta.timestamp,
-    requestDetails: {
-      categoryNeeded: selectedInquiryMeta.category,
-      expectedLeadTime: 'Not specified yet',
-    },
-    specifications: 'No specifications provided yet.',
-    description: selectedInquiryMeta.message,
-    specialInstructions: 'None provided.',
-    attachments: [],
-  });
+      // If we arrived here via ?conversation=<id> (e.g. from "View
+      // Product" on the marketplace) and that conversation isn't
+      // selected yet, select it now that the list has loaded.
+      const fromUrl = searchParams.get('conversation');
+      if (fromUrl && !selectedId) {
+        setSelectedId(fromUrl);
+      } else if (!fromUrl && !selectedId && list.length > 0) {
+        setSelectedId(list[0]._id);
+      }
+    } catch (err) {
+      console.error('Failed to load conversations', err);
+    } finally {
+      setLoadingConversations(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleSendMessage = () => {
-    if (!messageInput.trim() || !selectedInquiry) return;
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
 
-    const newMessage = {
-      sender: 'You',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      text: messageInput.trim(),
+  useEffect(() => {
+    if (!selectedId) {
+      setThread([]);
+      return;
+    }
+
+    const loadThread = async () => {
+      try {
+        setLoadingThread(true);
+        const res = await getMessages(selectedId);
+        setThread(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        console.error('Failed to load messages', err);
+        setThread([]);
+      } finally {
+        setLoadingThread(false);
+      }
     };
 
-    setThreads((prev) => ({
-      ...prev,
-      [selectedInquiry]: [...(prev[selectedInquiry] || []), newMessage],
-    }));
+    loadThread();
+    // Keep the URL in sync so the conversation is bookmarkable/shareable
+    // and survives a refresh.
+    setSearchParams({ conversation: selectedId }, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  const handleSelect = (id) => setSelectedId(id);
+
+  const handleSendMessage = async () => {
+    if (!messageInput.trim() || !selectedId || sending) return;
+
+    const text = messageInput.trim();
     setMessageInput('');
+    setSending(true);
+
+    try {
+      const res = await sendMessage(selectedId, text);
+      setThread((prev) => [...prev, res.data]);
+      // Refresh the list in the background so the preview/last-message
+      // shown in the sidebar stays current.
+      loadConversations();
+    } catch (err) {
+      console.error('Failed to send message', err);
+      alert('Failed to send message');
+      setMessageInput(text);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const filteredConversations = conversations.filter((c) => {
+    if (!searchTerm.trim()) return true;
+    const q = searchTerm.toLowerCase();
+    return (
+      c.otherParty?.name?.toLowerCase().includes(q) ||
+      c.product?.title?.toLowerCase().includes(q)
+    );
+  });
+
+  const current = conversations.find((c) => c._id === selectedId);
+
+  const formatTime = (iso) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
   return (
     <div className="messages-page">
-      {/* <Header currentPath={location.pathname} /> */}
-      <NavBar />
-      
-      <main className="quotes-main" style={{marginTop:"10px"}}>
+      <NavBar currentPath={location.pathname} />
+
+      <main className="quotes-main">
         <div className="quotes-container">
-          {/* Left Sidebar - Inquiries List */}
+          {/* Left Sidebar - Conversations List */}
           <aside className="inquiries-sidebar">
             <div className="sidebar-header">
-              <h2 className="sidebar-title">Team Inquiries & Messaging</h2>
-              <p className="sidebar-subtitle">View requests, discuss requirements, and respond to teams</p>
+              <h2 className="sidebar-title">Messages</h2>
+              <p className="sidebar-subtitle">Conversations with vendors and other teams about marketplace listings</p>
             </div>
 
-            {/* Search Bar */}
             <div className="search-wrapper">
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search inquiries..."
+                placeholder="Search conversations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-              </svg>
             </div>
 
-            {/* Filter Dropdown */}
-            <div className="filter-dropdown">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="filter-select"
-              >
-                <option>All Inquiries</option>
-                <option>New</option>
-                <option>Open</option>
-                <option>Closed</option>
-              </select>
-            </div>
-
-            {/* Inquiries List */}
             <div className="inquiries-list">
-              {filteredInquiries.length > 0 ? (
-                filteredInquiries.map((inquiry) => (
+              {loadingConversations ? (
+                <p className="inquiries-empty">Loading conversations…</p>
+              ) : filteredConversations.length > 0 ? (
+                filteredConversations.map((conv) => (
                   <div
-                    key={inquiry.id}
-                    className={`inquiry-item ${selectedInquiry === inquiry.id ? 'active' : ''} ${
-                      inquiry.isUnread ? 'unread' : ''
-                    }`}
-                    onClick={() => setSelectedInquiry(inquiry.id)}
+                    key={conv._id}
+                    className={`inquiry-item ${selectedId === conv._id ? 'active' : ''}`}
+                    onClick={() => handleSelect(conv._id)}
                   >
-                    <div className="inquiry-avatar">{inquiry.avatar}</div>
+                    <div className="inquiry-avatar">
+                      {conv.otherParty?.avatar ? (
+                        <img src={conv.otherParty.avatar} alt={conv.otherParty.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                      ) : (
+                        '🏢'
+                      )}
+                    </div>
                     <div className="inquiry-content">
                       <div className="inquiry-header">
-                        <h3 className="inquiry-name">{inquiry.name}</h3>
-                        <span className={`inquiry-badge badge-${inquiry.status.toLowerCase()}`}>
-                          {inquiry.status}
-                        </span>
+                        <h3 className="inquiry-name">{conv.otherParty?.name || 'Unknown'}</h3>
                       </div>
-                      <p className="inquiry-category">{inquiry.category}</p>
-                      {/* <p className="inquiry-message">{inquiry.message}</p> */}
-                      <p className="inquiry-time">{inquiry.timestamp}</p>
+                      <p className="inquiry-category">
+                        {conv.product?.title ? `Re: ${conv.product.title}` : 'General inquiry'}
+                      </p>
+                      <p className="inquiry-time">{formatTime(conv.lastMessage?.createdAt || conv.updatedAt)}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="inquiries-empty">No inquiries match your search.</p>
+                <p className="inquiries-empty">
+                  {conversations.length === 0
+                    ? "No conversations yet — message a seller from the marketplace to start one."
+                    : 'No conversations match your search.'}
+                </p>
               )}
             </div>
           </aside>
 
-          {/* Center Main Area - Inquiry Details */}
+          {/* Center - Conversation thread */}
           <div className="inquiry-details">
-            {current && (
+            {current ? (
               <>
-                {/* Header with Contact Info */}
                 <div className="details-header">
                   <div className="contact-info">
-                    <span className="contact-avatar">{current.avatar}</span>
+                    <span className="contact-avatar">
+                      {current.otherParty?.avatar ? (
+                        <img src={current.otherParty.avatar} alt={current.otherParty.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                      ) : (
+                        '🏢'
+                      )}
+                    </span>
                     <div className="contact-details">
-                      <h2 className="contact-name">{current.name}</h2>
+                      <h2 className="contact-name">{current.otherParty?.name || 'Unknown'}</h2>
                       <p className="contact-status">
-                        <span className="status-badge">Typed</span>
-                        <span className="received-date">Received: {current.received}</span>
+                        <span className="status-badge">{current.otherParty?.role || 'Contact'}</span>
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Request Details Card */}
-                <div className="details-card">
-                  <h3 className="card-title">Request Details</h3>
-                  <div className="details-grid">
-                    <div className="detail-item">
-                      <label className="detail-label">Category Needed</label>
-                      <p className="detail-value">{current.requestDetails.categoryNeeded}</p>
-                    </div>
-                    <div className="detail-item">
-                      <label className="detail-label">Expected Lead Time</label>
-                      <p className="detail-value">{current.requestDetails.expectedLeadTime}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Specifications Card */}
-                <div className="details-card">
-                  <h3 className="card-title">Specifications</h3>
-                  <p className="detail-text">{current.specifications}</p>
-                </div>
-
-                {/* Requirement Description Card */}
-                <div className="details-card">
-                  <h3 className="card-title">Requirement Description</h3>
-                  <p className="detail-text">{current.description}</p>
-                </div>
-
-                {/* Special Instructions Card */}
-                <div className="details-card">
-                  <h3 className="card-title">Special Instructions</h3>
-                  <p className="detail-text">{current.specialInstructions}</p>
-                </div>
-
-                {/* Attachments Card */}
-                {current.attachments && current.attachments.length > 0 && (
-                  <div className="details-card attachments-card">
-                    <h3 className="card-title">Attachments</h3>
-                    <div className="attachments-grid">
-                      {current.attachments.map((attachment, index) => (
-                        <div key={index} className="attachment-item">
-                          <div className="attachment-icon">
-                            {attachment.type === 'pdf' && '📄'}
-                            {attachment.type === 'image' && '🖼️'}
-                            {attachment.type === 'document' && '📋'}
-                          </div>
-                          <div className="attachment-info">
-                            <p className="attachment-name">{attachment.name}</p>
-                            <p className="attachment-size">{attachment.size}</p>
-                          </div>
-                          <button className="attachment-download">Download</button>
-                        </div>
-                      ))}
+                {current.product && (
+                  <div className="details-card">
+                    <h3 className="card-title">About this product</h3>
+                    <div className="details-grid">
+                      <div className="detail-item">
+                        <label className="detail-label">Product</label>
+                        <p className="detail-value">{current.product.title}</p>
+                      </div>
+                      <div className="detail-item">
+                        <label className="detail-label">Price</label>
+                        <p className="detail-value">${current.product.price}</p>
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* Action Buttons */}
-                <div className="action-buttons">
-                  <button className="btn btn-primary">
-                    <span>📤</span> Send Quote
-                  </button>
-                  <button className="btn btn-secondary">Mark as Open</button>
-                  <button className="btn btn-danger">Mark as Closed</button>
+                <div className="details-card">
+                  <h3 className="card-title">Conversation</h3>
+
+                  <div className="messages-container">
+                    {loadingThread ? (
+                      <p className="inquiries-empty">Loading messages…</p>
+                    ) : thread.length > 0 ? (
+                      thread.map((msg) => (
+                        <div
+                          key={msg._id}
+                          className={`message ${msg.sender?.role === 'TEAM' ? 'outgoing' : 'incoming'}`}
+                        >
+                          {msg.sender?.role !== 'TEAM' && (
+                            <div className="message-avatar">🏢</div>
+                          )}
+                          <div className="message-content">
+                            <div className="message-bubble">
+                              <p className="message-text">{msg.content}</p>
+                            </div>
+                            <p className="message-time">{formatTime(msg.createdAt)}</p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="inquiries-empty">
+                        No messages yet — say hello to get the conversation started.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="message-input-wrapper">
+                    <input
+                      type="text"
+                      className="message-input"
+                      placeholder="Type your message..."
+                      value={messageInput}
+                      onChange={(e) => setMessageInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                      disabled={sending}
+                    />
+                    <button className="message-send" onClick={handleSendMessage} disabled={sending}>
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </>
+            ) : (
+              <p className="inquiries-empty">
+                {loadingConversations ? 'Loading…' : 'Select a conversation to view messages.'}
+              </p>
             )}
           </div>
-
-          {/* Right Sidebar - Messaging */}
-          <aside className="messaging-sidebar">
-            {current && (
-              <>
-                {/* Contact Card */}
-                <div className="contact-card">
-                  <div className="card-avatar">{current.avatar}</div>
-                  <h3 className="card-contact-name">{current.name}</h3>
-                  <p className="card-contact-status">Contact</p>
-                </div>
-
-                {/* Messages Thread */}
-                <div className="messages-container">
-                  {(threads[selectedInquiry] || []).map((msg, index) => (
-                    <div key={index} className={`message ${msg.sender === 'You' ? 'outgoing' : 'incoming'}`}>
-                      {msg.sender !== 'You' && (
-                        <div className="message-avatar">{current.avatar}</div>
-                      )}
-                      <div className="message-content">
-                        <div className="message-bubble">
-                          <p className="message-text">{msg.text}</p>
-                        </div>
-                        <p className="message-time">{msg.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Message Input */}
-                <div className="message-input-wrapper">
-                  <input
-                    type="text"
-                    className="message-input"
-                    placeholder="Type your message..."
-                    value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  />
-                  <button className="message-send" onClick={handleSendMessage}>
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M16.6915026,12.4744748 L3.50612381,13.2599618 C3.19218622,13.2599618 3.03521743,13.4170592 3.03521743,13.5741566 L1.15159189,20.0151496 C0.8376543,20.8006365 0.99,21.89 1.77946707,22.52 C2.40,22.99 3.50612381,23.1 4.13399899,22.8429026 L21.714504,14.0454487 C22.6563168,13.5741566 23.1272231,12.6315722 22.9702544,11.6889879 L4.13399899,1.16346272 C3.34915502,0.9 2.40734225,1.00636533 1.77946707,1.4776575 C0.994623095,2.10604706 0.837654326,3.0486314 1.15159189,3.99701575 L3.03521743,10.4380088 C3.03521743,10.5951061 3.19218622,10.7522035 3.50612381,10.7522035 L16.6915026,11.5376905 C16.6915026,11.5376905 17.1624089,11.5376905 17.1624089,12.0089827 C17.1624089,12.4744748 16.6915026,12.4744748 16.6915026,12.4744748 Z"/>
-                    </svg>
-                  </button>
-                </div>
-              </>
-            )}
-          </aside>
         </div>
       </main>
     </div>

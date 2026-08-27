@@ -16,6 +16,15 @@ const conversationSchema = new mongoose.Schema(
       }
     ],
 
+    // The product this conversation was started about — set when a buyer
+    // clicks "View Product" / "Message Seller" from the marketplace.
+    // Optional so general (non-product) conversations still work.
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      default: null
+    },
+
     lastMessage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message"

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/product-card.css';
+import { openConversation } from '../../api/chat.api';
 
 
 const getTagColor = (tag) => {
@@ -16,6 +18,9 @@ const getTagColor = (tag) => {
 };
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+  const [messaging, setMessaging] = useState(false);
+
   const conditions = {
     'new': { label: 'New', color: '#10b981' },
     'refurbished': { label: 'Refurbished', color: '#f59e0b' },
@@ -23,6 +28,21 @@ const ProductCard = ({ product }) => {
   };
 
   const conditionInfo = conditions[product.condition] || conditions['new'];
+
+  const handleViewDetails = async () => {
+    if (messaging) return;
+    try {
+      setMessaging(true);
+      const res = await openConversation(product._id);
+      navigate(`/team/messages?conversation=${res.data._id}`);
+    } catch (err) {
+      console.error('Failed to start conversation', err);
+      const message = err.response?.data?.error || 'Could not open a conversation for this product.';
+      alert(message);
+    } finally {
+      setMessaging(false);
+    }
+  };
 
   return (
     <div className="product-card"style={{border:'1.5px solid white', padding:'8px',margin:"0px 10px", borderRadius:"20px"}}>
@@ -89,7 +109,14 @@ const ProductCard = ({ product }) => {
           <span className="product-card-price"style={{color:"#53b738"}}>
             ₹{Number(product.price || 0).toFixed(2)}
           </span>
-          <button className="product-card-btn"style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}>View Details</button>
+          <button
+            className="product-card-btn"
+            style={{color:"#f1f1f6c8",backgroundColor:"#0080ff"}}
+            onClick={handleViewDetails}
+            disabled={messaging}
+          >
+            {messaging ? 'Opening…' : 'View Details'}
+          </button>
         </div>
       </div>
     </div>
