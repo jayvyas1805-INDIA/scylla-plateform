@@ -175,7 +175,7 @@ const Messages = () => {
             </div>
           </aside>
 
-          {/* Center - Conversation thread */}
+          {/* Center - Conversation thread (chat is the primary focus) */}
           <div className="inquiry-details">
             {current ? (
               <>
@@ -197,68 +197,48 @@ const Messages = () => {
                   </div>
                 </div>
 
-                {current.product && (
-                  <div className="details-card">
-                    <h3 className="card-title">About this product</h3>
-                    <div className="details-grid">
-                      <div className="detail-item">
-                        <label className="detail-label">Product</label>
-                        <p className="detail-value">{current.product.title}</p>
-                      </div>
-                      <div className="detail-item">
-                        <label className="detail-label">Price</label>
-                        <p className="detail-value">${current.product.price}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="details-card">
-                  <h3 className="card-title">Conversation</h3>
-
-                  <div className="messages-container">
-                    {loadingThread ? (
-                      <p className="inquiries-empty">Loading messages…</p>
-                    ) : thread.length > 0 ? (
-                      thread.map((msg) => (
-                        <div
-                          key={msg._id}
-                          className={`message ${msg.sender?.role === 'TEAM' ? 'outgoing' : 'incoming'}`}
-                        >
-                          {msg.sender?.role !== 'TEAM' && (
-                            <div className="message-avatar">🏢</div>
-                          )}
-                          <div className="message-content">
-                            <div className="message-bubble">
-                              <p className="message-text">{msg.content}</p>
-                            </div>
-                            <p className="message-time">{formatTime(msg.createdAt)}</p>
+                <div className="messages-container">
+                  {loadingThread ? (
+                    <p className="inquiries-empty">Loading messages…</p>
+                  ) : thread.length > 0 ? (
+                    thread.map((msg) => (
+                      <div
+                        key={msg._id}
+                        className={`message ${msg.sender?.role === 'TEAM' ? 'outgoing' : 'incoming'}`}
+                      >
+                        {msg.sender?.role !== 'TEAM' && (
+                          <div className="message-avatar">🏢</div>
+                        )}
+                        <div className="message-content">
+                          <div className="message-bubble">
+                            <p className="message-text">{msg.content}</p>
                           </div>
+                          <p className="message-time">{formatTime(msg.createdAt)}</p>
                         </div>
-                      ))
-                    ) : (
-                      <p className="inquiries-empty">
-                        No messages yet — say hello to get the conversation started.
-                      </p>
-                    )}
-                  </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="inquiries-empty">
+                      No messages yet — say hello to get the conversation started.
+                    </p>
+                  )}
+                </div>
 
-                  <div className="message-input-wrapper">
-                    <input
-                      type="text"
-                      className="message-input"
-                      placeholder="Type your message..."
-                      value={messageInput}
-                      onChange={(e) => setMessageInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                      disabled={sending}
-                    />
-                    <button className="message-send" onClick={handleSendMessage} disabled={sending}>
-                      <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
-                      </svg>
-                    </button>
-                  </div>
+                <div className="message-input-wrapper">
+                  <input
+                    type="text"
+                    className="message-input"
+                    placeholder="Type your message..."
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    disabled={sending}
+                  />
+                  <button className="message-send" onClick={handleSendMessage} disabled={sending}>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+                    </svg>
+                  </button>
                 </div>
               </>
             ) : (
@@ -267,6 +247,45 @@ const Messages = () => {
               </p>
             )}
           </div>
+
+          {/* Right Sidebar - Referenced product details */}
+          <aside className="messaging-sidebar">
+            {current && (
+              current.product ? (
+                <div className="product-panel">
+                  <h3 className="product-panel-title">Referenced Product</h3>
+
+                  {current.product.images?.[0] && (
+                    <img
+                      src={current.product.images[0]}
+                      alt={current.product.title}
+                      className="product-panel-image"
+                    />
+                  )}
+
+                  <h4 className="product-panel-name">{current.product.title}</h4>
+
+                  <div className="product-panel-meta">
+                    <span className="product-panel-price">${current.product.price}</span>
+                    {current.product.category && (
+                      <span className="product-panel-category">{current.product.category}</span>
+                    )}
+                  </div>
+
+                  {current.product.description && (
+                    <p className="product-panel-desc">{current.product.description}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="product-panel product-panel-empty">
+                  <span className="product-panel-empty-icon">💬</span>
+                  <p className="inquiries-empty">
+                    This is a general inquiry — no specific product was referenced.
+                  </p>
+                </div>
+              )
+            )}
+          </aside>
         </div>
       </main>
     </div>

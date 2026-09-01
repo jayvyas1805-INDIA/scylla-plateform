@@ -672,6 +672,104 @@
   padding: 20px;
 }
 
+/* ---------------- Referenced product panel (right sidebar) ---------------- */
+
+.vendor-quotes-product-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vendor-quotes-product-panel-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px;
+}
+
+.vendor-quotes-product-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 14px;
+  background: var(--bg-tertiary);
+}
+
+.vendor-quotes-product-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.vendor-quotes-product-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.vendor-quotes-product-price {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--blue-neon);
+}
+
+.vendor-quotes-product-category {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.vendor-quotes-product-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.vendor-quotes-view-product-btn {
+  margin-top: auto;
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 11px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vendor-quotes-view-product-btn:hover {
+  border-color: var(--blue-neon);
+  color: var(--blue-neon);
+}
+
+.vendor-quotes-product-panel-empty {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.vendor-quotes-product-empty-icon {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
 .vendor-quotes-contact-card {
   text-align: center;
   flex-shrink: 0;

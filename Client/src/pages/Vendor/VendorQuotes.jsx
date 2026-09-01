@@ -211,7 +211,7 @@ const VendorQuotes = () => {
             </div>
           </aside>
 
-          {/* Center - Conversation details */}
+          {/* Center - Conversation thread (chat is the primary focus) */}
           <div className="vendor-quotes-details">
             {current ? (
               <>
@@ -233,45 +233,6 @@ const VendorQuotes = () => {
                       </p>
                     </div>
                   </div>
-                </div>
-
-                {current.product && (
-                  <div className="vendor-quotes-detail-card">
-                    <h3 className="vendor-quotes-card-title">About this product</h3>
-                    <div className="vendor-quotes-detail-grid">
-                      <div className="vendor-quotes-detail-item">
-                        <label className="vendor-quotes-detail-label">Product</label>
-                        <p className="vendor-quotes-detail-value">{current.product.title}</p>
-                      </div>
-                      <div className="vendor-quotes-detail-item">
-                        <label className="vendor-quotes-detail-label">Price</label>
-                        <p className="vendor-quotes-detail-value">${current.product.price}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="vendor-quotes-empty">
-                {loadingConversations ? 'Loading…' : 'Select a conversation to view details.'}
-              </p>
-            )}
-          </div>
-
-          {/* Right Sidebar - Messaging */}
-          <aside className="vendor-quotes-messaging-sidebar">
-            {current && (
-              <>
-                <div className="vendor-quotes-contact-card">
-                  <div className="vendor-quotes-card-avatar">
-                    {current.otherParty?.avatar ? (
-                      <img src={current.otherParty.avatar} alt={current.otherParty.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-                    ) : (
-                      '🏁'
-                    )}
-                  </div>
-                  <h3 className="vendor-quotes-card-contact-name">{current.otherParty?.name || 'Unknown'}</h3>
-                  <p className="vendor-quotes-card-contact-status">Contact</p>
                 </div>
 
                 <div className="vendor-quotes-messages-container">
@@ -318,6 +279,56 @@ const VendorQuotes = () => {
                   </button>
                 </div>
               </>
+            ) : (
+              <p className="vendor-quotes-empty">
+                {loadingConversations ? 'Loading…' : 'Select a conversation to view messages.'}
+              </p>
+            )}
+          </div>
+
+          {/* Right Sidebar - Referenced product details */}
+          <aside className="vendor-quotes-messaging-sidebar">
+            {current && (
+              current.product ? (
+                <div className="vendor-quotes-product-panel">
+                  <h3 className="vendor-quotes-product-panel-title">Referenced Product</h3>
+
+                  {current.product.images?.[0] && (
+                    <img
+                      src={current.product.images[0]}
+                      alt={current.product.title}
+                      className="vendor-quotes-product-image"
+                    />
+                  )}
+
+                  <h4 className="vendor-quotes-product-name">{current.product.title}</h4>
+
+                  <div className="vendor-quotes-product-meta">
+                    <span className="vendor-quotes-product-price">${current.product.price}</span>
+                    {current.product.category && (
+                      <span className="vendor-quotes-product-category">{current.product.category}</span>
+                    )}
+                  </div>
+
+                  {current.product.description && (
+                    <p className="vendor-quotes-product-desc">{current.product.description}</p>
+                  )}
+
+                  <button
+                    className="vendor-quotes-view-product-btn"
+                    onClick={() => navigate('/vendor/product')}
+                  >
+                    Manage This Listing
+                  </button>
+                </div>
+              ) : (
+                <div className="vendor-quotes-product-panel vendor-quotes-product-panel-empty">
+                  <span className="vendor-quotes-product-empty-icon">💬</span>
+                  <p className="vendor-quotes-empty">
+                    This is a general inquiry — no specific product was referenced.
+                  </p>
+                </div>
+              )
             )}
           </aside>
         </div>
