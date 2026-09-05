@@ -17,9 +17,12 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import EditProfile from "./components/EditProfile";
 import AdminLogin from "./pages/adminLogin";
 import RequireAdminAuth from "./components/RequireAdminAuth";
+import ChatWidget from "./components/assistant/ChatWidget";
+import { useLocation } from "react-router-dom";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const closeListener = () => setIsSidebarOpen(false);
@@ -152,6 +155,7 @@ export default function App() {
       </main>
 
       <Toaster position="top-right" />
+      {location.pathname !== "/admin/login" && <ChatWidget />}
     </div>
   );
 }

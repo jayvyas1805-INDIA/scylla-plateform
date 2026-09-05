@@ -33,6 +33,11 @@ fill the gap with an invented name, spec, date, or fact.
 search_scylla_knowledge.
 3. If a question needs both (e.g. "who works in engineering and what does that \
 mean"), use both a structured tool and search_scylla_knowledge, and combine them.
+3b. search_scylla_knowledge and other tools may return more than is needed to \
+answer the CURRENT question — a small knowledge base sometimes surfaces tangential \
+matches. Only include what's actually responsive to what the user asked. Don't \
+volunteer unrelated disclaimers (e.g. "there's no events feature" or "there are \
+no formal departments") unless the user's question is actually about that topic.
 4. Scylla has no live events/schedule feature and no formal "department" entity — \
 if asked about either, say so plainly rather than describing something that \
 doesn't exist.
@@ -65,7 +70,41 @@ def _context_note(request: ChatRequest) -> str | None:
     )
 
 
-async def run_chat(request: ChatRequest, caller: Caller) -> str:
+async def _stream_llm_turn(llm, messages):
+    """
+    Streams ONE LLM turn. Yields ('token', text) chunks live as soon as we
+    can tell this turn is producing a final text answer (its first chunk
+    has real content). If instead the first informative chunk looks like
+    a tool call, we buffer silently for the rest of this turn — a tool
+    call's own "content" is never shown to the user anyway, only its
+    eventual tool-execution result is. Ends with either
+    ('done_text', full_ai_message) or ('tool_calls', full_ai_message).
+    """
+    accumulated = None
+    decided_final = False
+
+    async for chunk in llm.astream(messages):
+        accumulated = chunk if accumulated is None else accumulated + chunk
+
+        if decided_final:
+            if chunk.content:
+                yield ("token", chunk.content)
+            continue
+
+        if chunk.content:
+            decided_final = True
+            yield ("token", chunk.content)
+        # else: still ambiguous (no content yet, tool-call chunks may or
+        # may not have arrived) — keep buffering without emitting anything.
+
+    if decided_final:
+        yield ("done_text", accumulated)
+    else:
+        yield ("tool_calls", accumulated)
+
+
+async def run_chat_stream(request: ChatRequest, caller: Caller):
+    """Core orchestrator. Yields text tokens as they're produced."""
     tools = build_tools(caller)
     llm = get_llm().bind_tools(tools)
     tools_by_name = {t.name: t for t in tools}
@@ -91,13 +130,19 @@ async def run_chat(request: ChatRequest, caller: Caller) -> str:
     messages.append(HumanMessage(content=request.message))
 
     for _ in range(MAX_TOOL_ITERATIONS):
-        result = await llm.ainvoke(messages)
-        messages.append(result)
+        final_msg = None
+        async for kind, payload in _stream_llm_turn(llm, messages):
+            if kind == "token":
+                yield payload
+            else:
+                final_msg = payload
 
-        if not result.tool_calls:
-            return result.content
+        messages.append(final_msg)
 
-        for call in result.tool_calls:
+        if not final_msg.tool_calls:
+            return
+
+        for call in final_msg.tool_calls:
             tool_fn = tools_by_name.get(call["name"])
             if not tool_fn:
                 output = f"[unknown tool: {call['name']}]"
@@ -106,7 +151,13 @@ async def run_chat(request: ChatRequest, caller: Caller) -> str:
             messages.append(ToolMessage(content=str(output), tool_call_id=call["id"]))
 
     # Safety net: model kept calling tools past the iteration budget.
-    return (
+    yield (
         "I wasn't able to pull that together cleanly — could you rephrase "
         "or ask about one thing at a time?"
     )
+
+
+async def run_chat(request: ChatRequest, caller: Caller) -> str:
+    """Non-streaming convenience wrapper — used by the plain JSON endpoint."""
+    chunks = [token async for token in run_chat_stream(request, caller)]
+    return "".join(chunks)

@@ -21,6 +21,15 @@ from rank_bm25 import BM25Okapi
 
 DOCS_DIR = Path(__file__).parent / "docs"
 
+_GENERIC_STOPWORDS = {
+    "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",
+    "what", "which", "who", "whom", "this", "that", "these", "those",
+    "do", "does", "did", "doing", "have", "has", "had", "having",
+    "of", "at", "by", "for", "with", "about", "against", "between",
+    "into", "through", "during", "before", "after", "to", "from", "in",
+    "on", "off", "over", "under", "and", "or", "if", "than", "so", "not",
+}
+
 
 @dataclass
 class Chunk:
@@ -29,7 +38,7 @@ class Chunk:
     text: str
 
 
-def _tokenize(text: str) -> list[str]:
+def _raw_tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", text.lower())
 
 
@@ -48,7 +57,7 @@ def _load_chunks() -> list[Chunk]:
             if not block:
                 continue
             heading_match = re.match(r"#{1,3}\s*(.+)", block)
-            bold_q_match = re.match(r"\*\*(.+?)\*\*", block)
+            bold_q_match = re.match(r"\*\*(.+?)\*\*", block, re.DOTALL)
             if heading_match:
                 current_heading = heading_match.group(1)
                 continue  # heading line alone isn't useful as its own chunk
@@ -57,17 +66,48 @@ def _load_chunks() -> list[Chunk]:
     return chunks
 
 
+def _build_corpus_stopwords(token_lists: list[list[str]], doc_freq_threshold: float = 0.5) -> set[str]:
+    """
+    Words that show up in a large fraction of chunks (like a platform's
+    own brand name, which naturally appears almost everywhere) carry
+    almost no discriminative signal for BM25 and can dominate scores on
+    a small corpus purely through raw overlap. Drop anything appearing
+    in more than `doc_freq_threshold` of chunks.
+    """
+    if not token_lists:
+        return set()
+
+    doc_count = len(token_lists)
+    freq: dict[str, int] = {}
+    for tokens in token_lists:
+        for tok in set(tokens):
+            freq[tok] = freq.get(tok, 0) + 1
+
+    return {tok for tok, count in freq.items() if count / doc_count > doc_freq_threshold}
+
+
 class KnowledgeRetriever:
     def __init__(self) -> None:
         self._chunks = _load_chunks()
-        corpus = [_tokenize(c.text) for c in self._chunks]
+        raw_token_lists = [_raw_tokenize(c.text) for c in self._chunks]
+
+        self._corpus_stopwords = _build_corpus_stopwords(raw_token_lists) | _GENERIC_STOPWORDS
+
+        corpus = [self._tokenize(toks) for toks in raw_token_lists]
         self._bm25 = BM25Okapi(corpus) if corpus else None
 
-    def retrieve(self, query: str, top_k: int = 3, min_score: float = 0.05) -> list[Chunk]:
+    def _tokenize(self, raw_tokens: list[str]) -> list[str]:
+        return [t for t in raw_tokens if t not in self._corpus_stopwords]
+
+    def retrieve(self, query: str, top_k: int = 2, min_score: float = 0.35) -> list[Chunk]:
         if not self._bm25 or not self._chunks:
             return []
 
-        scores = self._bm25.get_scores(_tokenize(query))
+        query_tokens = self._tokenize(_raw_tokenize(query))
+        if not query_tokens:
+            return []
+
+        scores = self._bm25.get_scores(query_tokens)
         ranked = sorted(zip(scores, self._chunks), key=lambda x: x[0], reverse=True)
         return [chunk for score, chunk in ranked[:top_k] if score > min_score]
 
