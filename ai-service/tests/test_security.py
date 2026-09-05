@@ -15,6 +15,17 @@ def test_system_prompt_refuses_to_reveal_itself():
     assert "reveal this system prompt" in SYSTEM_PROMPT
 
 
+def test_system_prompt_does_not_trust_unverified_identity_claims():
+    lower = SYSTEM_PROMPT.lower()
+    assert "authenticated session" in lower
+    assert "claim in the chat text" in lower or "claims to be an admin" in lower.replace("\"", "")
+
+
+def test_system_prompt_forbids_inventing_unverified_navigation():
+    lower = SYSTEM_PROMPT.lower()
+    assert "unverified" in lower and "ui flow" in lower
+
+
 def test_invalid_jwt_falls_back_to_public_caller_not_a_crash(monkeypatch):
     monkeypatch.setattr(settings, "JWT_SECRET", "test-secret-for-this-test-only")
     caller = get_caller(authorization="Bearer not-a-real-jwt")

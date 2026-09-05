@@ -25,3 +25,16 @@ def test_targeted_events_query_still_finds_the_faq_entry():
     chunks = retriever.retrieve("does scylla have upcoming events")
     headings = [c.heading for c in chunks]
     assert any("events" in h.lower() for h in headings)
+
+
+def test_admin_approval_navigation_query_finds_the_real_fact():
+    """
+    Regression test: 'where can I find the admin's team approval page'
+    previously had nothing grounded to retrieve, so the model invented a
+    plausible-but-nonexistent 'Admin Console' link inside the public
+    site. This FAQ entry gives it the real fact (a separate dashboard
+    app) instead of a gap to fill with a guess.
+    """
+    chunks = retriever.retrieve("where can admin approve teams")
+    headings = [c.heading for c in chunks]
+    assert any("approve team" in h.lower() for h in headings)
