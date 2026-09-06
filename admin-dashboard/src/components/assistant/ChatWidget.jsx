@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { streamAssistantMessage } from "../../api/assistant.api";
 import "./ChatWidget.css";
 
@@ -10,6 +10,28 @@ const SUGGESTED_QUESTIONS = [
   "How does team approval work?",
 ];
 
+function ComparisonCard({ comparison }) {
+  const { a, b } = comparison;
+  const keys = Object.keys(a).filter((k) => k !== "name");
+
+  return (
+    <div className="scylla-admin-chat-comparison">
+      <div className="scylla-admin-chat-comparison-header">
+        <span></span>
+        <span>{a.name}</span>
+        <span>{b.name}</span>
+      </div>
+      {keys.map((key) => (
+        <div className="scylla-admin-chat-comparison-row" key={key}>
+          <span className="scylla-admin-chat-comparison-label">{key}</span>
+          <span>{String(a[key])}</span>
+          <span>{String(b[key])}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -18,7 +40,9 @@ export default function ChatWidget() {
   const [error, setError] = useState(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const scrollRef = useRef(null);
+  const hasGreetedRef = useRef(false);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -26,15 +50,32 @@ export default function ChatWidget() {
     }
   }, [messages, isLoading, isOpen]);
 
+  // Proactive summary: the first time an admin opens the chat in this
+  // session, silently ask for a pending-approvals digest instead of
+  // showing the generic empty state. Deliberately NOT a scheduled/
+  // pushed digest (no cron/background job here) — it's an on-demand
+  // summary that fires once, right when the admin engages with the
+  // assistant, which is the honest version of "proactive" without
+  // adding infrastructure this project doesn't otherwise need.
+  useEffect(() => {
+    if (isOpen && !hasGreetedRef.current && messages.length === 0) {
+      hasGreetedRef.current = true;
+      handleSend("Give me a quick summary of anything needing my attention right now.", { silent: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   const pageContext = { route: location.pathname, entity_type: null, entity_id: null };
 
-  async function handleSend(text) {
+  async function handleSend(text, { silent = false } = {}) {
     const trimmed = text.trim();
     if (!trimmed || isLoading) return;
 
     setError(null);
-    const nextMessages = [...messages, { role: "user", content: trimmed }];
-    setMessages(nextMessages);
+    const nextMessages = silent
+      ? messages
+      : [...messages, { role: "user", content: trimmed }];
+    if (!silent) setMessages(nextMessages);
     setInput("");
     setIsLoading(true);
 
@@ -50,38 +91,56 @@ export default function ChatWidget() {
         .map(({ role, content }) => ({ role, content }));
 
       let receivedAny = false;
+      let pendingRoute = null;
 
-      await streamAssistantMessage(trimmed, historyForApi, pageContext, (token) => {
-        receivedAny = true;
-        setMessages((prev) => {
-          const copy = [...prev];
-          copy[assistantIndex] = {
-            ...copy[assistantIndex],
-            content: copy[assistantIndex].content + token,
-          };
-          return copy;
-        });
+      await streamAssistantMessage(trimmed, historyForApi, pageContext, {
+        onToken: (token) => {
+          receivedAny = true;
+          setMessages((prev) => {
+            const copy = [...prev];
+            copy[assistantIndex] = {
+              ...copy[assistantIndex],
+              content: copy[assistantIndex].content + token,
+            };
+            return copy;
+          });
+        },
+        onComparison: (comparison) => {
+          receivedAny = true;
+          setMessages((prev) => [...prev, { role: "comparison", comparison }]);
+        },
+        onNavigate: ({ route }) => {
+          pendingRoute = route;
+        },
       });
 
       if (!receivedAny) {
         setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
-        setError("The assistant didn't return a response. Please try again.");
+        if (!silent) setError("The assistant didn't return a response. Please try again.");
+      }
+
+      if (pendingRoute) {
+        setTimeout(() => navigate(pendingRoute), 600);
       }
     } catch (err) {
       setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
 
-      const status = err?.response?.status;
-      let friendly = "Something went wrong. Please try again in a moment.";
-      if (status === 401 || status === 403) {
-        friendly = "Please log in as admin to ask about that.";
-      } else if (status === 429) {
-        friendly = "You're sending messages a bit fast — please wait a moment and try again.";
-      } else if (status === 503) {
-        friendly = "The assistant isn't set up yet — check back soon.";
-      } else if (!err?.response) {
-        friendly = "Can't reach the assistant right now — check your connection.";
+      if (!silent) {
+        const status = err?.response?.status;
+        let friendly = "Something went wrong. Please try again in a moment.";
+        if (status === 401 || status === 403) {
+          friendly = "Please log in as admin to ask about that.";
+        } else if (status === 429) {
+          friendly = "You're sending messages a bit fast — please wait a moment and try again.";
+        } else if (status === 503) {
+          friendly = "The assistant isn't set up yet — check back soon.";
+        } else if (!err?.response) {
+          friendly = "Can't reach the assistant right now — check your connection.";
+        }
+        setError(friendly);
       }
-      setError(friendly);
+      // A failed silent greeting just fails quietly — the admin never
+      // typed anything, so there's nothing to apologize for.
     } finally {
       setIsLoading(false);
     }
@@ -143,13 +202,18 @@ export default function ChatWidget() {
               </div>
             )}
 
-            {messages.map((m, i) => (
-              <div key={i} className={`scylla-admin-chat-bubble scylla-admin-chat-bubble-${m.role}`}>
-                {m.content || (isLoading && i === messages.length - 1 ? (
-                  <span className="scylla-admin-chat-typing"><span></span><span></span><span></span></span>
-                ) : null)}
-              </div>
-            ))}
+            {messages.map((m, i) => {
+              if (m.role === "comparison") {
+                return <ComparisonCard key={i} comparison={m.comparison} />;
+              }
+              return (
+                <div key={i} className={`scylla-admin-chat-bubble scylla-admin-chat-bubble-${m.role}`}>
+                  {m.content || (isLoading && i === messages.length - 1 ? (
+                    <span className="scylla-admin-chat-typing"><span></span><span></span><span></span></span>
+                  ) : null)}
+                </div>
+              );
+            })}
 
             {error && <div className="scylla-admin-chat-error">{error}</div>}
           </div>

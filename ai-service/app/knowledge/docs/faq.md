@@ -46,7 +46,10 @@ review and approval/rejection. There is no "Admin" link inside the
 regular team/vendor-facing site — if someone isn't already using the
 separate admin dashboard, direct them to log in there rather than
 describing a navigation path within the public site, since one doesn't
-exist.
+exist. Exact menu labels, button names, or click-by-click steps inside
+the admin dashboard are NOT documented here — say that plainly rather
+than describing specific buttons, menu names, or steps that aren't
+listed in this FAQ.
 
 **How do I contact the team behind Scylla / get support?**
 There's a Contact Us page at `/contact` and a Support/Help page.

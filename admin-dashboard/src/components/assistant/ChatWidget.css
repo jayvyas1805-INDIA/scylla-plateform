@@ -203,6 +203,39 @@
   cursor: not-allowed;
 }
 
+.scylla-admin-chat-comparison {
+  align-self: stretch;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12.5px;
+  color: #374151;
+}
+
+.scylla-admin-chat-comparison-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  font-weight: 600;
+  color: #2563eb;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.scylla-admin-chat-comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 3px 0;
+}
+
+.scylla-admin-chat-comparison-label {
+  text-transform: capitalize;
+  opacity: 0.7;
+}
+
 @media (max-width: 480px) {
   .scylla-admin-chat-window {
     width: calc(100vw - 24px);

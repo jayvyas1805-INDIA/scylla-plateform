@@ -68,7 +68,18 @@ def test_logged_in_member_gets_own_team_tools_but_not_admin_tools():
     names = {t.name for t in tools}
 
     assert "get_my_team_profile" in names
+    assert "get_my_vendor_profile" not in names
     assert "get_admin_dashboard_stats" not in names
+
+
+def test_logged_in_vendor_gets_own_vendor_tool_but_not_team_tools():
+    vendor_caller = Caller(raw_token="fake.jwt.token", role="VENDOR", user_id="v1")
+    tools = build_tools(vendor_caller)
+    names = {t.name for t in tools}
+
+    assert "get_my_vendor_profile" in names
+    assert "get_my_team_profile" not in names
+    assert "get_my_team_vehicles" not in names
 
 
 def test_admin_role_gets_admin_tool():

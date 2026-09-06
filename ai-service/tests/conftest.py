@@ -15,8 +15,10 @@ class ScriptedLLM:
         self._call_index = 0
         self.received_messages = []  # for assertions on what was sent to the model
 
-    def bind_tools(self, tools):
+    def bind_tools(self, tools, tool_choice=None):
         self._bound_tools = tools
+        self.tool_choice_calls = getattr(self, "tool_choice_calls", [])
+        self.tool_choice_calls.append(tool_choice)
         return self
 
     def astream(self, messages):

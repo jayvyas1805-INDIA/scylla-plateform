@@ -22,3 +22,5 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     reply: str
     role_used: str | None = None
+    actions: list[dict] = Field(default_factory=list)
+    comparisons: list[dict] = Field(default_factory=list)

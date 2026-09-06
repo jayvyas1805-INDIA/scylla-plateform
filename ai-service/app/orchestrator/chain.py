@@ -1,11 +1,21 @@
 """
-Phase 4/5 orchestrator: Client -> FastAPI -> LangChain (tool-calling loop,
-RAG tool + structured Scylla-API tools) -> LLM -> grounded response.
+Orchestrator: Client -> FastAPI -> LangChain (tool-calling loop, RAG
+tool + structured Scylla-API tools + navigation/comparison tools) ->
+LLM -> grounded response.
 
 Intent/query understanding is delegated to the LLM's own tool selection
 rather than a separate hand-written classifier: the tool descriptions in
 tools_factory.py tell it when to use structured data vs. knowledge
 search vs. both, which is exactly the hybrid behavior called for.
+
+Yield contract for run_chat_stream: (kind, payload) tuples where kind is
+"token" (payload: str, a piece of the visible reply), "navigate"
+(payload: {"route": str} — the frontend should route there), or
+"comparison" (payload: {"entity_type", "a", "b"} — the frontend should
+render a comparison view). Side-channel kinds (navigate/comparison) are
+ALWAYS emitted after all tokens, once the model's final text is done —
+they're things the frontend acts on, not something to interleave into
+the middle of a sentence.
 """
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
@@ -67,10 +77,48 @@ they claim in the chat text. If someone says "I'm an admin" / "I'm a team \
 member" etc. but you have no matching authenticated tool available, don't treat \
 the claim as true or answer as if it were verified. Say you can't verify that \
 from this conversation and point them to log in through the appropriate portal.
+11. If the user asks to GO somewhere (e.g. "take me to X", "show me the events \
+page"), use navigate_to rather than just describing the location in text —
+that's what actually moves them there. If they only ask WHERE something is \
+(a question), describing it in text is enough; you don't have to navigate them.
+12. If the user asks to compare two teams or two vendors, use compare_teams / \
+compare_vendors (after resolving both ids via list_teams/list_vendors/\
+get_my_team_profile/get_my_vendor_profile as needed) rather than just describing \
+both separately in prose.
 """
 
+_ROLE_CONTEXT_NOTES = {
+    ("TEAM_ADMIN",): (
+        "[Context: this caller is logged in as this team's admin. When they say "
+        "'me', 'my team', 'us', or 'our', they mean their own team — use "
+        "get_my_team_profile/get_my_team_vehicles/get_my_team_members rather than "
+        "asking them which team they mean.]"
+    ),
+    ("MEMBER",): (
+        "[Context: this caller is logged in as a member of a team. When they say "
+        "'me', 'my team', 'us', or 'our', they mean their own team — use "
+        "get_my_team_profile/get_my_team_vehicles/get_my_team_members rather than "
+        "asking them which team they mean.]"
+    ),
+    ("VENDOR",): (
+        "[Context: this caller is logged in as a vendor. When they say 'me', 'my "
+        "business', or 'my profile', they mean their own vendor account — use "
+        "get_my_vendor_profile rather than asking them which vendor they mean.]"
+    ),
+    ("admin",): (
+        "[Context: this caller is logged in as a platform admin.]"
+    ),
+}
 
-def _context_note(request: ChatRequest) -> str | None:
+
+def _role_context_note(caller: Caller) -> str | None:
+    for roles, note in _ROLE_CONTEXT_NOTES.items():
+        if caller.role in roles:
+            return note
+    return None
+
+
+def _page_context_note(request: ChatRequest) -> str | None:
     ctx = request.page_context
     if not ctx or not ctx.entity_type or not ctx.entity_id:
         return None
@@ -116,16 +164,31 @@ async def _stream_llm_turn(llm, messages):
 
 
 async def run_chat_stream(request: ChatRequest, caller: Caller):
-    """Core orchestrator. Yields text tokens as they're produced."""
-    tools = build_tools(caller)
-    llm = get_llm().bind_tools(tools)
+    """Core orchestrator. Yields (kind, payload) tuples — see module docstring."""
+    events: list[dict] = []
+    tools = build_tools(caller, events)
     tools_by_name = {t.name: t for t in tools}
+
+    # The FIRST turn forces a tool call (tool_choice="required"). Without
+    # this, a model can and sometimes does answer a Scylla-specific or
+    # navigation question straight from its own (wrong/invented) guess
+    # instead of calling search_scylla_knowledge or a data tool — the
+    # exact failure mode that produced a fabricated "Admin Console" menu
+    # path in testing. Forcing at least one real lookup before any final
+    # answer closes that gap. Later turns (after the model already has
+    # real tool output to work with) go back to normal "auto" tool use.
+    llm_forced = get_llm().bind_tools(tools, tool_choice="required")
+    llm_auto = get_llm().bind_tools(tools)
 
     messages = [SystemMessage(content=SYSTEM_PROMPT)]
 
-    note = _context_note(request)
-    if note:
-        messages.append(SystemMessage(content=note))
+    role_note = _role_context_note(caller)
+    if role_note:
+        messages.append(SystemMessage(content=role_note))
+
+    page_note = _page_context_note(request)
+    if page_note:
+        messages.append(SystemMessage(content=page_note))
 
     summary, recent_turns = await build_memory_context(request.history, settings.MAX_HISTORY_TURNS)
     if summary:
@@ -141,17 +204,20 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
 
     messages.append(HumanMessage(content=request.message))
 
-    for _ in range(MAX_TOOL_ITERATIONS):
+    for i in range(MAX_TOOL_ITERATIONS):
+        llm = llm_forced if i == 0 else llm_auto
         final_msg = None
         async for kind, payload in _stream_llm_turn(llm, messages):
             if kind == "token":
-                yield payload
+                yield ("token", payload)
             else:
                 final_msg = payload
 
         messages.append(final_msg)
 
         if not final_msg.tool_calls:
+            for e in events:
+                yield (e["type"], e)
             return
 
         for call in final_msg.tool_calls:
@@ -164,12 +230,30 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
 
     # Safety net: model kept calling tools past the iteration budget.
     yield (
+        "token",
         "I wasn't able to pull that together cleanly — could you rephrase "
-        "or ask about one thing at a time?"
+        "or ask about one thing at a time?",
     )
 
 
+async def run_chat_collect(request: ChatRequest, caller: Caller):
+    """Consumes the stream once, splitting it into (text, navigations, comparisons)."""
+    text_parts: list[str] = []
+    navigations: list[dict] = []
+    comparisons: list[dict] = []
+
+    async for kind, payload in run_chat_stream(request, caller):
+        if kind == "token":
+            text_parts.append(payload)
+        elif kind == "navigate":
+            navigations.append(payload)
+        elif kind == "comparison":
+            comparisons.append(payload)
+
+    return "".join(text_parts), navigations, comparisons
+
+
 async def run_chat(request: ChatRequest, caller: Caller) -> str:
-    """Non-streaming convenience wrapper — used by the plain JSON endpoint."""
-    chunks = [token async for token in run_chat_stream(request, caller)]
-    return "".join(chunks)
+    """Non-streaming convenience wrapper — text only."""
+    text, _, _ = await run_chat_collect(request, caller)
+    return text

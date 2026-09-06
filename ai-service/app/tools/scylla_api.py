@@ -15,6 +15,15 @@ import httpx
 
 from app.config import settings
 
+_client: httpx.AsyncClient | None = None
+
+
+def _get_client() -> httpx.AsyncClient:
+    global _client
+    if _client is None:
+        _client = httpx.AsyncClient(base_url=settings.SCYLLA_BACKEND_URL, timeout=10)
+    return _client
+
 
 class ScyllaApiError(Exception):
     def __init__(self, status_code: int, message: str):
@@ -31,9 +40,7 @@ def _headers(token: str | None) -> dict:
 
 
 async def _get(path: str, token: str | None = None, params: dict | None = None):
-    url = f"{settings.SCYLLA_BACKEND_URL}{path}"
-    async with httpx.AsyncClient(timeout=10) as client:
-        resp = await client.get(url, headers=_headers(token), params=params)
+    resp = await _get_client().get(path, headers=_headers(token), params=params)
 
     if resp.status_code == 401 or resp.status_code == 403:
         raise ScyllaApiError(resp.status_code, "You don't have access to that information.")
@@ -95,9 +102,20 @@ async def get_my_team_members(token: str) -> list:
 
 # ---- Admin-only ----
 
+async def get_my_vendor_profile(token: str) -> dict:
+    """Requires VENDOR token. The caller's own (private) vendor profile."""
+    return await _get("/api/vendors/profile", token=token)
+
+
 async def get_admin_dashboard_stats(token: str) -> dict:
     """Requires admin token. Platform-wide dashboard stats."""
     return await _get("/api/admin/dashboard", token=token)
+
+
+async def get_pending_approvals(token: str) -> dict:
+    """Requires admin token. Returns ALL teams/vendors — status filtering
+    happens in the tool layer, matching what the real endpoint returns."""
+    return await _get("/api/admin/pending", token=token)
 
 
 # ---- Landing content ----
