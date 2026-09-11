@@ -10,6 +10,26 @@ const SUGGESTED_QUESTIONS = [
   "How does team approval work?",
 ];
 
+// Keys here must match app/orchestrator/chain.py's _PAGE_CONTEXT_HINTS
+// table on the backend. Unmapped admin routes (e.g. /edit) still send
+// their raw route so the backend's generic fallback note kicks in.
+const ADMIN_ROUTE_CONTEXT = {
+  "/": "admin_dashboard",
+  "/approvals": "admin_approvals",
+  "/analytics": "admin_analytics",
+  "/payments": "admin_payments",
+  "/category": "admin_category_management",
+  "/content-moderation": "admin_content_moderation",
+};
+
+function derivePageContext(pathname) {
+  return {
+    route: pathname,
+    entity_type: ADMIN_ROUTE_CONTEXT[pathname] || null,
+    entity_id: null,
+  };
+}
+
 function ComparisonCard({ comparison }) {
   const { a, b } = comparison;
   const keys = Object.keys(a).filter((k) => k !== "name");
@@ -65,7 +85,7 @@ export default function ChatWidget() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const pageContext = { route: location.pathname, entity_type: null, entity_id: null };
+  const pageContext = derivePageContext(location.pathname);
 
   async function handleSend(text, { silent = false } = {}) {
     const trimmed = text.trim();

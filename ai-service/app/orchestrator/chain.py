@@ -118,16 +118,56 @@ def _role_context_note(caller: Caller) -> str | None:
     return None
 
 
+# Hints for pages that don't have an :id (the user's OWN pages, or admin
+# pages) — keyed by the entity_type the frontend sends for that route.
+# Anything not in this table still gets a generic "user is on this page"
+# note (see _page_context_note) rather than no context at all.
+_PAGE_CONTEXT_HINTS = {
+    "teams_directory": "the Teams Directory (browsing all approved teams)",
+    "vendors_directory": "the Vendors Directory (browsing all approved vendors)",
+    "my_team_home": "their own team's home page",
+    "my_team_profile": "their own team's profile page — if they ask to see/edit/check 'my profile' or similar, use get_my_team_profile",
+    "my_team_members": "their own team's Members page — if they ask about 'my members'/'our members', use get_my_team_members",
+    "my_team_vehicles": "their own team's Vehicles page — if they ask about 'my vehicles'/'our vehicles', use get_my_team_vehicles",
+    "my_team_marketplace": "their own team's Marketplace page",
+    "my_team_messages": "their own team's Messages page",
+    "my_vendor_home": "their own vendor home page",
+    "my_vendor_profile": "their own vendor profile page — if they ask to see/edit 'my profile', use get_my_vendor_profile",
+    "my_vendor_products": "their own vendor Products page",
+    "my_vendor_quotes": "their own vendor Quotes page",
+    "admin_dashboard": "the admin dashboard home",
+    "admin_approvals": "the admin Approvals page — if they ask about pending approvals, use get_pending_approvals_summary",
+    "admin_analytics": "the admin Analytics page — if they ask for stats, use get_admin_dashboard_stats",
+    "admin_payments": "the admin Payments page",
+    "admin_category_management": "the admin Category Management page",
+    "admin_content_moderation": "the admin Content Moderation page",
+}
+
+
 def _page_context_note(request: ChatRequest) -> str | None:
     ctx = request.page_context
-    if not ctx or not ctx.entity_type or not ctx.entity_id:
+    if not ctx or not ctx.entity_type:
         return None
-    return (
-        f"[Context: the user is currently viewing a {ctx.entity_type} page "
-        f"with id {ctx.entity_id}. If they say 'this' or 'here', they likely "
-        f"mean this {ctx.entity_type} — use its id with the matching tool "
-        f"rather than asking them to repeat it.]"
-    )
+
+    # Directory pages with a specific entity open (team/vendor profile by id)
+    if ctx.entity_id and ctx.entity_type in ("team", "vendor"):
+        return (
+            f"[Context: the user is currently viewing a {ctx.entity_type} page "
+            f"with id {ctx.entity_id}. If they say 'this' or 'here', they likely "
+            f"mean this {ctx.entity_type} — use its id with the matching tool "
+            f"rather than asking them to repeat it.]"
+        )
+
+    hint = _PAGE_CONTEXT_HINTS.get(ctx.entity_type)
+    if hint:
+        return f"[Context: the user is currently on {hint}.]"
+
+    # Known route, no specific hint written for it yet — still tell the
+    # model roughly where the user is rather than giving it nothing.
+    if ctx.route:
+        return f"[Context: the user is currently on the page at route {ctx.route}.]"
+
+    return None
 
 
 async def _stream_llm_turn(llm, messages):

@@ -59,3 +59,25 @@ def test_admin_approval_navigation_query_surfaces_the_real_fact():
     chunks = retriever.retrieve("where can admin approve teams", top_k=5)
     headings = [c.heading.lower() for c in chunks]
     assert any("approve team" in h for h in headings)
+
+
+def test_public_caller_never_sees_admin_only_navigation_details():
+    """
+    Regression test: an earlier version put specific admin-dashboard
+    page names (e.g. '/approvals') in the PUBLIC FAQ, meaning any
+    unauthenticated visitor could ask the assistant to enumerate the
+    admin dashboard's internal page structure — an information
+    disclosure issue, not just a hallucination one. Public search must
+    never surface the admin-only tier.
+    """
+    chunks = retriever.retrieve("where do admins approve teams", include_admin=False)
+    combined_text = " ".join(c.text for c in chunks)
+    assert "/approvals" not in combined_text
+    assert "/category" not in combined_text
+    assert "/content-moderation" not in combined_text
+
+
+def test_admin_caller_does_see_admin_only_navigation_details():
+    chunks = retriever.retrieve("where do admins approve teams", include_admin=True)
+    combined_text = " ".join(c.text for c in chunks)
+    assert "/approvals" in combined_text

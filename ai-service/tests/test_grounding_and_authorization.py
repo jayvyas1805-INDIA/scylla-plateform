@@ -104,3 +104,23 @@ def test_no_tool_exposes_the_caller_token_as_an_llm_settable_argument():
         assert "token" not in schema_fields
         assert "raw_token" not in schema_fields
         assert "role" not in schema_fields
+
+
+@pytest.mark.asyncio
+async def test_search_knowledge_tool_hides_admin_navigation_from_public_caller():
+    public_caller = Caller(raw_token=None, role=None, user_id=None)
+    tools = build_tools(public_caller)
+    kb = _tool(tools, "search_scylla_knowledge")
+
+    result = await kb.ainvoke({"query": "where do admins approve teams"})
+    assert "/approvals" not in result
+
+
+@pytest.mark.asyncio
+async def test_search_knowledge_tool_reveals_admin_navigation_to_admin_caller():
+    admin_caller = Caller(raw_token="tok", role="admin", user_id="a1")
+    tools = build_tools(admin_caller)
+    kb = _tool(tools, "search_scylla_knowledge")
+
+    result = await kb.ainvoke({"query": "where do admins approve teams"})
+    assert "/approvals" in result

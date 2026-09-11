@@ -46,7 +46,7 @@ def build_tools(caller: Caller, events: list | None = None) -> list:
         approval works, navigation help, known platform limitations) for
         conceptual/how-things-work questions. NOT for live data like specific
         teams/vehicles/vendors — use the other tools for that."""
-        chunks = retriever.retrieve(query)
+        chunks = retriever.retrieve(query, include_admin=(role == "admin"))
         if not chunks:
             return "No matching knowledge found."
         return "\n\n---\n\n".join(c.text for c in chunks)

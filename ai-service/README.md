@@ -1,5 +1,24 @@
 # Scylla AI Assistant — service
 
+## Latest fixes: admin-only knowledge segregation + richer page context
+
+- **Two-tier knowledge base** (`app/knowledge/docs/` public,
+  `app/knowledge/docs_admin_only/` admin-only): an earlier version put
+  specific admin-dashboard page names (e.g. `/approvals`) in the public
+  FAQ, meaning any unauthenticated visitor could ask the assistant to
+  enumerate the admin dashboard's internal structure — a real
+  information-disclosure issue. `search_scylla_knowledge` now only
+  searches the admin tier when the caller's actual authenticated role
+  is `admin`; verified with tests at both the retriever and tool level.
+- **Richer page-context awareness**: both `ChatWidget`s now send a
+  semantic `entity_type` for every real route (not just team/vendor
+  profile pages with an id) — e.g. a team member on their own Vehicles
+  page gets an explicit backend hint pointing the model at
+  `get_my_team_vehicles`, an admin on the Approvals page gets a hint
+  toward `get_pending_approvals_summary`, and any route without a
+  curated hint still degrades gracefully to a generic "user is on
+  route X" note instead of no context at all.
+
 ## New: real actions, not just answers
 
 Beyond retrieval + Q&A, the assistant can now:

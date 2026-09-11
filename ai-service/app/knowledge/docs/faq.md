@@ -39,17 +39,12 @@ no sponsorship feature at all.
 
 **Where do admins approve team and vendor registrations?**
 Admin functions (including team/vendor approvals) live in a completely
-separate Admin Dashboard application — not a page or link inside the
-main public Scylla site. An admin logs into that separate dashboard
-directly, and pending team/vendor registrations appear there for
-review and approval/rejection. There is no "Admin" link inside the
-regular team/vendor-facing site — if someone isn't already using the
-separate admin dashboard, direct them to log in there rather than
-describing a navigation path within the public site, since one doesn't
-exist. Exact menu labels, button names, or click-by-click steps inside
-the admin dashboard are NOT documented here — say that plainly rather
-than describing specific buttons, menu names, or steps that aren't
-listed in this FAQ.
+separate Admin Dashboard application that requires an admin login —
+it's not a page or link inside the main public Scylla site, and isn't
+part of the public navigation. If someone isn't already logged in as
+an admin, that's as much detail as is appropriate to give them here;
+don't describe the admin dashboard's internal pages, menu names, or
+layout to a non-admin.
 
 **How do I contact the team behind Scylla / get support?**
 There's a Contact Us page at `/contact` and a Support/Help page.

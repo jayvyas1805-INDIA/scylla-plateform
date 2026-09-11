@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { streamAssistantMessage } from "../../api/assistant.api";
 import "./ChatWidget.css";
 
@@ -11,8 +11,29 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 // Derives a lightweight, non-sensitive page context from the current
-// route so the assistant can reason about "this team" / "this vehicle"
-// without us shipping private frontend state to it.
+// route so the assistant can reason about "this team" / "my vehicles"
+// etc. without us shipping private frontend state to it. Keys here
+// must match app/orchestrator/chain.py's _PAGE_CONTEXT_HINTS table on
+// the backend (falls back to a generic route-only note if a route
+// isn't mapped, so an unmapped page degrades gracefully rather than
+// breaking).
+const STATIC_ROUTE_CONTEXT = {
+  "/teams-directory": "teams_directory",
+  "/vendors-directory": "vendors_directory",
+  "/team/home": "my_team_home",
+  "/team/profile": "my_team_profile",
+  "/team/profilee": "my_team_profile",
+  "/team/members": "my_team_members",
+  "/team/vehicles": "my_team_vehicles",
+  "/team/marketplace": "my_team_marketplace",
+  "/team/messages": "my_team_messages",
+  "/vendor/home": "my_vendor_home",
+  "/vendor/myProfile": "my_vendor_profile",
+  "/vendor/profile": "my_vendor_profile",
+  "/vendor/product": "my_vendor_products",
+  "/vendor/quote": "my_vendor_quotes",
+};
+
 function derivePageContext(pathname, params) {
   if (pathname.startsWith("/teams-directory/") && params.teamId) {
     return { route: pathname, entity_type: "team", entity_id: params.teamId };
@@ -20,7 +41,31 @@ function derivePageContext(pathname, params) {
   if (pathname.startsWith("/vendors-directory/") && params.vendorId) {
     return { route: pathname, entity_type: "vendor", entity_id: params.vendorId };
   }
-  return { route: pathname, entity_type: null, entity_id: null };
+
+  const entityType = STATIC_ROUTE_CONTEXT[pathname] || null;
+  return { route: pathname, entity_type: entityType, entity_id: null };
+}
+
+function ComparisonCard({ comparison }) {
+  const { a, b } = comparison;
+  const keys = Object.keys(a).filter((k) => k !== "name");
+
+  return (
+    <div className="scylla-chat-comparison">
+      <div className="scylla-chat-comparison-header">
+        <span></span>
+        <span>{a.name}</span>
+        <span>{b.name}</span>
+      </div>
+      {keys.map((key) => (
+        <div className="scylla-chat-comparison-row" key={key}>
+          <span className="scylla-chat-comparison-label">{key}</span>
+          <span>{String(a[key])}</span>
+          <span>{String(b[key])}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function ChatWidget() {
@@ -32,6 +77,7 @@ export default function ChatWidget() {
 
   const location = useLocation();
   const params = useParams();
+  const navigate = useNavigate();
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -65,17 +111,29 @@ export default function ChatWidget() {
         .map(({ role, content }) => ({ role, content }));
 
       let receivedAny = false;
+      let pendingRoute = null;
 
-      await streamAssistantMessage(trimmed, historyForApi, pageContext, (token) => {
-        receivedAny = true;
-        setMessages((prev) => {
-          const copy = [...prev];
-          copy[assistantIndex] = {
-            ...copy[assistantIndex],
-            content: copy[assistantIndex].content + token,
-          };
-          return copy;
-        });
+      await streamAssistantMessage(trimmed, historyForApi, pageContext, {
+        onToken: (token) => {
+          receivedAny = true;
+          setMessages((prev) => {
+            const copy = [...prev];
+            copy[assistantIndex] = {
+              ...copy[assistantIndex],
+              content: copy[assistantIndex].content + token,
+            };
+            return copy;
+          });
+        },
+        onComparison: (comparison) => {
+          receivedAny = true;
+          setMessages((prev) => [...prev, { role: "comparison", comparison }]);
+        },
+        onNavigate: ({ route }) => {
+          // Captured, not acted on immediately — let the reply text finish
+          // rendering first so the navigation doesn't cut off mid-sentence.
+          pendingRoute = route;
+        },
       });
 
       if (!receivedAny) {
@@ -83,6 +141,10 @@ export default function ChatWidget() {
         // rather than leaving a blank message in the transcript.
         setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
         setError("The assistant didn't return a response. Please try again.");
+      }
+
+      if (pendingRoute) {
+        setTimeout(() => navigate(pendingRoute), 600);
       }
     } catch (err) {
       // Remove the empty placeholder bubble on failure.
@@ -163,13 +225,18 @@ export default function ChatWidget() {
               </div>
             )}
 
-            {messages.map((m, i) => (
-              <div key={i} className={`scylla-chat-bubble scylla-chat-bubble-${m.role}`}>
-                {m.content || (isLoading && i === messages.length - 1 ? (
-                  <span className="scylla-chat-typing"><span></span><span></span><span></span></span>
-                ) : null)}
-              </div>
-            ))}
+            {messages.map((m, i) => {
+              if (m.role === "comparison") {
+                return <ComparisonCard key={i} comparison={m.comparison} />;
+              }
+              return (
+                <div key={i} className={`scylla-chat-bubble scylla-chat-bubble-${m.role}`}>
+                  {m.content || (isLoading && i === messages.length - 1 ? (
+                    <span className="scylla-chat-typing"><span></span><span></span><span></span></span>
+                  ) : null)}
+                </div>
+              );
+            })}
 
             {error && <div className="scylla-chat-error">{error}</div>}
           </div>
