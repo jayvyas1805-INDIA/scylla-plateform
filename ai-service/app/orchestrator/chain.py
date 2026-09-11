@@ -217,7 +217,7 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
     # path in testing. Forcing at least one real lookup before any final
     # answer closes that gap. Later turns (after the model already has
     # real tool output to work with) go back to normal "auto" tool use.
-    llm_forced = get_llm().bind_tools(tools, tool_choice="required")
+    llm_forced = get_llm().bind_tools(tools)
     llm_auto = get_llm().bind_tools(tools)
 
     messages = [SystemMessage(content=SYSTEM_PROMPT)]
@@ -245,7 +245,7 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
     messages.append(HumanMessage(content=request.message))
 
     for i in range(MAX_TOOL_ITERATIONS):
-        llm = llm_forced if i == 0 else llm_auto
+        llm = llm_auto
         final_msg = None
         async for kind, payload in _stream_llm_turn(llm, messages):
             if kind == "token":

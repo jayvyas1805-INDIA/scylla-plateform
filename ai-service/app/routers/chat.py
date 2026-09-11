@@ -21,10 +21,12 @@ async def send_message(
     except RuntimeError as exc:
         # Config errors (e.g. missing API key) — safe message, no internals leaked
         raise HTTPException(status_code=503, detail="Assistant is not configured yet.") from exc
-    except Exception:
-        # Never leak provider errors/stack traces to the client
-        raise HTTPException(status_code=502, detail="Assistant is temporarily unavailable.")
-
+    except Exception as exc:
+        print("ASSISTANT ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=502,
+            detail="Assistant is temporarily unavailable."
+        ) from exc
     return ChatResponse(reply=reply, role_used=caller.role, actions=navigations, comparisons=comparisons)
 
 

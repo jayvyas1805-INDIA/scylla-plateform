@@ -3,7 +3,7 @@ import axios from "axios";
 // Separate deployable service from the main Express backend — its own
 // base URL, configured the same way api.js configures VITE_backend_url.
 const assistantApi = axios.create({
-  baseURL: import.meta.env.VITE_ai_backend_url || "http://localhost:8000",
+  baseURL: import.meta.env.VITE_ai_backend_url || "http://127.0.0.1:8000",
   withCredentials: true,
 });
 
