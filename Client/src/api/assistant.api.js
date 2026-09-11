@@ -32,18 +32,39 @@ export const sendAssistantMessage = (message, history = [], pageContext = null) 
 // once the stream's "done" event is received (or rejects on network/
 // HTTP failure, mirroring axios's error shape closely enough for the
 // widget's existing error handling to work unchanged).
-export const streamAssistantMessage = async (message, history, pageContext, onToken) => {
-  const baseURL = import.meta.env.VITE_ai_backend_url || "http://localhost:8000";
+export const streamAssistantMessage = async (
+  message,
+  history,
+  pageContext,
+  callbacks = {}
+) => {
+  const {
+    onToken,
+    onComparison,
+    onNavigate,
+  } = callbacks;
+
+  const baseURL =
+    import.meta.env.VITE_ai_backend_url || "http://localhost:8000";
+
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${baseURL}/api/assistant/message/stream`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify({ message, history, page_context: pageContext }),
-  });
+  const res = await fetch(
+    `${baseURL}/api/assistant/message/stream`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "text/event-stream",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        message,
+        history,
+        page_context: pageContext,
+      }),
+    }
+  );
 
   if (!res.ok) {
     const err = new Error("Assistant request failed");
@@ -51,31 +72,99 @@ export const streamAssistantMessage = async (message, history, pageContext, onTo
     throw err;
   }
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
+  if (!res.body) {
+    const err = new Error("Assistant returned no stream");
+    err.response = { status: 502 };
+    throw err;
+  }
 
-  while (true) {
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+
+  let buffer = "";
+  let finished = false;
+
+  while (!finished) {
     const { done, value } = await reader.read();
-    if (done) break;
+
+    if (done) {
+      break;
+    }
 
     buffer += decoder.decode(value, { stream: true });
-    const events = buffer.split("\n\n");
-    buffer = events.pop(); // last (possibly incomplete) event stays buffered
 
-    for (const raw of events) {
-      if (raw.startsWith("event: done")) return;
-      const line = raw.split("\n").find((l) => l.startsWith("data: "));
-      if (!line) continue;
-      const text = line.slice("data: ".length).replace(/\\n/g, "\n");
-      if (text.startsWith("[error]")) {
-        const err = new Error(text);
+    // Handle both LF and CRLF SSE formatting.
+    const events = buffer.split(/\r?\n\r?\n/);
+    buffer = events.pop() || "";
+
+    for (const rawEvent of events) {
+      const lines = rawEvent.split(/\r?\n/);
+
+      let eventType = "message";
+      const dataLines = [];
+
+      for (const line of lines) {
+        if (line.startsWith("event:")) {
+          eventType = line.slice(6).trim();
+        } else if (line.startsWith("data:")) {
+          const value = line.startsWith("data: ")
+            ? line.slice(6)
+            : line.slice(5);
+
+          dataLines.push(value);
+        } else if (line.startsWith("data:")) {
+          dataLines.push(line.slice(5));
+        }
+      }
+
+      const data = dataLines.join("\n");
+
+      // Backend finished the response.
+      if (eventType === "done") {
+        finished = true;
+        break;
+      }
+
+      if (!data) {
+        continue;
+      }
+
+      // Backend reported an error through SSE.
+      if (data.startsWith("[error]")) {
+        const err = new Error(data);
         err.response = { status: 502 };
         throw err;
       }
-      onToken(text);
+
+      // Normal streamed assistant text.
+      if (eventType === "message") {
+        onToken?.(data.replace(/\\n/g, "\n"));
+      }
+
+      // Navigation action.
+      if (eventType === "navigate") {
+        try {
+          const navigation = JSON.parse(data);
+          onNavigate?.(navigation);
+        } catch (error) {
+          console.error("Invalid navigation event:", data, error);
+        }
+      }
+
+      // Comparison action.
+      if (eventType === "comparison") {
+        try {
+          const comparison = JSON.parse(data);
+          onComparison?.(comparison);
+        } catch (error) {
+          console.error("Invalid comparison event:", data, error);
+        }
+      }
     }
   }
+
+  // Flush any remaining decoder bytes.
+  decoder.decode();
 };
 
 export default assistantApi;
