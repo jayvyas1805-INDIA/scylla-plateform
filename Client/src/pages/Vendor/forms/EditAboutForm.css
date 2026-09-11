@@ -1,0 +1,8 @@
+/* ================= EDIT ABOUT FORM ================= */
+/* VendorModal.css covers the base textarea styling — just bump the
+   min-height here since this is a longer-form field than the default. */
+
+.add-member-modal textarea {
+  min-height: 140px;
+  resize: vertical;
+}

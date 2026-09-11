@@ -1,0 +1,147 @@
+/* Page Wrapper */
+.edit-vendor-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main Container */
+.edit-vendor-main {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  width: 100%;
+}
+
+/* Card */
+.edit-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow:
+    0 0 35px rgba(37, 99, 235, 0.3),
+    inset 0 0 22px rgba(29, 78, 216, 0.15);
+}
+
+/* Title */
+.edit-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 28px;
+  color: var(--text-primary);
+  text-shadow: 0 0 14px rgba(37, 99, 235, 0.7);
+}
+
+/* Logo Preview */
+.logo-preview {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 2px solid var(--blue-primary);
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-placeholder {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.6);
+}
+
+/* Two Column Layout */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Buttons */
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .edit-vendor-main {
+    padding: 36px 20px;
+  }
+
+  .edit-card {
+    padding: 28px;
+  }
+
+  .logo-preview {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .edit-vendor-main {
+    padding: 24px 16px;
+  }
+
+  .edit-card {
+    padding: 22px;
+  }
+
+  .edit-title {
+    font-size: 1.3rem;
+  }
+
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .action-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .action-row .btn {
+    width: 100%;
+  }
+
+  .logo-preview {
+    width: 110px;
+    height: 110px;
+  }
+}

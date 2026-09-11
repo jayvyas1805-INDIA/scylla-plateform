@@ -1,0 +1,368 @@
+.team-vehicle-page {
+  padding: 40px;
+  color: #eaf3ff;
+}
+
+/* HEADER */
+.team-vehicle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.team-vehicle-header h1 {
+  font-size: 36px;
+  color: #4aa3ff;
+  text-shadow: 0 0 20px rgba(74, 163, 255, 0.6);
+}
+
+.team-vehicle-header p {
+  color: #9bbcff;
+}
+
+.team-vehicle-add-btn {
+  background: linear-gradient(135deg, #2b78ff, #4aa3ff);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(43, 120, 255, 0.7);
+}
+
+/* GRID */
+.team-vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 30px;
+}
+
+/* CARD */
+.team-vehicle-card {
+  background: rgba(10, 15, 40, 0.95);
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid rgba(0, 170, 255, 0.25);
+  box-shadow: 0 0 40px rgba(0, 170, 255, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.team-vehicle-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 60px rgba(0, 170, 255, 0.45);
+}
+
+/* HEADER */
+.team-vehicle-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-vehicle-card-header h2 {
+  color: #6aa9ff;
+}
+
+.team-vehicle-card-header span {
+  font-size: 14px;
+  color: #9bbcff;
+}
+
+.team-vehicle-icon-btn {
+  background: none;
+  border: 1px solid #2b78ff;
+  color: #2b78ff;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+/* IMAGE */
+.team-vehicle-main-image img {
+  width: 100%;
+  border-radius: 14px;
+  margin: 20px 0;
+}
+
+/* GALLERY */
+.team-vehicle-gallery {
+  display: flex;
+  gap: 10px;
+}
+
+.team-vehicle-gallery img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 170, 255, 0.4);
+}
+
+/* SPECS */
+.team-specs-section h3,
+.team-performance-section h3,
+.team-pdf-section h3 {
+  margin: 24px 0 12px;
+  color: #4aa3ff;
+}
+
+.team-spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* PERFORMANCE */
+.team-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.team-stat-box {
+  background: rgba(0, 170, 255, 0.08);
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* PDF */
+.team-pdf-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.team-pdf-buttons .primary {
+  background: #2b78ff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: white;
+}
+
+.team-pdf-buttons .secondary {
+  background: transparent;
+  border: 1px solid #2b78ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: #2b78ff;
+}
+
+/* ACTIONS */
+.team-vehicle-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.team-vehicle-edit-btn {
+  flex: 1;
+  margin-right: 10px;
+  background: rgba(43, 120, 255, 0.15);
+  border: 1px solid #2b78ff;
+  padding: 10px;
+  border-radius: 10px;
+  color: #eaf3ff;
+}
+
+.team-delete-btn {
+  background: rgba(255, 60, 60, 0.2);
+  border: 1px solid #ff5c5c;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #ff5c5c;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+  .team-vehicle-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .team-performance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-spec-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* MODAL OVERLAY */
+.team-vehicle-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+/* MODAL */
+.team-vehicle-modal {
+  width: min(900px, 92%);
+  background: linear-gradient(135deg,
+      rgba(10, 15, 30, 0.95),
+      rgba(5, 10, 20, 0.95));
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow:
+    0 0 30px rgba(43, 120, 255, 0.45),
+    0 0 80px rgba(0, 234, 255, 0.25);
+}
+
+/* HEADER */
+.team-vehicle-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-vehicle-modal-header h2 {
+  color: #4aa3ff;
+}
+
+.team-vehicle-modal-close-btn {
+  background: none;
+  border: none;
+  color: #cfe4ff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* BODY */
+.team-vehicle-modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* FORM */
+.team-modal-left label {
+  display: block;
+  font-size: 13px;
+  margin-top: 12px;
+  color: #6aa9ff;
+}
+
+.team-modal-left input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(43, 120, 255, 0.35);
+  border-radius: 10px;
+  color: #eaf3ff;
+}
+
+/* UPLOAD BOX */
+.team-upload-box {
+  height: 140px;
+  border: 2px dashed rgba(43, 120, 255, 0.4);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #6aa9ff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.team-upload-box:hover {
+  box-shadow: 0 0 25px rgba(43, 120, 255, 0.6);
+}
+
+.team-pdf-tag {
+  background: #2b78ff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/* FOOTER */
+.team-vehicle-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .team-vehicle-modal-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* here */
+
+
+
+
+.team-vehicle-gallery {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+.team-vehicle-gallery img.gallery-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.team-vehicle-gallery img.gallery-thumb:hover {
+  transform: scale(1.1);
+  border: 2px solid #007bff;
+}
+
+.team-vehicle-gallery img.active-thumb {
+  border: 2px solid #007bff;
+  transform: scale(1.1);
+}
+
+
+.team-image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* allows multiple rows if too many images */
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 120px;
+  /* optional: limits modal height */
+  overflow-y: auto;
+  /* scroll if too many images */
+}
+
+.team-image-preview-container img.preview-thumb {
+  width: 80px;
+  /* fixed width */
+  height: 80px;
+  /* fixed height */
+  object-fit: cover;
+  /* fills the box, keeps aspect ratio */
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid #ccc;
+  transition: border 0.2s ease, transform 0.2s ease;
+}
+
+.team-image-preview-container img.preview-thumb:hover {
+  border: 2px solid #007bff;
+  transform: scale(1.05);
+}
+

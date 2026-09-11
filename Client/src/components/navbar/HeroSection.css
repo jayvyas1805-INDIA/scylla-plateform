@@ -1,0 +1,178 @@
+/* =========================================================
+   Hero Section — flat "lp-" landing theme. No radial glow,
+   no gradient-clip text — a bordered media card next to a
+   plain headline, matching the Team/Vendor landing pages.
+   ========================================================= */
+
+.lp-hero-section {
+  padding: 72px 24px 64px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.lp-hero-content {
+  max-width: 480px;
+}
+
+.lp-hero-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--lp-text);
+  margin: 18px 0 16px;
+}
+
+.lp-hero-subtitle {
+  font-size: 1rem;
+  color: var(--lp-text-muted);
+  line-height: 1.7;
+  margin: 0 0 28px;
+}
+
+/* Carousel */
+.lp-hero-carousel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lp-carousel-wrapper {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  padding: 0;
+}
+
+.lp-carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.lp-carousel-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lp-carousel-slide img,
+.lp-carousel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-carousel-nav {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--lp-border-strong);
+  background: var(--lp-surface);
+  color: var(--lp-text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.lp-carousel-nav:hover {
+  border-color: var(--lp-accent);
+  color: var(--lp-accent);
+}
+
+/* Indicators */
+.lp-carousel-indicators {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.lp-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: var(--lp-border-strong);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.lp-indicator.active {
+  background: var(--lp-accent);
+  width: 20px;
+  border-radius: 4px;
+}
+
+/* Empty state (no admin content yet) */
+.lp-hero-placeholder {
+  aspect-ratio: 4 / 3;
+  border-style: dashed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--lp-text-muted);
+  font-size: 0.9rem;
+}
+
+.lp-hero-placeholder-icon {
+  font-size: 1.8rem;
+}
+
+/* Loading state */
+.lp-hero-loading {
+  min-height: 400px;
+}
+
+.lp-hero-skeleton {
+  max-width: 1160px;
+  height: 340px;
+  margin: 0 auto;
+  border-radius: var(--lp-radius-lg);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .lp-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-hero-title {
+    font-size: 2.1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .lp-hero-section {
+    padding: 48px 18px 40px;
+  }
+
+  .lp-hero-title {
+    font-size: 1.7rem;
+  }
+
+  .lp-hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .lp-carousel-nav {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}

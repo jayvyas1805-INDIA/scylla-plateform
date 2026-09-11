@@ -1,0 +1,105 @@
+.lp-marketplace-highlights {
+  background: var(--lp-surface);
+}
+
+.lp-marketplace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.lp-marketplace-header .lp-section-title {
+  margin: 0;
+}
+
+/* auto-fill (not a fixed 3-column grid) so 1-2 product cards keep
+   their natural width instead of stretching to fill the row —
+   same fix applied to the Vehicle module grid. */
+.lp-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: start;
+}
+
+.lp-marketplace-loading,
+.lp-marketplace-empty {
+  text-align: center;
+  color: var(--lp-text-muted);
+  font-size: 14px;
+  padding: 40px 0;
+}
+
+.lp-description-toggle {
+  background: none;
+  border: none;
+  color: var(--lp-accent);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.lp-description-toggle:hover {
+  text-decoration: underline;
+}
+
+.lp-product-card {
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-product-image-wrapper {
+  width: 100%;
+  height: 190px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-product-content {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-product-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--lp-text);
+}
+
+.lp-product-description {
+  font-size: 13px;
+  color: var(--lp-text-muted);
+  margin-bottom: 16px;
+  flex: 1;
+  line-height: 1.6;
+}
+
+.lp-product-content .lp-btn {
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .lp-marketplace-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lp-product-image-wrapper {
+    height: 160px;
+  }
+}

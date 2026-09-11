@@ -1,0 +1,23 @@
+.lp-cta-section {
+  text-align: center;
+  background: var(--lp-bg);
+}
+
+.lp-cta-content {
+  max-width: 560px;
+}
+
+.lp-cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+@media (max-width: 640px) {
+  .lp-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

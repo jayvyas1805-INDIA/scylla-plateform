@@ -1,0 +1,52 @@
+.land-platform-overview {
+  background-color: #f5f5f5;
+  padding: 60px 20px;
+}
+
+.land-platform-overview .land-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.land-platform-overview .land-section-title {
+  color: #1a1a1a;
+  margin-bottom: 40px;
+}
+
+.land-platform-overview .land-overview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.land-platform-overview .land-overview-content p {
+  font-size: 15px;
+  color: #333333;
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .land-platform-overview {
+    padding: 40px 20px;
+  }
+
+  .land-platform-overview .land-section-title {
+    margin-bottom: 30px;
+  }
+
+  .land-platform-overview .land-overview-content p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .land-platform-overview {
+    padding: 30px 16px;
+  }
+
+  .land-platform-overview .land-overview-content p {
+    font-size: 13px;
+  }
+}

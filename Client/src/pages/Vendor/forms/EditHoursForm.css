@@ -1,0 +1,36 @@
+/* ================= EDIT HOURS FORM ================= */
+
+.hours-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.hours-row label {
+  flex: 0 0 150px;
+  margin: 0;
+}
+
+.hours-row input {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.hours-row input:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.35);
+}
+
+.hours-loading {
+  color: var(--text-tertiary);
+  font-size: 13px;
+  text-align: center;
+  padding: 16px 0;
+}

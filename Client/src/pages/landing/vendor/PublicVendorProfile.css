@@ -1,0 +1,374 @@
+.pvp-page {
+  min-height: 60vh;
+}
+
+.pvp-loading,
+.pvp-notfound {
+  padding-top: 72px;
+  text-align: center;
+}
+
+.pvp-skeleton-header {
+  height: 140px;
+  border-radius: var(--lp-radius-lg);
+  margin-bottom: 20px;
+}
+
+.pvp-skeleton-block {
+  height: 300px;
+  border-radius: var(--lp-radius-lg);
+}
+
+/* ---------------- Header ---------------- */
+
+.pvp-header {
+  padding-top: 56px;
+  padding-bottom: 24px;
+  border-bottom: none;
+}
+
+.pvp-header-card {
+  padding: 32px;
+}
+
+.pvp-header-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.pvp-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.pvp-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pvp-name {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--lp-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.pvp-tagline {
+  font-size: 0.95rem;
+  color: var(--lp-text-muted);
+  margin: 0 0 12px;
+}
+
+.pvp-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.pvp-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--lp-accent);
+  background: var(--lp-accent-soft);
+  border: 1px solid var(--lp-border-strong);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.pvp-meta-item {
+  font-size: 0.82rem;
+  color: var(--lp-text-muted);
+}
+
+/* ---------------- Tabs ---------------- */
+
+.pvp-tabs-section {
+  border-top: 1px solid var(--lp-border);
+  border-bottom: 1px solid var(--lp-border);
+  background: var(--lp-surface);
+}
+
+.pvp-tabs-bar {
+  display: flex;
+  gap: 4px;
+}
+
+.pvp-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 14px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--lp-text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  font-family: inherit;
+}
+
+.pvp-tab:hover {
+  color: var(--lp-text);
+}
+
+.pvp-tab.active {
+  color: var(--lp-accent);
+  border-bottom-color: var(--lp-accent);
+}
+
+/* ---------------- Profile tab ---------------- */
+
+.pvp-profile-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.pvp-profile-main,
+.pvp-profile-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pvp-block {
+  padding: 24px;
+}
+
+.pvp-block-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 16px;
+}
+
+.pvp-about-text {
+  font-size: 0.9rem;
+  color: var(--lp-text-muted);
+  line-height: 1.75;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.pvp-empty {
+  color: var(--lp-text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.pvp-empty-section {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.pvp-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.pvp-service-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+}
+
+.pvp-service-icon {
+  font-size: 1.1rem;
+}
+
+.pvp-service-name {
+  font-size: 0.85rem;
+  color: var(--lp-text);
+  font-weight: 600;
+}
+
+.pvp-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.pvp-gallery-item {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--lp-radius-sm);
+  border: 1px solid var(--lp-border);
+}
+
+.pvp-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pvp-hours-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  background: var(--lp-bg);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+}
+
+.pvp-hours-day {
+  font-size: 0.82rem;
+  color: var(--lp-text-muted);
+  font-weight: 600;
+}
+
+.pvp-hours-time {
+  font-size: 0.82rem;
+  color: var(--lp-text);
+}
+
+/* ---------------- Products tab ---------------- */
+
+.pvp-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  justify-content: start;
+}
+
+.pvp-product-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.pvp-product-image-wrapper {
+  height: 180px;
+  border-bottom: 1px solid var(--lp-border);
+  background: var(--lp-bg);
+}
+
+.pvp-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pvp-product-body {
+  padding: 20px;
+}
+
+.pvp-product-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 6px;
+}
+
+.pvp-product-price {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--lp-accent);
+  margin: 0 0 10px;
+}
+
+.pvp-product-desc {
+  font-size: 0.82rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------------- Projects tab ---------------- */
+
+.pvp-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  justify-content: start;
+}
+
+.pvp-project-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.pvp-project-image-wrapper {
+  height: 170px;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.pvp-project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pvp-project-body {
+  padding: 18px 20px;
+}
+
+.pvp-project-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin: 0 0 6px;
+}
+
+.pvp-project-desc {
+  font-size: 0.82rem;
+  color: var(--lp-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 900px) {
+  .pvp-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .pvp-header {
+    padding-top: 40px;
+  }
+
+  .pvp-header-card {
+    padding: 22px;
+  }
+
+  .pvp-header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .pvp-meta-row {
+    justify-content: center;
+  }
+
+  .pvp-tabs-bar {
+    overflow-x: auto;
+  }
+
+  .pvp-tab {
+    padding: 12px 14px;
+    white-space: nowrap;
+  }
+}

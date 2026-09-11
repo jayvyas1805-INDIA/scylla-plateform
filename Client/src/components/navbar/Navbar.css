@@ -1,0 +1,167 @@
+/* =========================================================
+   Landing Navbar — flat "lp-" landing theme (no neon glow,
+   real borders, matches Team/Vendor landing pages and the
+   rest of the marketing site).
+   ========================================================= */
+
+.lp-navbar {
+  background: var(--lp-bg);
+  border-bottom: 1px solid var(--lp-border);
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.lp-navbar-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.lp-navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.lp-logo-mark {
+  font-size: 1.05rem;
+}
+
+.lp-logo-text {
+  color: var(--lp-text);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.lp-nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-nav-item {
+  position: relative;
+}
+
+.lp-nav-link {
+  color: var(--lp-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: var(--lp-radius-sm);
+  transition: all 0.15s ease;
+  display: inline-block;
+}
+
+.lp-nav-link:hover {
+  color: var(--lp-text);
+  background: var(--lp-surface);
+}
+
+.lp-nav-link.active {
+  color: var(--lp-accent);
+  background: var(--lp-accent-soft);
+}
+
+.lp-signin-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lp-signin-button {
+  padding: 9px 22px;
+  font-size: 14px;
+}
+
+.lp-signin-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
+}
+
+.lp-signin-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius-md);
+  min-width: 170px;
+  margin-top: 10px;
+  padding: 6px;
+  box-shadow: var(--lp-shadow-md);
+  z-index: 150;
+}
+
+.lp-signin-option {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  color: var(--lp-text-muted);
+  background: none;
+  border: none;
+  text-decoration: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--lp-radius-sm);
+  transition: all 0.15s ease;
+}
+
+.lp-signin-option:hover {
+  background: var(--lp-accent-soft);
+  color: var(--lp-accent);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .lp-nav-link {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lp-navbar-container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lp-nav-menu {
+    order: 3;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .lp-signin-button {
+    padding: 7px 18px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-logo-text {
+    font-size: 15px;
+  }
+
+  .lp-nav-link {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}

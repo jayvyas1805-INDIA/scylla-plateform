@@ -1,0 +1,141 @@
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap: 28px;
+}
+
+.marketplace-card {
+  background: rgba(10,15,35,0.9);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 0 20px rgba(0,120,255,0.2);
+  transition: transform .3s, box-shadow .3s;
+}
+
+.marketplace-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 35px rgba(0,170,255,0.6);
+}
+
+.marketplace-image img,
+.product-img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.neon-btn {
+  margin-top: 14px;
+  background: linear-gradient(135deg,#2b78ff,#4aa3ff);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(0,150,255,0.6);
+}
+
+.messages-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+
+.messages-list {
+  background: rgba(10,15,35,0.9);
+  border-radius: 14px;
+}
+
+.message-item {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.message-item.active {
+  background: rgba(0,150,255,0.15);
+}
+
+.chat-window {
+  background: rgba(10,15,35,0.9);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 20px;
+}
+
+.msg {
+  padding: 12px;
+  border-radius: 12px;
+  max-width: 60%;
+}
+
+.msg.left {
+  background: rgba(255,255,255,0.08);
+}
+
+.msg.right {
+  background: rgba(0,150,255,0.4);
+  align-self: flex-end;
+}
+
+
+.marketplace-page {
+  margin-top: 32px;
+}
+
+/* GRID */
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+/* CARD */
+.marketplace-card {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 30, 60, 0.95),
+    rgba(5, 10, 25, 0.95)
+  );
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(0, 140, 255, 0.25);
+  position: relative;
+  transition: all 0.35s ease;
+}
+
+/* HOVER EFFECT */
+.marketplace-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 0 35px rgba(0, 140, 255, 0.5),
+    0 0 90px rgba(0, 140, 255, 0.25);
+}
+
+/* IMAGE */
+.marketplace-card img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+
+/* BUTTON */
+.marketplace-card button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2b78ff, #00eaff);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.marketplace-card button:hover {
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.8);
+  transform: translateY(-2px);
+}

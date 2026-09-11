@@ -1,0 +1,211 @@
+.marketplace-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  /* Force the main viewport window to handle the scroll container context */
+  overflow: visible; 
+  
+}
+
+.marketplace-main {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  
+  /* CRITICAL: Must be visible so the sticky child can track the page scroll */
+  overflow: visible; 
+}
+
+.marketplace-header {
+  margin: 0 auto 8px;
+  max-width: 1400px;
+  padding: 40px 20px 0;
+  text-align: center;
+}
+
+.marketplace-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  letter-spacing: -1px;
+}
+
+.marketplace-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.marketplace-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 32px;
+  
+  /* STICKY CONFIGURATION */
+  position: sticky;
+  z-index: 50;                       /* Keeps buttons stacked cleanly above the product grid */
+  background-color: var(--bg-secondary); /* Matches container background to block out scrolling text */
+  padding: 12px 0;                   /* Keeps layout padded nicely when stuck to the top */
+}
+
+.filter-toggle-btn,
+.add-product-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.filter-toggle-btn {
+  background-color:#0f1535;
+  color:#6b7d9e;
+}
+
+.filter-toggle-btn:hover {
+  background-color: rgba(0, 128, 255, 0.15);
+  border-color: #0080ff;
+  color: #0080ff;
+}
+
+.add-product-btn {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  margin-left: auto;
+}
+
+.add-product-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--primary), 0 0 40px rgba(0, 128, 255, 0.4);
+}
+
+.products-count {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+  font-weight: 500;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.no-products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.no-products svg {
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.no-products h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.no-products p {
+  font-size: 14px;
+  margin: 0;
+  max-width: 300px;
+}
+
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .marketplace-main {
+    padding: 32px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .marketplace-title {
+    font-size: 28px;
+  }
+
+  .marketplace-subtitle {
+    font-size: 14px;
+  }
+
+  .marketplace-main {
+    padding: 24px 12px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .marketplace-controls {
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .add-product-btn {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .marketplace-title {
+    font-size: 24px;
+  }
+
+  .marketplace-subtitle {
+    font-size: 13px;
+  }
+
+  .marketplace-main {
+    padding: 16px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .filter-toggle-btn,
+  .add-product-btn {
+    font-size: 13px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .filter-toggle-btn svg,
+  .add-product-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .marketplace-controls {
+    gap: 8px;
+  }
+
+  .marketplace-header {
+    margin-bottom: 24px;
+  }
+}

@@ -1,0 +1,344 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.land-about-us-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  line-height: 1.6;
+  color: #333333;
+}
+
+/* Hero Section */
+.land-about-hero {
+  background: linear-gradient(135deg, #999999 0%, #888888 100%);
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.land-about-hero-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.land-about-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 1.5rem;
+}
+
+.land-about-description {
+  font-size: 0.95rem;
+  color: #555555;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Section Styles */
+.land-section-white,
+.land-section-gray {
+  padding: 3.5rem 1.5rem;
+}
+
+.land-section-white {
+  background-color: #ffffff;
+}
+
+.land-section-gray {
+  background-color: #f5f5f5;
+}
+
+.land-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.land-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+}
+
+.land-section-subtitle,
+.land-section-text {
+  font-size: 0.95rem;
+  color: #555555;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.land-section-subtitle {
+  font-size: 0.9rem;
+  color: #666666;
+  margin-bottom: 2rem;
+}
+
+/* Teams Grid */
+.land-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.land-team-card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.land-team-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.land-team-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.land-team-icon {
+  font-size: 2rem;
+  background-color: #f0f0f0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.land-team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.land-team-card-body {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.land-team-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.land-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.land-stat-label {
+  font-size: 0.8rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.land-team-button {
+  width: 100%;
+  background-color: #f5f5f5;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #555555;
+  font-weight: 500;
+}
+
+.land-team-button:hover {
+  background-color: #e8e8e8;
+}
+
+/* Vendors Grid */
+.land-vendors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.land-vendor-card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.land-vendor-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.land-vendor-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.land-vendor-icon {
+  font-size: 1.5rem;
+}
+
+.land-vendor-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.land-vendor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+}
+
+.land-vendor-category {
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.land-vendor-rating {
+  color: #d4a300;
+  font-weight: 600;
+}
+
+.land-vendor-button {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #999999;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #555555;
+}
+
+.land-vendor-button:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: #1a1a1a;
+}
+
+/* View All Button */
+.land-view-all-button {
+  display: block;
+  margin: 0 auto;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.land-view-all-button:hover {
+  background-color: #b71c1c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .land-about-title {
+    font-size: 2rem;
+  }
+
+  .land-about-description {
+    font-size: 0.9rem;
+  }
+
+  .land-section-white,
+  .land-section-gray {
+    padding: 2.5rem 1rem;
+  }
+
+  .land-section-title {
+    font-size: 1.5rem;
+  }
+
+  .land-teams-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .land-vendors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .land-team-card-body {
+    gap: 1rem;
+  }
+
+  .land-team-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .land-about-title {
+    font-size: 1.5rem;
+  }
+
+  .land-about-description {
+    font-size: 0.85rem;
+  }
+
+  .land-section-title {
+    font-size: 1.25rem;
+  }
+
+  .land-section-subtitle,
+  .land-section-text {
+    font-size: 0.85rem;
+  }
+
+  .land-vendors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .land-team-card {
+    padding: 1rem;
+  }
+
+  .land-team-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+  }
+
+  .land-team-name {
+    font-size: 1rem;
+  }
+
+  .land-view-all-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}

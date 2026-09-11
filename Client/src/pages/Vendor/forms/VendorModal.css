@@ -1,0 +1,292 @@
+/* ================= OVERLAY ================= */
+
+.add-product-overlay,
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(7, 11, 26, 0.9),
+    rgba(7, 11, 26, 0.85)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+/* ================= CARD ================= */
+
+.add-product-card,
+.add-member-modal {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(12, 18, 40, 0.95);
+  backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  box-shadow:
+    0 0 40px rgba(37, 99, 235, 0.35),
+    inset 0 0 20px rgba(59, 130, 246, 0.08);
+  animation: scaleIn 0.25s ease;
+  position: relative;
+  max-height: 90vh;      
+  overflow-y: auto;     /* 👈 enable vertical scroll */
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ================= HEADER ================= */
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modal-header h2 {
+  color: #e6ecff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ================= CLOSE BUTTON ================= */
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #a5b4fc;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.close-btn:hover {
+  color: #ffffff;
+  transform: rotate(90deg);
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.9));
+}
+
+/* ================= TITLE ================= */
+
+.form-title {
+  text-align: center;
+  margin-bottom: 22px;
+  color: #e6ecff;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* ================= FORM ================= */
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.product-form input,
+.product-form select,
+.add-member-modal input,
+.add-member-modal textarea {
+  background: #111a3a;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: #e6ecff;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+.product-form input::placeholder,
+.add-member-modal textarea::placeholder,
+.add-member-modal input::placeholder {
+  color: #7c8bd6;
+}
+
+.product-form input:focus,
+.product-form select:focus,
+.add-member-modal input:focus,
+.add-member-modal textarea:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+  background: #0f1733;
+}
+
+/* ================= LABEL ================= */
+
+.add-member-modal label {
+  font-size: 13px;
+  color: #a5b4fc;
+  margin: 10px 0 4px;
+  display: block;
+}
+
+/* ================= TAGS ================= */
+
+.tag-group {
+  margin-top: 6px;
+}
+
+.tag-title {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #a5b4fc;
+}
+
+.tag-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #a5b4fc;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.25s ease;
+}
+
+.tag-chip:hover {
+  background: rgba(59, 130, 246, 0.18);
+  color: #e6ecff;
+}
+
+.tag-chip.active {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.7);
+}
+
+/* ================= IMAGE UPLOAD ================= */
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* FILE INPUT */
+
+.image-upload input[type="file"] {
+  padding: 8px;
+  border-radius: 12px;
+  background: #0f1733;
+  color: #a5b4fc;
+  cursor: pointer;
+}
+
+/* URL INPUT */
+
+.image-upload input[type="text"] {
+  background: #111a3a;
+  border: 1px dashed rgba(59, 130, 246, 0.45);
+}
+
+/* PREVIEW */
+
+.image-preview {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  background: #0b1024;
+}
+
+/* ================= ACTIONS ================= */
+
+.form-actions,
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.form-actions button,
+.save-btn {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.6);
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(37, 99, 235, 0.9);
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width: 1024px) {
+  .add-product-card,
+  .add-member-modal {
+    max-width: 480px;
+    padding: 22px;
+  }
+
+  .image-preview {
+    height: 150px;
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+  .add-product-card,
+  .add-member-modal {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .form-actions,
+  .modal-footer {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-title {
+    font-size: 18px;
+  }
+
+  .image-preview {
+    height: 130px;
+  }
+}
+
+
+.add-member-modal{
+  max-height: 90vh;
+  overflow-y: auto;
+}
