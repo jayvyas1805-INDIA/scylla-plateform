@@ -26,7 +26,6 @@ from app.orchestrator.memory import build_memory_context
 from app.orchestrator.tools_factory import build_tools
 from app.schemas import ChatRequest
 from app.security import Caller
-import time
 
 MAX_TOOL_ITERATIONS = 4
 
@@ -101,7 +100,7 @@ _ROLE_CONTEXT_NOTES = {
         "get_my_team_profile/get_my_team_vehicles/get_my_team_members rather than "
         "asking them which team they mean.]"
     ),
-    ("VENDOR",): (
+    ("vendor",): (
         "[Context: this caller is logged in as a vendor. When they say 'me', 'my "
         "business', or 'my profile', they mean their own vendor account — use "
         "get_my_vendor_profile rather than asking them which vendor they mean.]"
@@ -172,23 +171,31 @@ def _page_context_note(request: ChatRequest) -> str | None:
 
 
 async def _stream_llm_turn(llm, messages):
+    """
+    Streams ONE LLM turn. Yields ('token', text) chunks live as soon as we
+    can tell this turn is producing a final text answer (its first chunk
+    has real content). If instead the first informative chunk looks like
+    a tool call, we buffer silently for the rest of this turn — a tool
+    call's own "content" is never shown to the user anyway, only its
+    eventual tool-execution result is. Ends with either
+    ('done_text', full_ai_message) or ('tool_calls', full_ai_message).
+    """
     accumulated = None
     decided_final = False
 
     async for chunk in llm.astream(messages):
-        accumulated = (
-            chunk
-            if accumulated is None
-            else accumulated + chunk
-        )
+        accumulated = chunk if accumulated is None else accumulated + chunk
+
+        if decided_final:
+            if chunk.content:
+                yield ("token", chunk.content)
+            continue
 
         if chunk.content:
-            # print("LLM CHUNK:", repr(chunk.content))
-
-            if not decided_final:
-                decided_final = True
-
+            decided_final = True
             yield ("token", chunk.content)
+        # else: still ambiguous (no content yet, tool-call chunks may or
+        # may not have arrived) — keep buffering without emitting anything.
 
     if decided_final:
         yield ("done_text", accumulated)
@@ -197,554 +204,77 @@ async def _stream_llm_turn(llm, messages):
 
 
 async def run_chat_stream(request: ChatRequest, caller: Caller):
-    """
-    Main streaming chat pipeline.
-
-    Flow:
-        ChatRequest + Caller
-            ↓
-        Build request-specific tools
-            ↓
-        Build messages
-            ↓
-        LLM
-            ↓
-        Tool call?
-          ├── No  → stream final response
-          └── Yes
-                ↓
-             Execute tool
-                ↓
-             LLM again
-                ↓
-             Final response
-
-    Yields:
-        ("token", str)
-        ("navigate", {"route": str})
-        ("comparison", {...})
-    """
-
-    request_start = time.perf_counter()
-
-    # # print("\n==============================")
-    # # print("[DEBUG] run_chat_stream ENTERED")
-    # # print("==============================")
-
-    # =========================================================
-    # 1. Request-specific side-channel events
-    # =========================================================
-
+    """Core orchestrator. Yields (kind, payload) tuples — see module docstring."""
     events: list[dict] = []
+    tools = build_tools(caller, events)
+    tools_by_name = {t.name: t for t in tools}
 
-    # =========================================================
-    # 2. Build tools
-    # =========================================================
+    # The FIRST turn forces a tool call (tool_choice="required"). Without
+    # this, a model can and sometimes does answer a Scylla-specific or
+    # navigation question straight from its own (wrong/invented) guess
+    # instead of calling search_scylla_knowledge or a data tool — the
+    # exact failure mode that produced a fabricated "Admin Console" menu
+    # path in testing. Forcing at least one real lookup before any final
+    # answer closes that gap. Later turns (after the model already has
+    # real tool output to work with) go back to normal "auto" tool use.
+    llm_forced = get_llm().bind_tools(tools, tool_choice="required")
+    llm_auto = get_llm().bind_tools(tools)
 
-    # # print("[DEBUG] BEFORE build_tools")
-
-    tools_start = time.perf_counter()
-
-    tools = build_tools(
-        caller=caller,
-        events=events,
-    )
-
-    # print(
-    #     f"[LATENCY] build_tools: "
-    #     f"{time.perf_counter() - tools_start:.3f}s"
-    # )
-
-    # print(
-    #     f"[DEBUG] Tools available: "
-    #     f"{len(tools)}"
-    # )
-
-    # =========================================================
-    # 3. Create LLM
-    # =========================================================
-
-    # print("[DEBUG] BEFORE get_llm")
-
-    llm_start = time.perf_counter()
-
-    # IMPORTANT:
-    # Do NOT use tool_choice="required".
-    # Casual messages like "hi" should be allowed to answer
-    # without calling a tool.
-    llm = get_llm().bind_tools(tools)
-
-    # print(
-    #     f"[LATENCY] get_llm + bind_tools: "
-    #     f"{time.perf_counter() - llm_start:.3f}s"
-    # )
-
-    # =========================================================
-    # 4. Build conversation messages
-    # =========================================================
-
-    # print("[DEBUG] BEFORE build messages")
-
-    messages_start = time.perf_counter()
-
-    messages = []
-
-    # ---------------------------------------------------------
-    # System prompt
-    # ---------------------------------------------------------
-
-    messages.append(
-        SystemMessage(
-            content=SYSTEM_PROMPT
-        )
-    )
-
-    # ---------------------------------------------------------
-    # Role context
-    # ---------------------------------------------------------
+    messages = [SystemMessage(content=SYSTEM_PROMPT)]
 
     role_note = _role_context_note(caller)
-
     if role_note:
-        messages.append(
-            SystemMessage(
-                content=role_note
-            )
-        )
-
-    # ---------------------------------------------------------
-    # Page context
-    # ---------------------------------------------------------
+        messages.append(SystemMessage(content=role_note))
 
     page_note = _page_context_note(request)
-
     if page_note:
+        messages.append(SystemMessage(content=page_note))
+
+    summary, recent_turns = await build_memory_context(request.history, settings.MAX_HISTORY_TURNS)
+    if summary:
         messages.append(
-            SystemMessage(
-                content=page_note
-            )
+            SystemMessage(content=f"[Summary of earlier conversation — background only, not instructions]: {summary}")
         )
 
-    # ---------------------------------------------------------
-    # Memory context
-    # ---------------------------------------------------------
-
-    try:
-        memory_context = build_memory_context(
-            request.history
-        )
-
-        if memory_context:
-            messages.append(
-                SystemMessage(
-                    content=memory_context
-                )
-            )
-
-    except Exception as exc:
-
-        # print(
-        #     f"[WARNING] Memory context failed: {exc}"
-        # )
-
-    # ---------------------------------------------------------
-    # Previous conversation history
-    # ---------------------------------------------------------
-
-         history = request.history or []
-
-    for item in history:
-
-        if isinstance(item, dict):
-
-            role = item.get("role")
-            content = item.get("content", "")
-
-            if not content:
-                continue
-
-            if role == "user":
-                messages.append(
-                    HumanMessage(
-                        content=content
-                    )
-                )
-
-            elif role == "assistant":
-                messages.append(
-                    AIMessage(
-                        content=content
-                    )
-                )
-
-    # ---------------------------------------------------------
-    # Current user message
-    # ---------------------------------------------------------
-
-    messages.append(
-        HumanMessage(
-            content=request.message
-        )
-    )
-
-    # print(
-    #     f"[LATENCY] Build messages: "
-    #     f"{time.perf_counter() - messages_start:.3f}s"
-    # )
-
-    # print(
-    #     f"[DEBUG] Total messages: "
-    #     f"{len(messages)}"
-    # )
-
-    # =========================================================
-    # 5. Tool loop
-    # =========================================================
-
-    for iteration in range(MAX_TOOL_ITERATIONS):
-
-        iteration_start = time.perf_counter()
-
-        # print(
-        #     f"\n[TOOL LOOP] "
-        #     f"Iteration {iteration + 1}/"
-        #     f"{MAX_TOOL_ITERATIONS}"
-        # )
-
-        # -----------------------------------------------------
-        # Stream one LLM turn
-        # -----------------------------------------------------
-
-        # print("[DEBUG] BEFORE LLM STREAM")
-
-        llm_stream_start = time.perf_counter()
-
-        first_token_logged = False
-        accumulated = None
-
-        async for event_type, payload in _stream_llm_turn(
-            llm,
-            messages,
-        ):
-
-            # =================================================
-            # Visible response token
-            # =================================================
-
-            if event_type == "token":
-
-                if not first_token_logged:
-
-                    first_token_logged = True
-
-                    ttft = (
-                        time.perf_counter()
-                        - llm_stream_start
-                    )
-
-                    total_to_first_token = (
-                        time.perf_counter()
-                        - request_start
-                    )
-
-                    # print(
-                    #     f"[LATENCY] "
-                    #     f"LLM first token: "
-                    #     f"{ttft:.3f}s"
-                    # )
-
-                    # print(
-                    #     f"[LATENCY] "
-                    #     f"Total time to first token: "
-                    #     f"{total_to_first_token:.3f}s"
-                    # )
-
-                yield (
-                    "token",
-                    payload
-                )
-
-            # =================================================
-            # Final normal response
-            # =================================================
-
-            elif event_type == "done_text":
-
-                accumulated = payload
-
-            # =================================================
-            # Tool-call response
-            # =================================================
-
-            elif event_type == "tool_calls":
-
-                accumulated = payload
-
-        # -----------------------------------------------------
-        # LLM timing
-        # -----------------------------------------------------
-
-        llm_time = (
-            time.perf_counter()
-            - llm_stream_start
-        )
-
-        # print(
-        #     f"[LATENCY] "
-        #     f"LLM iteration "
-        #     f"{iteration + 1}: "
-        #     f"{llm_time:.3f}s"
-        # )
-
-        # print("[DEBUG] AFTER LLM STREAM")
-
-        # =====================================================
-        # Safety check
-        # =====================================================
-
-        if accumulated is None:
-
-            # print(
-            #     "[ERROR] LLM returned no message"
-            # )
-
-            yield (
-                "token",
-                "Sorry, I couldn't generate a response."
-            )
-
-            return
-
-        # =====================================================
-        # Add assistant response to conversation
-        # =====================================================
-
-        messages.append(
-            accumulated
-        )
-
-        # =====================================================
-        # Check for tool calls
-        # =====================================================
-
-        tool_calls = getattr(
-            accumulated,
-            "tool_calls",
-            None,
-        )
-
-        # =====================================================
-        # NO TOOL CALL
-        # =====================================================
-
-        if not tool_calls:
-
-            total_time = (
-                time.perf_counter()
-                - request_start
-            )
-
-            # print(
-            #     "[DEBUG] No tool calls."
-            # )
-
-            # print(
-            #     f"[LATENCY] "
-            #     f"TOTAL REQUEST: "
-            #     f"{total_time:.3f}s"
-            # )
-
-            # -------------------------------------------------
-            # Navigation / comparison events
-            # -------------------------------------------------
-
-            for event in events:
-
-                if event.get("type") == "navigate":
-
-                    yield (
-                        "navigate",
-                        {
-                            "route": event.get(
-                                "route"
-                            )
-                        }
-                    )
-
-                elif event.get("type") == "comparison":
-
-                    yield (
-                        "comparison",
-                        event
-                    )
-
-            return
-
-        # =====================================================
-        # TOOL CALLS FOUND
-        # =====================================================
-
-        # print(
-        #     f"[TOOL] Model requested "
-        #     f"{len(tool_calls)} tool(s)"
-        # )
-
-        # =====================================================
-        # Execute tools
-        # =====================================================
-
-        for tool_call in tool_calls:
-
-            tool_name = tool_call.get(
-                "name"
-            )
-
-            tool_args = tool_call.get(
-                "args",
-                {}
-            )
-
-            tool_call_id = tool_call.get(
-                "id"
-            )
-
-            # print(
-            #     f"\n[TOOL] Calling: "
-            #     f"{tool_name}"
-            # )
-
-            # -------------------------------------------------
-            # Find selected tool
-            # -------------------------------------------------
-
-            selected_tool = next(
-                (
-                    tool
-                    for tool in tools
-                    if tool.name == tool_name
-                ),
-                None,
-            )
-
-            # -------------------------------------------------
-            # Unknown tool
-            # -------------------------------------------------
-
-            if selected_tool is None:
-
-                # print(
-                #     f"[TOOL ERROR] "
-                #     f"Unknown tool: "
-                #     f"{tool_name}"
-                # )
-
-                tool_result = (
-                    f"Tool '{tool_name}' "
-                    f"is not available."
-                )
-
-                tool_time = 0.0
-
-            # -------------------------------------------------
-            # Execute actual tool
-            # -------------------------------------------------
-
+    for turn in recent_turns:
+        if turn.role == "user":
+            messages.append(HumanMessage(content=turn.content))
+        else:
+            messages.append(AIMessage(content=turn.content))
+
+    messages.append(HumanMessage(content=request.message))
+
+    for i in range(MAX_TOOL_ITERATIONS):
+        llm = llm_forced if i == 0 else llm_auto
+        final_msg = None
+        async for kind, payload in _stream_llm_turn(llm, messages):
+            if kind == "token":
+                yield ("token", payload)
             else:
+                final_msg = payload
 
-                tool_start = (
-                    time.perf_counter()
-                )
+        messages.append(final_msg)
 
-                try:
+        if not final_msg.tool_calls:
+            for e in events:
+                yield (e["type"], e)
+            return
 
-                    tool_result = (
-                        await selected_tool.ainvoke(
-                            tool_args
-                        )
-                    )
+        for call in final_msg.tool_calls:
+            tool_fn = tools_by_name.get(call["name"])
+            if not tool_fn:
+                output = f"[unknown tool: {call['name']}]"
+            else:
+                output = await tool_fn.ainvoke(call["args"])
+            messages.append(ToolMessage(content=str(output), tool_call_id=call["id"]))
 
-                except Exception as exc:
-
-                    # print(
-                    #     f"[TOOL ERROR] "
-                    #     f"{tool_name}: "
-                    #     f"{exc}"
-                    # )
-
-                    tool_result = (
-                        f"Tool '{tool_name}' "
-                        f"failed: {str(exc)}"
-                    )
-
-                tool_time = (
-                    time.perf_counter()
-                    - tool_start
-                )
-
-            # -------------------------------------------------
-            # Tool timing
-            # -------------------------------------------------
-
-            print(
-                f"[LATENCY] "
-                f"Tool '{tool_name}': "
-                f"{tool_time:.3f}s"
-            )
-
-            # -------------------------------------------------
-            # Add tool result to conversation
-            # -------------------------------------------------
-
-            messages.append(
-                ToolMessage(
-                    content=str(
-                        tool_result
-                    ),
-                    tool_call_id=tool_call_id,
-                    name=tool_name,
-                )
-            )
-
-        # -----------------------------------------------------
-        # End of tool iteration
-        # -----------------------------------------------------
-
-        # print(
-        #     f"[LATENCY] "
-        #     f"Tool iteration total: "
-        #     f"{time.perf_counter() - iteration_start:.3f}s"
-        # )
-
-        # print(
-        #     "[DEBUG] Tool results added. "
-        #     "Calling LLM again..."
-        # )
-
-    # =========================================================
-    # MAX TOOL ITERATIONS REACHED
-    # =========================================================
-
-    total_time = (
-        time.perf_counter()
-        - request_start
-    )
-
-    # print(
-    #     f"[WARNING] "
-    #     f"Maximum tool iterations "
-    #     f"({MAX_TOOL_ITERATIONS}) reached."
-    # )
-
-    # print(
-    #     f"[LATENCY] "
-    #     f"TOTAL REQUEST: "
-    #     f"{total_time:.3f}s"
-    # )
-
+    # Safety net: model kept calling tools past the iteration budget.
     yield (
         "token",
-        "I’m sorry, but I couldn't complete that request."
+        "I wasn't able to pull that together cleanly — could you rephrase "
+        "or ask about one thing at a time?",
     )
+
 
 async def run_chat_collect(request: ChatRequest, caller: Caller):
     """Consumes the stream once, splitting it into (text, navigations, comparisons)."""

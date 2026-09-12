@@ -24,10 +24,22 @@ The Content Moderation page, at `/content-moderation`.
 The Payments page, at `/payments`.
 
 **Is there a real events-management feature in the admin dashboard?**
-There's an Events page in the admin dashboard UI (`/events`), but as of
-now it only holds local placeholder data in the frontend — it isn't
-wired to a real backend endpoint. Don't describe it as tracking real,
-persisted event data; if asked, say it's UI that's still in progress.
+The Events page (`/events`) now calls a real API layer
+(`getEvents`/`createEvent`/etc., targeting `/api/events`) — but the
+Express backend has no `/api/events` route implemented yet. Visiting
+that page will fail to load data (a fetch error), not show working
+data. If an admin asks about it, say plainly that the Events page is a
+work in progress and its backend endpoint isn't built yet — don't
+describe it as either fully broken-and-ignorable or fully functional.
+
+**Are the Category Management, Content Moderation, and Analytics pages
+backed by real data?**
+No — as of now these three pages (`/category`, `/content-moderation`,
+`/analytics`) have no dedicated backend API calls; they're UI-only.
+The only admin-facing data actually backed by a real endpoint are the
+Approvals page (`/approvals`) and the dashboard stats (`/`,
+`/analytics`'s headline numbers come from get_admin_dashboard_stats,
+not the analytics page's own charts).
 
 **Where do I edit my own admin profile?**
 The Edit Profile page, at `/edit`.

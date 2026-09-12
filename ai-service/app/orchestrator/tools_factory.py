@@ -273,7 +273,7 @@ def build_tools(caller: Caller, events: list | None = None) -> list:
 
         tools += [get_my_team_profile, get_my_team_vehicles, get_my_team_members]
 
-    if token and role == "VENDOR":
+    if token and role == "vendor":
 
         @tool
         async def get_my_vendor_profile() -> str:
