@@ -1,5 +1,29 @@
 # Scylla AI Assistant — service
 
+## Deploying to Render (or similar): pin the Python version
+
+Render (and some other PaaS platforms) can default to whatever the
+newest available Python is — at time of writing that's 3.14, which is
+too new to have a prebuilt wheel for `pydantic-core==2.27.2`. Pip then
+tries to compile it from Rust source, which fails on Render because
+its build sandbox has a read-only cargo cache (`maturin failed ...
+Read-only file system`). This isn't a bug in the app — Python 3.12 (what
+this project is built and tested against, including every test run
+during development) has prebuilt wheels for everything here and
+installs cleanly.
+
+Two files are included to pin it: `.python-version` and `runtime.txt`
+(both set to `3.12.7`). Different platforms read different ones, and
+I can't verify from here which one Render's build step actually honors
+for a subdirectory service — if the build still picks 3.14 after
+adding these files, set it explicitly instead:
+
+- Render dashboard → your service → **Environment** → add
+  `PYTHON_VERSION` = `3.12.7` → trigger a manual redeploy.
+
+Whichever mechanism actually takes effect, the fix is the same: force
+3.12.x instead of letting the platform auto-select the newest Python.
+
 ## Latest fixes: admin-only knowledge segregation + richer page context
 
 - **Two-tier knowledge base** (`app/knowledge/docs/` public,
