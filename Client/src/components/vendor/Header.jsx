@@ -11,24 +11,47 @@ const Header = ({ currentPath }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log('Logout clicked');
+    localStorage.removeItem("token");
+    setVendor(null);
     setIsDropdownOpen(false);
+    navigate("/vendor/login", { replace: true });
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    // No JWT = no vendor access
+    if (!token) {
+      navigate("/vendor/login", { replace: true });
+      return;
+    }
+
     const vendorData = async () => {
       try {
         setLoading(true);
+
         const res = await getVendorProfile();
+
         setVendor(res.data);
       } catch (err) {
-        console.log(err.message);
+        console.log("Vendor authentication failed:", err);
+
+        // Invalid / expired JWT
+        if (
+          err.response?.status === 401 ||
+          err.response?.status === 403
+        ) {
+          localStorage.removeItem("token");
+          navigate("/vendor/login", { replace: true });
+          return;
+        }
       } finally {
         setLoading(false);
       }
     };
+
     vendorData();
-  }, []);
+  }, [navigate]);
 
   // Always render the header shell — even before the vendor profile has
   // loaded, or if it fails to load — so navigation never disappears.
