@@ -1,5 +1,23 @@
 # Scylla AI Assistant — service
 
+## Regression fix: navigate_to / compare_* silently stopped executing
+
+The previous round's fix for "a good answer gets wiped out by a late
+error" (below) over-corrected: it stopped the orchestrator from making
+a second LLM call once real text had streamed in a turn, but it also
+accidentally skipped EXECUTING any tool_call attached to that same
+turn — including navigate_to and compare_teams/compare_vendors. Since
+models very naturally narrate an action in the same turn as calling the
+tool ("Sure, taking you there!" + a navigate_to call), this silently
+dropped the actual navigation/comparison for team, vendor, and admin
+callers alike — it was an orchestrator bug, not a per-role permissions
+one, so it affected everyone the same way. Fixed: tool_calls attached
+to a turn are now always executed for their side effects, regardless
+of whether text also streamed in that turn; only the decision to make
+a SECOND LLM call still depends on whether real text already streamed.
+Locked in with a test that reproduces the exact "narrate + navigate_to
+in one turn" pattern and asserts the navigate event actually fires.
+
 ## Security fix: private pages were navigable by unauthenticated guests
 
 `navigate_to`'s route whitelist previously distinguished only "admin vs

@@ -262,23 +262,19 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
 
         messages.append(final_msg)
 
-        if turn_kind == "done_text":
-            # Real text was already streamed live to the user this turn.
-            # Treat it as the final answer even if the model's message
-            # ALSO happens to carry tool_calls (some providers legitimately
-            # emit both content and a tool call in the same turn) — looping
-            # back for another LLM round after the user has already seen
-            # what looks like a complete answer is confusing UX at best,
-            # and at worst risks a later failure wiping out content that
-            # already streamed successfully (the exact bug this guards
-            # against: a good answer followed by a late error that the
-            # frontend then had to treat as a total failure).
-            for e in events:
-                yield (e["type"], e)
-            return
-
-        # turn_kind == "tool_calls": no content was streamed this turn at
-        # all, so it's safe to go execute them and loop for a real answer.
+        # Execute any tool_calls attached to THIS turn regardless of
+        # whether real text also streamed in the same turn — a
+        # navigate_to/compare_* call needs to actually run to populate its
+        # side-channel event (events list below), even when the model
+        # narrates the action in the same turn as calling the tool (e.g.
+        # "Sure, taking you there!" + a navigate_to call — a common,
+        # natural pattern). Skipping tool execution just because text was
+        # also present was a real regression: it silently dropped every
+        # navigate_to/compare_* call whenever the model phrased it that
+        # way, which is exactly why "take me to my vehicles" stopped
+        # actually navigating anywhere for logged-in team/vendor/admin
+        # callers alike — role-independent, since it was an orchestrator
+        # bug, not a permissions one.
         for call in final_msg.tool_calls:
             tool_fn = tools_by_name.get(call["name"])
             if not tool_fn:
@@ -286,6 +282,21 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
             else:
                 output = await tool_fn.ainvoke(call["args"])
             messages.append(ToolMessage(content=str(output), tool_call_id=call["id"]))
+
+        if turn_kind == "done_text":
+            # Real text was already streamed live to the user this turn —
+            # any of its tool_calls were just executed above for their
+            # side effects. What we DON'T do is go back to the LLM for a
+            # SECOND round after that: the user already has a complete-
+            # looking answer, and looping back risks a later failure
+            # wiping it out (the original bug this guarded against).
+            for e in events:
+                yield (e["type"], e)
+            return
+
+        # turn_kind == "tool_calls": no content was streamed this turn at
+        # all, so loop continues to get a real text answer next round
+        # (the tools were already executed above, in the shared block).
 
     # Safety net: model kept calling tools past the iteration budget.
     yield (

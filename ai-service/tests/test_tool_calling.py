@@ -45,34 +45,54 @@ async def test_first_turn_forces_a_tool_call(make_scripted_llm):
 
 
 @pytest.mark.asyncio
-async def test_mixed_content_and_tool_calls_in_one_turn_still_stops_after_streaming_text(make_scripted_llm):
+async def test_mixed_content_and_tool_calls_stops_after_one_llm_round_but_still_executes_the_tool(make_scripted_llm):
     """
-    Regression test: some providers can legitimately emit a message that
-    has BOTH real text content AND tool_calls in the same turn. Once
-    that text has already streamed live to the user, the orchestrator
-    must NOT go back for another LLM round just because the accumulated
-    message also happens to carry tool_calls — doing so previously risked
-    a later failure wiping out content that had already streamed
-    successfully. Only ONE LLM turn should occur here, not two.
+    Regression test (two-part — this bug has bitten twice now):
+
+    1. Some providers legitimately emit a message with BOTH real text
+       content AND a tool_call in the same turn (e.g. "Sure, taking you
+       there!" + a navigate_to call). Once text has streamed live, the
+       orchestrator must NOT make a SECOND LLM call just because the
+       message also carries tool_calls — that risked a later failure
+       wiping out content already shown (fixed once).
+    2. But that fix then over-corrected into a NEW bug: it skipped
+       EXECUTING the tool_call entirely whenever text was also present —
+       silently dropping every navigate_to/compare_* call whenever the
+       model phrased it this way, which is why "take me to my vehicles"
+       stopped actually navigating anywhere. The tool must still run for
+       its side effect (the navigate event below), even though we don't
+       make a second LLM call afterward.
     """
     mixed_turn = [
-        AIMessageChunk(content="Here's what I found: "),
+        AIMessageChunk(content="Sure, taking you there! "),
         AIMessageChunk(
             content="",
-            tool_call_chunks=[{"name": "list_teams", "args": "{}", "id": "call_1", "index": 0}],
+            tool_call_chunks=[
+                {"name": "navigate_to", "args": "", "id": "call_1", "index": 0}
+            ],
+        ),
+        AIMessageChunk(
+            content="",
+            tool_call_chunks=[
+                {"name": None, "args": '{"destination_key": "teams_directory"}', "id": None, "index": 0}
+            ],
         ),
     ]
-    # If the bug were present, the orchestrator would call astream a SECOND
-    # time (to execute the dangling tool_call and get a "final" answer).
-    # Only ONE scripted turn is provided — a second call would raise
-    # IndexError from ScriptedLLM, failing this test loudly.
+    # Only ONE scripted turn is provided — if the orchestrator wrongly
+    # made a second LLM call, ScriptedLLM raises IndexError, failing
+    # this test loudly (covers regression #1).
     llm = make_scripted_llm([mixed_turn])
 
     with patch("app.orchestrator.chain.get_llm", return_value=llm):
-        req = ChatRequest(message="tell me about the teams")
+        req = ChatRequest(message="take me to the teams page")
         events = [e async for e in chain.run_chat_stream(req, ANON_CALLER)]
 
-    assert _tokens_only(events) == ["Here's what I found: "]
+    assert _tokens_only(events) == ["Sure, taking you there! "]
+
+    # Covers regression #2: the tool must have actually run.
+    nav_events = [payload for kind, payload in events if kind == "navigate"]
+    assert len(nav_events) == 1
+    assert nav_events[0]["route"] == "/teams-directory"
     assert llm._call_index == 1  # confirms we did NOT loop back for a second turn
 
 
