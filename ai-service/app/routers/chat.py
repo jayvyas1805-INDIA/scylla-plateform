@@ -1,4 +1,5 @@
 import json
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
@@ -7,6 +8,8 @@ from app.orchestrator.chain import run_chat_collect, run_chat_stream
 from app.rate_limit import limiter
 from app.schemas import ChatRequest, ChatResponse
 from app.security import Caller, get_caller
+
+logger = logging.getLogger("scylla_ai.chat")
 
 router = APIRouter(prefix="/api/assistant", tags=["assistant"])
 
@@ -22,7 +25,10 @@ async def send_message(
         # Config errors (e.g. missing API key) — safe message, no internals leaked
         raise HTTPException(status_code=503, detail="Assistant is not configured yet.") from exc
     except Exception:
-        # Never leak provider errors/stack traces to the client
+        # Never leak provider errors/stack traces to the CLIENT — but log
+        # the real exception server-side, or a real failure here is
+        # completely undiagnosable from the generic message alone.
+        logger.exception("Unhandled error in /message for role=%s", caller.role)
         raise HTTPException(status_code=502, detail="Assistant is temporarily unavailable.")
 
     return ChatResponse(reply=reply, role_used=caller.role, actions=navigations, comparisons=comparisons)
@@ -49,8 +55,17 @@ async def send_message_stream(
                     # without guessing from content shape.
                     yield f"event: {kind}\ndata: {json.dumps(content)}\n\n"
         except RuntimeError:
+            logger.warning("Assistant not configured (role=%s)", caller.role)
             yield "data: [error] Assistant is not configured yet.\n\n"
         except Exception:
+            # Same principle as above: safe message to the client, real
+            # exception (including whether it happened before or after
+            # some text had already streamed) logged server-side.
+            logger.exception(
+                "Unhandled error in /message/stream for role=%s, message=%r",
+                caller.role,
+                payload.message,
+            )
             yield "data: [error] Assistant is temporarily unavailable.\n\n"
         finally:
             yield "event: done\ndata: \n\n"
