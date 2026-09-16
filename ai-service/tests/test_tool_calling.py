@@ -45,6 +45,38 @@ async def test_first_turn_forces_a_tool_call(make_scripted_llm):
 
 
 @pytest.mark.asyncio
+async def test_mixed_content_and_tool_calls_in_one_turn_still_stops_after_streaming_text(make_scripted_llm):
+    """
+    Regression test: some providers can legitimately emit a message that
+    has BOTH real text content AND tool_calls in the same turn. Once
+    that text has already streamed live to the user, the orchestrator
+    must NOT go back for another LLM round just because the accumulated
+    message also happens to carry tool_calls — doing so previously risked
+    a later failure wiping out content that had already streamed
+    successfully. Only ONE LLM turn should occur here, not two.
+    """
+    mixed_turn = [
+        AIMessageChunk(content="Here's what I found: "),
+        AIMessageChunk(
+            content="",
+            tool_call_chunks=[{"name": "list_teams", "args": "{}", "id": "call_1", "index": 0}],
+        ),
+    ]
+    # If the bug were present, the orchestrator would call astream a SECOND
+    # time (to execute the dangling tool_call and get a "final" answer).
+    # Only ONE scripted turn is provided — a second call would raise
+    # IndexError from ScriptedLLM, failing this test loudly.
+    llm = make_scripted_llm([mixed_turn])
+
+    with patch("app.orchestrator.chain.get_llm", return_value=llm):
+        req = ChatRequest(message="tell me about the teams")
+        events = [e async for e in chain.run_chat_stream(req, ANON_CALLER)]
+
+    assert _tokens_only(events) == ["Here's what I found: "]
+    assert llm._call_index == 1  # confirms we did NOT loop back for a second turn
+
+
+@pytest.mark.asyncio
 async def test_pure_text_turn_streams_tokens_live(make_scripted_llm):
     llm = make_scripted_llm([_text_turn(["Scylla ", "is ", "a ", "platform."])])
 

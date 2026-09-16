@@ -98,8 +98,9 @@ export default function ChatWidget() {
     setInput("");
     setIsLoading(true);
 
-    // Placeholder bubble that gets filled in token-by-token.
     let assistantIndex;
+    let receivedAny = false;
+
     setMessages((prev) => {
       assistantIndex = prev.length;
       return [...prev, { role: "assistant", content: "" }];
@@ -110,7 +111,6 @@ export default function ChatWidget() {
         .slice(-12)
         .map(({ role, content }) => ({ role, content }));
 
-      let receivedAny = false;
       let pendingRoute = null;
 
       await streamAssistantMessage(trimmed, historyForApi, pageContext, {
@@ -147,11 +147,20 @@ export default function ChatWidget() {
         setTimeout(() => navigate(pendingRoute), 600);
       }
     } catch (err) {
-      // Remove the empty placeholder bubble on failure.
-      setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
+      // A failure here can happen AFTER real content already streamed
+      // successfully into this bubble (e.g. a late error on a trailing
+      // step). Only remove the bubble if it's still genuinely empty —
+      // destroying an answer the user already saw arrive, just because
+      // something failed afterward, is worse than leaving a partial
+      // answer visible.
+      if (!receivedAny) {
+        setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
+      }
 
       const status = err?.response?.status;
-      let friendly = "Something went wrong. Please try again in a moment.";
+      let friendly = receivedAny
+        ? "That answer may be incomplete — something interrupted the response."
+        : "Something went wrong. Please try again in a moment.";
       if (status === 401 || status === 403) {
         friendly = "Please log in to ask about that.";
       } else if (status === 429) {

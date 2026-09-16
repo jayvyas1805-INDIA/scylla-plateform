@@ -10,6 +10,26 @@ const SUGGESTED_QUESTIONS = [
   "How does team approval work?",
 ];
 
+// Keys here must match app/orchestrator/chain.py's _PAGE_CONTEXT_HINTS
+// table on the backend. Unmapped admin routes (e.g. /edit) still send
+// their raw route so the backend's generic fallback note kicks in.
+const ADMIN_ROUTE_CONTEXT = {
+  "/": "admin_dashboard",
+  "/approvals": "admin_approvals",
+  "/analytics": "admin_analytics",
+  "/payments": "admin_payments",
+  "/category": "admin_category_management",
+  "/content-moderation": "admin_content_moderation",
+};
+
+function derivePageContext(pathname) {
+  return {
+    route: pathname,
+    entity_type: ADMIN_ROUTE_CONTEXT[pathname] || null,
+    entity_id: null,
+  };
+}
+
 function ComparisonCard({ comparison }) {
   const { a, b } = comparison;
   const keys = Object.keys(a).filter((k) => k !== "name");
@@ -65,7 +85,7 @@ export default function ChatWidget() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const pageContext = { route: location.pathname, entity_type: null, entity_id: null };
+  const pageContext = derivePageContext(location.pathname);
 
   async function handleSend(text, { silent = false } = {}) {
     const trimmed = text.trim();
@@ -80,6 +100,8 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     let assistantIndex;
+    let receivedAny = false;
+
     setMessages((prev) => {
       assistantIndex = prev.length;
       return [...prev, { role: "assistant", content: "" }];
@@ -90,7 +112,6 @@ export default function ChatWidget() {
         .slice(-12)
         .map(({ role, content }) => ({ role, content }));
 
-      let receivedAny = false;
       let pendingRoute = null;
 
       await streamAssistantMessage(trimmed, historyForApi, pageContext, {
@@ -123,11 +144,19 @@ export default function ChatWidget() {
         setTimeout(() => navigate(pendingRoute), 600);
       }
     } catch (err) {
-      setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
+      // A failure here can happen AFTER real content already streamed
+      // successfully into this bubble. Only remove the bubble if it's
+      // still genuinely empty — never destroy an answer the admin
+      // already saw arrive just because something failed afterward.
+      if (!receivedAny) {
+        setMessages((prev) => prev.filter((_, i) => i !== assistantIndex));
+      }
 
       if (!silent) {
         const status = err?.response?.status;
-        let friendly = "Something went wrong. Please try again in a moment.";
+        let friendly = receivedAny
+          ? "That answer may be incomplete — something interrupted the response."
+          : "Something went wrong. Please try again in a moment.";
         if (status === 401 || status === 403) {
           friendly = "Please log in as admin to ask about that.";
         } else if (status === 429) {

@@ -1,5 +1,28 @@
 # Scylla AI Assistant — service
 
+## Security fix: private pages were navigable by unauthenticated guests
+
+`navigate_to`'s route whitelist previously distinguished only "admin vs
+everyone else" — meaning an unauthenticated guest could ask the
+assistant to take them to `/vendor/quote`, `/team/messages`, or any
+other private team/vendor-portal page, and it would comply, since
+nothing checked whether the caller was actually logged in as that
+team/vendor at all. Fixed: routes are now split into PUBLIC / TEAM-only
+/ VENDOR-only / ADMIN-only tiers in `app/orchestrator/navigation.py`,
+each only ever returned to a caller whose REAL authenticated role
+matches. Locked in with regression tests asserting a guest gets zero
+private-page keys at all, and a vendor can't reach team pages or
+vice versa.
+
+Also fixed in this round: a real robustness gap where a turn that
+streamed real text to the user, but whose message ALSO happened to
+carry tool_calls (some providers do this), would incorrectly loop back
+for another LLM round — risking a late failure that wiped out content
+already shown. Once real text streams, that turn is now always treated
+as final. Both `ChatWidget`s were also hardened so that even in a
+genuine failure, an answer that already streamed successfully is never
+deleted — only a still-empty placeholder bubble gets removed.
+
 ## Deploying to Render (or similar): pin the Python version
 
 Render (and some other PaaS platforms) can default to whatever the

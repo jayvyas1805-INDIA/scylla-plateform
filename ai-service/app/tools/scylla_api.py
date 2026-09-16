@@ -40,7 +40,23 @@ def _headers(token: str | None) -> dict:
 
 
 async def _get(path: str, token: str | None = None, params: dict | None = None):
-    resp = await _get_client().get(path, headers=_headers(token), params=params)
+    try:
+        resp = await _get_client().get(path, headers=_headers(token), params=params)
+    except httpx.RequestError as exc:
+        # Connection refused, timeout, DNS failure, etc. — happens BEFORE
+        # any HTTP response exists, so it's a different exception class
+        # entirely from the status-code checks below. Previously this
+        # propagated uncaught all the way to the router's generic
+        # "Assistant is temporarily unavailable" 502 — which the model
+        # never got a chance to respond to gracefully, since it wasn't a
+        # tool result the model could react to, just a crash. Converting
+        # it to the same ScyllaApiError type the tools already know how
+        # to handle means the model can still give a normal, polite reply
+        # ("that information isn't available right now") instead of the
+        # whole turn failing.
+        raise ScyllaApiError(
+            503, "Scylla's backend isn't reachable right now."
+        ) from exc
 
     if resp.status_code == 401 or resp.status_code == 403:
         raise ScyllaApiError(resp.status_code, "You don't have access to that information.")

@@ -247,19 +247,33 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
     for i in range(MAX_TOOL_ITERATIONS):
         llm = llm_forced if i == 0 else llm_auto
         final_msg = None
+        turn_kind = None
         async for kind, payload in _stream_llm_turn(llm, messages):
             if kind == "token":
                 yield ("token", payload)
             else:
+                turn_kind = kind
                 final_msg = payload
 
         messages.append(final_msg)
 
-        if not final_msg.tool_calls:
+        if turn_kind == "done_text":
+            # Real text was already streamed live to the user this turn.
+            # Treat it as the final answer even if the model's message
+            # ALSO happens to carry tool_calls (some providers legitimately
+            # emit both content and a tool call in the same turn) — looping
+            # back for another LLM round after the user has already seen
+            # what looks like a complete answer is confusing UX at best,
+            # and at worst risks a later failure wiping out content that
+            # already streamed successfully (the exact bug this guards
+            # against: a good answer followed by a late error that the
+            # frontend then had to treat as a total failure).
             for e in events:
                 yield (e["type"], e)
             return
 
+        # turn_kind == "tool_calls": no content was streamed this turn at
+        # all, so it's safe to go execute them and loop for a real answer.
         for call in final_msg.tool_calls:
             tool_fn = tools_by_name.get(call["name"])
             if not tool_fn:
