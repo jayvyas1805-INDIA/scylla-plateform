@@ -1,4 +1,5 @@
 const Event = require("../models/Event");
+const Moderation = require("../models/Moderation");
 const Team = require("../models/Team");
 const Vendor = require("../models/Vendor");
 const Member = require("../models/Member");
@@ -62,6 +63,18 @@ exports.submitEvent = async (req, res) => {
       organizerId: user?._id || null,
       submittedByName: user?.name || user?.businessName || organizer,
       submittedByEmail: user?.email || contactEmail,
+    });
+
+    await Moderation.create({
+      contentType: "EVENT",
+      contentId: event._id.toString(),
+      title: event.name,
+      submittedBy: {
+        id: event.organizerId,
+        name: event.submittedByName,
+        email: event.submittedByEmail,
+      },
+      status: "PENDING_REVIEW",
     });
 
     res.status(201).json({

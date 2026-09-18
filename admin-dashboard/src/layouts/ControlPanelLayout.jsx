@@ -18,7 +18,10 @@ export default function ControlPanelLayout({ title, children, isSidebarOpen }) {
         transform transition-all duration-500 ease-in-out 
         ${isSidebarOpen ? "translate-x-0 opacity-100" : "-translate-x-64 opacity-0"}`}
       >
-        <Sidebar />
+        <Sidebar
+          open={isSidebarOpen}
+          onClose={() => document.dispatchEvent(new CustomEvent("closeSidebar"))}
+        />
       </div>
 
       {/* ================= BACKDROP (MOBILE) ================= */}

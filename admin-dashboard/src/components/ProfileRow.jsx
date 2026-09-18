@@ -62,7 +62,7 @@ export default function ProfileRow({
     <div
       style={{ "--tw-neon": glowColor }}
       className={clsx(
-  "relative group flex items-center justify-between p-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02]",
+  "relative group flex items-start justify-between gap-3 p-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02]",
   color,
   hoverBg
 )}
@@ -75,9 +75,9 @@ export default function ProfileRow({
       ></div>
 
       {/* Foreground content */}
-      <div className="flex items-center gap-3 relative z-10">
+      <div className="relative z-10 flex min-w-0 flex-1 items-start gap-3">
         {/* Number box */}
-        <div className="w-8 h-8 flex items-center justify-center rounded-md bg-white/10">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/10">
           <span
             className={clsx(
               "font-bold text-sm transition-colors duration-300",
@@ -90,7 +90,7 @@ export default function ProfileRow({
         </div>
 
         {/* Icon box */}
-        <div className="w-8 h-8 flex items-center justify-center rounded-md bg-white/10">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/10">
           <Icon
             className={clsx(
               "w-5 h-5 transition-colors duration-300",
@@ -101,10 +101,10 @@ export default function ProfileRow({
         </div>
 
         {/* Name + type */}
-        <div>
+        <div className="min-w-0 flex-1">
           <div
             className={clsx(
-              "text-white font-semibold transition-colors duration-300",
+              "break-words text-white font-semibold transition-colors duration-300",
               hoverColor
             )}
           >
@@ -115,7 +115,7 @@ export default function ProfileRow({
       </div>
 
       {/* Views */}
-      <div className="flex flex-col items-end relative z-10">
+      <div className="relative z-10 shrink-0 pt-1 text-right">
         <span
           className={clsx(
             "font-semibold text-sm transition-colors duration-300",

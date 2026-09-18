@@ -89,3 +89,18 @@ export const deleteAdminMedia = (mediaId) =>
 export const updateAdminMedia = async (mediaId, data) => {
   return api.put(`/api/admin/media/${mediaId}`,data);
 }
+
+export const fetchModerationQueue = (params = {}) =>
+  api.get("/api/admin/moderation", { params });
+
+export const fetchModerationItem = (contentType, contentId) =>
+  api.get(`/api/admin/moderation/${contentType}/${contentId}`);
+
+export const approveModerationItem = (contentType, contentId) =>
+  api.post(`/api/admin/moderation/${contentType}/${contentId}/approve`);
+
+export const rejectModerationItem = (contentType, contentId, reason) =>
+  api.post(`/api/admin/moderation/${contentType}/${contentId}/reject`, { reason });
+
+export const requestModerationChanges = (contentType, contentId, feedback) =>
+  api.post(`/api/admin/moderation/${contentType}/${contentId}/request-changes`, { feedback });

@@ -97,7 +97,7 @@ export default function Dashboard() {
       </div>
 
       {/* ================= PAYMENT CHART ================= */}
-      <div className="bg-black p-6 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+      <div className="hidden md:block bg-black p-6 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.03)]">
         <PaymentChart paymentStats={stats?.payments} />
       </div>
 
@@ -126,7 +126,7 @@ export default function Dashboard() {
             Most Viewed Profiles
           </h2>
 
-          {(stats?.mostViewedProfiles || []).map((profile, index) => (
+          {(stats?.mostViewedProfiles || []).slice(0, 5).map((profile, index) => (
             <ProfileRow
               key={`${profile.kind}-${profile.name}`}
               index={index + 1}

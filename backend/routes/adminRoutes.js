@@ -89,20 +89,20 @@ router.patch(
 
 // content moderation
 // add content moderation
-router.post("/content", adminCtrl.upload,adminCtrl.saveAdminContent);
+router.post("/content", adminAuth, adminCtrl.upload, adminCtrl.saveAdminContent);
 
 // fetch content moderation
-router.get("/content",adminCtrl.getAdminContent);
+router.get("/content", adminAuth, adminCtrl.getAdminContent);
 
 
 // approve the media at admin level
-router.patch("/media/:mediaId/approve",adminCtrl.approveMedia);
+router.patch("/media/:mediaId/approve", adminAuth, adminCtrl.approveMedia);
 
 // delete the media
-router.delete("/media/:mediaId",adminCtrl.deleteAdminMedia);
+router.delete("/media/:mediaId", adminAuth, adminCtrl.deleteAdminMedia);
 
 // update the media
-router.put("/media/:mediaId", adminCtrl.updateAdminMedia);
+router.put("/media/:mediaId", adminAuth, adminCtrl.updateAdminMedia);
 
 
 

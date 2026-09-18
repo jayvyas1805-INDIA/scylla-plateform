@@ -21,7 +21,9 @@ import ChatWidget from "./components/assistant/ChatWidget";
 import { useLocation } from "react-router-dom";
 
 export default function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    () => typeof window !== "undefined" && window.innerWidth >= 768
+  );
   const location = useLocation();
 
   useEffect(() => {
