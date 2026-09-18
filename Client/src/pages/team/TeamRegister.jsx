@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import Navbar from "../../components/navbar/Navbar";
 
 
 
@@ -155,7 +156,9 @@ function TeamRegister() {
 
 
   return (
-    <div className="team-register-page">
+    <>
+      <Navbar />
+      <div className="team-register-page">
       <div className="team-register-glow"></div>
 
       <div className="team-register-card">
@@ -371,7 +374,8 @@ function TeamRegister() {
         </p>
 
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

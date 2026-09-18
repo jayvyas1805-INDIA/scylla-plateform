@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { vendorRegister } from "../../api/vendor.api";
 import "./VendorRegister.css";
+import Navbar from "../../components/navbar/Navbar";
 
 function VendorRegister() {
 
@@ -67,7 +68,9 @@ function VendorRegister() {
 
 
   return (
-    <div className="vendor-register-page">
+    <>
+      <Navbar />
+      <div className="vendor-register-page">
       <div className="vendor-register-glow"></div>
 
       <div className="vendor-register-card">
@@ -286,7 +289,8 @@ function VendorRegister() {
           </span>
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

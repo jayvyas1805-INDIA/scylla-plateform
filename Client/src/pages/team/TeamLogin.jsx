@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { teamLogin } from "../../api/team.api";
 import "./TeamLogin.css";
+import Navbar from "../../components/navbar/Navbar";
 
 function TeamLogin() {
   const [role, setRole] = useState("team");
@@ -42,7 +43,9 @@ const handleLogin = async () => {
 };
 
   return (
-    <div className="login-page">
+    <>
+      <Navbar />
+      <div className="login-page">
       {/* LEFT VISUAL */}
       <div className="login-visual">
         <img
@@ -145,7 +148,8 @@ const handleLogin = async () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

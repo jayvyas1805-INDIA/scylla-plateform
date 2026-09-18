@@ -104,3 +104,18 @@ export const rejectModerationItem = (contentType, contentId, reason) =>
 
 export const requestModerationChanges = (contentType, contentId, feedback) =>
   api.post(`/api/admin/moderation/${contentType}/${contentId}/request-changes`, { feedback });
+
+export const fetchCategories = (group) =>
+  api.get("/api/admin/categories", { params: group ? { group } : {} });
+
+export const createCategory = (data) =>
+  api.post("/api/admin/categories", data);
+
+export const updateCategory = (id, data) =>
+  api.patch(`/api/admin/categories/${id}`, data);
+
+export const deleteCategory = (id) =>
+  api.delete(`/api/admin/categories/${id}`);
+
+export const fetchAdminAnalytics = (range = "all") =>
+  api.get("/api/admin/analytics", { params: { range } });

@@ -5,6 +5,7 @@ const authUser = require("../middlewares/authUser");
 const adminAuth = require("../middlewares/adminAuth");
 const adminCtrl = require("../controllers/adminController");
 const { getAdminDashboardStats } = require("../controllers/adminDashboardController");
+const { getAdminAnalytics } = require("../controllers/analyticsController");
 
 
 
@@ -76,6 +77,7 @@ router.delete("/team/:id", adminAuth, adminCtrl.deleteTeamByAdmin);
 // Admin Dashboard
 // router.get("/dashboard", authUser(["admin"]), getAdminDashboardStats);
 router.get("/dashboard",adminAuth, getAdminDashboardStats);
+router.get("/analytics", adminAuth, getAdminAnalytics);
 
 
 // verification docs

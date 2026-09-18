@@ -57,6 +57,7 @@ app.use("/api/public/events", require("./routes/publicEventRoutes"));
 
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/admin/moderation", require("./routes/moderationRoutes"));
+app.use("/api/admin/categories", require("./routes/categoryRoutes"));
 
 // app.use("/api/products", require("./routes/productRoutes"));
 

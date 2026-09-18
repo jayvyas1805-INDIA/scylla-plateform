@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { vendorLogin } from "../../api/vendor.api"
 import "./VendorLogin.css";
+import Navbar from "../../components/navbar/Navbar";
 
 function VendorLogin() {
   const [role, setRole] = useState("vendor");
@@ -41,7 +42,9 @@ function VendorLogin() {
   };
 
   return (
-    <div className="login-page">
+    <>
+      <Navbar />
+      <div className="login-page">
       {/* LEFT VISUAL */}
       <div className="login-visual">
 
@@ -148,7 +151,8 @@ function VendorLogin() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

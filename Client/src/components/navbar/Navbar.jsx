@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../../styles/landing-theme.css";
 import "./Navbar.css";
@@ -15,6 +15,12 @@ const NAV_LINKS = [
 
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  useEffect(() => {
+    setShowMobileMenu(false);
+    setShowDropdown(false);
+  }, []);
 
   return (
     <nav className="lp-navbar">
@@ -24,13 +30,26 @@ function Navbar() {
           <span className="lp-logo-text">SCYLLA</span>
         </NavLink>
 
-        <ul className="lp-nav-menu">
+        <button
+          type="button"
+          className="lp-mobile-menu-button"
+          aria-label={showMobileMenu ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={showMobileMenu}
+          onClick={() => setShowMobileMenu((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <ul className={`lp-nav-menu ${showMobileMenu ? "open" : ""}`}>
           {NAV_LINKS.map((link) => (
             <li className="lp-nav-item" key={link.to}>
               <NavLink
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) => `lp-nav-link ${isActive ? "active" : ""}`}
+                onClick={() => setShowMobileMenu(false)}
               >
                 {link.label}
               </NavLink>
@@ -41,7 +60,10 @@ function Navbar() {
         <div className="lp-signin-container">
           <button
             className="lp-btn lp-btn-primary lp-signin-button"
-            onClick={() => setShowDropdown((prev) => !prev)}
+            onClick={() => {
+              setShowDropdown((prev) => !prev);
+              setShowMobileMenu(false);
+            }}
           >
             Sign In
           </button>
