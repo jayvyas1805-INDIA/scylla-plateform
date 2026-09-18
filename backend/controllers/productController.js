@@ -80,7 +80,7 @@ exports.getMyProducts = async (req, res) => {
   try {
     const products = await Product.find({
       createdBy: req.user._id,
-      creatorModel: "Vendor",
+      creatorModel: req.user.role === "VENDOR" ? "Vendor" : "Team",
     })
       .sort({ createdAt: -1 })
       .lean();

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import AddProductForm from "./AddProductForm";
-import { getMarketPlace, addProduct } from '../../api/product.api';
+import { getMarketPlace, getMyProduct, addProduct } from '../../api/product.api';
 import { openConversation } from '../../api/chat.api';
 // import '../../index.css'
 // import '../../../globle.css'
@@ -20,6 +20,9 @@ const ProductListing = () => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const [products, setProducts] = useState([]);
+  const [publicProducts, setPublicProducts] = useState([]);
+  const [myProducts, setMyProducts] = useState([]);
+  const [catalogView, setCatalogView] = useState('all');
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -86,6 +89,11 @@ const ProductListing = () => {
 
         <div className="product-card-content" style={{ margin: "5px" }}>
           <h3>{product.name}</h3>
+          {product.status && (
+            <span className={`product-status product-status-${product.status}`}>
+              {product.status}
+            </span>
+          )}
           {product.model && <p>Model: {product.model}</p>}
           {product.brand && <p>Brand: {product.brand}</p>}
           {product.year && <p>Year: {product.year}</p>}
@@ -123,11 +131,29 @@ const ProductListing = () => {
   useEffect(() => {
     const fetchMarketplace = async () => {
       try {
-        const res = await getMarketPlace();
-
-        if (res.data.success) {
-          setProducts(res.data.data); // 👈 important
-        }
+        const [marketplaceResponse, ownResponse] = await Promise.all([
+          getMarketPlace(),
+          getMyProduct(),
+        ]);
+        const formatOwnProduct = (product) => ({
+          _id: product._id,
+          name: product.title,
+          category: product.category,
+          description: product.description,
+          price: product.price,
+          image: product.images?.[0] || "",
+          condition: product.condition || "new",
+          tags: product.tags || [],
+          status: product.status,
+          brand: product.brand,
+          model: product.model,
+          year: product.year,
+        });
+        const ownProducts = (ownResponse.data.products || []).map(formatOwnProduct);
+        const allProducts = marketplaceResponse.data.data || [];
+        setPublicProducts(allProducts);
+        setMyProducts(ownProducts);
+        setProducts(allProducts);
       } catch (err) {
         console.error("Marketplace fetch error", err);
       }
@@ -156,7 +182,10 @@ const ProductListing = () => {
           tags: newProduct.tags || []
         };
 
-        setProducts(prev => [formattedProduct, ...prev]);
+        setMyProducts((prev) => [formattedProduct, ...prev]);
+        if (catalogView === 'mine') {
+          setProducts((prev) => [formattedProduct, ...prev]);
+        }
         setShowAddForm(false);
       }
     } catch (error) {
@@ -165,6 +194,11 @@ const ProductListing = () => {
     }
   };
 
+
+  const selectCatalogView = (view) => {
+    setCatalogView(view);
+    setProducts(view === 'mine' ? myProducts : publicProducts);
+  };
 
   return (
     <div className="product-listing-page">
@@ -180,6 +214,15 @@ const ProductListing = () => {
               style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '40px', cursor: 'pointer', marginRight: '10px' }}
             >
               + Add New / Old Product
+            </button>
+          </div>
+
+          <div className="catalog-view-tabs">
+            <button className={catalogView === 'all' ? 'active' : ''} onClick={() => selectCatalogView('all')}>
+              All Products
+            </button>
+            <button className={catalogView === 'mine' ? 'active' : ''} onClick={() => selectCatalogView('mine')}>
+              My Products
             </button>
           </div>
 

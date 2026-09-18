@@ -9,7 +9,7 @@ const NavBar = () => {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <nav className="navbar-container" style={{borderBottom:"1px solid rgba(0, 128, 255, 0.15)"}}>
+    <nav className="navbar-container" style={{borderBottom:"1px solid rgba(0, 128, 255, 0.15)",backgroundColor:"rgba(10, 15, 35, 0.902)"}}>
       <div className="navbar-content">
         {/* Desktop Navigation */}
         <div className="navbar-links navbar-links-centered">
