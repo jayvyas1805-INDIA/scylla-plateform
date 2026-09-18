@@ -1,7 +1,22 @@
 import { useState, useEffect } from "react";
 
 export default function EventModal({ event, onClose, onSave }) {
-  const [form, setForm] = useState({ name: "", date: "", location: "", description: "" });
+  const [form, setForm] = useState({
+    name: "",
+    eventType: "other",
+    date: "",
+    startTime: "",
+    endTime: "",
+    location: "",
+    venue: "",
+    organizer: "",
+    contactEmail: "",
+    registrationUrl: "",
+    capacity: "",
+    entryFee: "",
+    requirements: "",
+    description: "",
+  });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -9,8 +24,18 @@ export default function EventModal({ event, onClose, onSave }) {
     if (event) {
       setForm({
         name: event.name || "",
+        eventType: event.eventType || "other",
         date: event.date || "",
+        startTime: event.startTime || "",
+        endTime: event.endTime || "",
         location: event.location || "",
+        venue: event.venue || "",
+        organizer: event.organizer || "",
+        contactEmail: event.contactEmail || "",
+        registrationUrl: event.registrationUrl || "",
+        capacity: event.capacity ?? "",
+        entryFee: event.entryFee || "",
+        requirements: event.requirements || "",
         description: event.description || "",
       });
     }
@@ -41,10 +66,10 @@ export default function EventModal({ event, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-admin-surface-raised border border-admin-border rounded-xl p-6 w-[400px]">
+      <div className="bg-admin-surface-raised border border-admin-border rounded-xl p-6 w-[min(720px,calc(100%-2rem))] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold text-admin-accent mb-4">Edit Event</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:col-span-2">
             <input
               type="text"
               placeholder="Event Name"
@@ -56,6 +81,16 @@ export default function EventModal({ event, onClose, onSave }) {
               <p className="text-red-400 text-xs mt-1">{errors.name}</p>
             )}
           </div>
+
+          <select value={form.eventType} onChange={(e) => setForm({ ...form, eventType: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border">
+            <option value="race">Race / Competition</option>
+            <option value="meetup">Car Meet / Community Meetup</option>
+            <option value="track-day">Track Day</option>
+            <option value="show">Auto Show / Expo</option>
+            <option value="charity">Charity Drive</option>
+            <option value="workshop">Workshop / Training</option>
+            <option value="other">Other</option>
+          </select>
 
           <div>
             <input
@@ -69,6 +104,9 @@ export default function EventModal({ event, onClose, onSave }) {
             )}
           </div>
 
+          <input type="time" value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" aria-label="Start time" />
+          <input type="time" value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" aria-label="End time" />
+
           <div>
             <input
               type="text"
@@ -78,6 +116,14 @@ export default function EventModal({ event, onClose, onSave }) {
               className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border"
             />
           </div>
+
+          <input type="text" placeholder="Venue or track name" value={form.venue} onChange={(e) => setForm({ ...form, venue: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <input type="text" placeholder="Organizer" value={form.organizer} onChange={(e) => setForm({ ...form, organizer: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <input type="email" placeholder="Contact email" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <input type="url" placeholder="Registration link (optional)" value={form.registrationUrl} onChange={(e) => setForm({ ...form, registrationUrl: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <input type="number" min="0" placeholder="Participant capacity" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <input type="text" placeholder="Entry fee (e.g. Free or $25)" value={form.entryFee} onChange={(e) => setForm({ ...form, entryFee: e.target.value })} className="w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
+          <textarea placeholder="Requirements (license, helmet, vehicle class, etc.)" value={form.requirements} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={2} className="md:col-span-2 w-full bg-admin-bg text-admin-text px-4 py-2 rounded-lg outline-none border border-admin-border" />
 
           <div>
             <textarea
@@ -89,7 +135,7 @@ export default function EventModal({ event, onClose, onSave }) {
             />
           </div>
 
-          <div className="flex justify-end gap-3 mt-4">
+          <div className="md:col-span-2 flex justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}

@@ -12,6 +12,7 @@ import TeamsDirectory from "../pages/landing/team/TeamsDirectory";
 import PublicTeamProfile from "../pages/landing/team/PublicTeamProfile";
 import VendorsDirectory from "../pages/landing/vendor/VendorsDirectory";
 import PublicVendorProfile from "../pages/landing/vendor/PublicVendorProfile";
+import Events from "../pages/landing/events/Events";
 
 import TeamLayout from "../layouts/TeamLayout";
 
@@ -74,6 +75,7 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/contact" element={<ContactUs />} />
+      <Route path="/events" element={<Events />} />
       <Route path="/motorsport-policy" element={<MotorsportPolicy />} />
       <Route path="/teams" element={<TeamLanding/>} />
       <Route path="/teams-directory" element={<TeamsDirectory/>} />

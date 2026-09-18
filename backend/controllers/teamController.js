@@ -11,6 +11,8 @@ const Member = require("../models/Member")
 const Vehicle = require("../models/Vehicle")
 const Admin = require("../models/Admin")
 const SocialLink = require("../models/SocialLink");
+const crypto = require("crypto");
+const RegistrationInvitation = require("../models/RegistrationInvitation");
 
 
 
@@ -56,6 +58,15 @@ exports.registerTeam = async (req, res) => {
       contactNo,
       category
     } = req.body;
+    const inviteToken = req.body.inviteToken;
+    let invitation = null;
+    if (inviteToken) {
+      const tokenHash = crypto.createHash("sha256").update(inviteToken).digest("hex");
+      invitation = await RegistrationInvitation.findOne({ tokenHash, type: "team", status: "pending" });
+      if (!invitation || invitation.email !== email.trim().toLowerCase()) {
+        return res.status(400).json({ error: "This Team invitation is invalid or does not match the email" });
+      }
+    }
 
     let location;
 
@@ -119,6 +130,12 @@ exports.registerTeam = async (req, res) => {
 
 
     await team.save();
+    if (invitation) {
+      invitation.status = "converted";
+      invitation.convertedAt = new Date();
+      invitation.accountId = team._id;
+      await invitation.save();
+    }
 
     res.status(201).json({
       success: true,
@@ -755,7 +772,11 @@ exports.getPublicTeamProfile = async (req, res) => {
   try {
     const { teamId } = req.params;
 
-    const team = await Team.findOne({ _id: teamId, status: "approved" }).lean();
+    const team = await Team.findOneAndUpdate(
+      { _id: teamId, status: "approved" },
+      { $inc: { profileViews: 1 } },
+      { new: true }
+    ).lean();
     if (!team) return res.status(404).json({ error: "Team not found" });
 
     const galleryUrls = (team.gallery || []).map(file =>

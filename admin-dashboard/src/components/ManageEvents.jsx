@@ -86,7 +86,8 @@ export default function ManageEvents({ events, onView, onEdit, onDelete, onAppro
         <div className="col-span-3">Event Name</div>
         <div className="col-span-2">Date</div>
         <div className="col-span-2">Status</div>
-        <div className="col-span-4">Actions</div>
+        <div className="col-span-1">Registered</div>
+        <div className="col-span-3">Actions</div>
       </div>
 
       {/* Table rows */}
@@ -123,8 +124,12 @@ export default function ManageEvents({ events, onView, onEdit, onDelete, onAppro
                 <StatusBadge status={event.status} />
               </div>
 
+              <div className="md:col-span-1 text-admin-muted text-sm">
+                {event.participantCount || 0}{event.capacity ? ` / ${event.capacity}` : ""}
+              </div>
+
               {/* Actions */}
-              <div className="md:col-span-4 flex flex-wrap gap-2">
+              <div className="md:col-span-3 flex flex-wrap gap-2">
                 {event.status === "pending" && (
                   <>
                     <button

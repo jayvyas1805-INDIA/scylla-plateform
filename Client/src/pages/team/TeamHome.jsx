@@ -4,6 +4,7 @@ import TeamNavbar from "../../components/team/TeamNavbar";
 import { getTeamProfile, getTeamActivities } from "../../api/team.api";
 import { getMember } from "../../api/member.api";
 import { getVehicle } from "../../api/vehicle.api";
+import EventSubmissionModal from "../../components/navbar/EventSubmissionModal";
 import { useNavigate } from "react-router-dom"
 
 
@@ -34,6 +35,7 @@ function TeamHome() {
   const [error, setError] = useState(null);
   const [activities, setActivities] = useState([]);
   const [showAll, setShowAll] = useState(false);
+  const [showEventSubmission, setShowEventSubmission] = useState(false);
 
 
   useEffect(() => {
@@ -139,6 +141,7 @@ function TeamHome() {
     SPONSOR_ADDED: { icon: <FaMoneyBillWave />, color: "green" },
     ACHIVEMENT_ADDED: { icon: <FaTrophy />, color: "gold" },
     GALLERY_UPDATED: { icon: <FaPlus />, color: "orange" },
+    EVENT_REGISTERED: { icon: <FaCalendarAlt />, color: "green" },
   };
 
   const timeAgo = (date) => {
@@ -206,8 +209,11 @@ function TeamHome() {
             </div>
           </div>
 
-          <button className="primary-action" >
+          <button className="primary-action" onClick={() => navigate("/events")}>
             Register <FaArrowRight />
+          </button>
+          <button className="primary-action" onClick={() => setShowEventSubmission(true)}>
+            Organize Event <FaCalendarAlt />
           </button>
         </div>
 
@@ -353,6 +359,13 @@ function TeamHome() {
           </strong>
         </span>
       </footer>
+
+      {showEventSubmission && (
+        <EventSubmissionModal
+          onClose={() => setShowEventSubmission(false)}
+          onSubmitted={() => setShowEventSubmission(false)}
+        />
+      )}
 
     </div>
   );

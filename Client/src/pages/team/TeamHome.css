@@ -72,6 +72,10 @@
   cursor: pointer;
 }
 
+.primary-action + .primary-action {
+  margin-left: 12px;
+}
+
 /* STATS */
 .team-stats {
   margin: 40px 0;

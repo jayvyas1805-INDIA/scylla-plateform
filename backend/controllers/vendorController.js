@@ -5,6 +5,8 @@ const multer = require("multer");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const path = require("path")
+const crypto = require("crypto");
+const RegistrationInvitation = require("../models/RegistrationInvitation");
 // const CloudinaryStorage  = require("multer-storage-cloudinary");
 
 // Multer temp storage
@@ -40,7 +42,17 @@ exports.registerVendor = async (req, res) => {
       password,
       description,
       location,
+      inviteToken,
     } = req.body;
+
+    let invitation = null;
+    if (inviteToken) {
+      const tokenHash = crypto.createHash("sha256").update(inviteToken).digest("hex");
+      invitation = await RegistrationInvitation.findOne({ tokenHash, type: "vendor", status: "pending" });
+      if (!invitation || invitation.email !== email.trim().toLowerCase()) {
+        return res.status(400).json({ error: "This Vendor invitation is invalid or does not match the email" });
+      }
+    }
 
     if (!req.files?.logo || !req.files?.banner || !req.files?.verificationDoc) {
       return res.status(400).json({ error: "All files are required" });
@@ -83,6 +95,12 @@ exports.registerVendor = async (req, res) => {
     });
 
     await vendor.save();
+    if (invitation) {
+      invitation.status = "converted";
+      invitation.convertedAt = new Date();
+      invitation.accountId = vendor._id;
+      await invitation.save();
+    }
 
     res.status(201).json({
       success: true,

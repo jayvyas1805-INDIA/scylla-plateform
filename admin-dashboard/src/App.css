@@ -1,3 +1,63 @@
+.admin-account-create-modal {
+  background: #0b1526 !important;
+  border-color: rgba(56, 189, 248, 0.28) !important;
+}
+
+.admin-account-create-input {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 5px;
+  background: #101a2b !important;
+  color: #f8fafc !important;
+  color-scheme: dark;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: none;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.admin-account-create-input:focus {
+  border-color: rgba(56, 189, 248, 0.75);
+  background: #14233a !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.12);
+}
+
+.admin-account-create-input::placeholder {
+  color: rgba(203, 213, 225, 0.52);
+}
+
+.approval-hover-value {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.approval-hover-tooltip {
+  position: fixed;
+  z-index: 9999;
+  width: max-content;
+  max-width: min(360px, 70vw);
+  padding: 8px 11px;
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  border-radius: 8px;
+  background: #081426;
+  color: #f8fafc;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 14px rgba(56, 189, 248, 0.12);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+
+.approval-hover-tooltip--below {
+  transform: none;
+}
 /* ROOT FIX */
 #root {
   width: 100%;

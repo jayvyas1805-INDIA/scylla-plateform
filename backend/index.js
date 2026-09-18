@@ -52,6 +52,9 @@ app.use("/api/teams", require("./routes/teamRoutes"));
 
 app.use("/api/vendors", require("./routes/vendorRoutes"));
 
+app.use("/api/events", require("./routes/eventRoutes"));
+app.use("/api/public/events", require("./routes/publicEventRoutes"));
+
 app.use("/api/admin", require("./routes/adminRoutes"));
 
 // app.use("/api/products", require("./routes/productRoutes"));

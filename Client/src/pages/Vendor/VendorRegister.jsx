@@ -8,6 +8,7 @@ function VendorRegister() {
 
   // ✅ ADD NAVIGATE
   const navigate = useNavigate();
+  const inviteToken = new URLSearchParams(window.location.search).get("invite");
   const [formData, setFormData] = useState({
     businessName: "",
     category: "",
@@ -44,6 +45,7 @@ function VendorRegister() {
       Object.keys(formData).forEach((key) => {
         data.append(key, formData[key]);
       });
+      if (inviteToken) data.append("inviteToken", inviteToken);
 
       // append files
       data.append("logo", logo);

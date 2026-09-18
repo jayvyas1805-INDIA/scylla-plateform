@@ -37,18 +37,18 @@ function useCountUp(target, duration = 1500) {
   return count
 }
 
-export default function PaymentChart() {
+export default function PaymentChart({ paymentStats }) {
   const chartRef = useRef(null)
   const [range, setRange] = useState("Monthly")
 
-  const collected = useCountUp(2400000)
-  const pending = useCountUp(180000)
-  const refunded = useCountUp(45000)
+  const collected = useCountUp(paymentStats?.collected || 0)
+  const pending = useCountUp(paymentStats?.pending || 0)
+  const refunded = useCountUp(paymentStats?.refunded || 0)
 
   // Base datasets
-  const monthly = [120000,150000,180000,200000,220000,260000,280000,300000,320000,340000,360000,400000]
-  const quarterly = [450000,600000,750000,900000]
-  const yearly = [2400000]
+  const monthly = paymentStats?.monthly || Array(12).fill(0)
+  const quarterly = paymentStats?.quarterly || Array(4).fill(0)
+  const yearly = paymentStats?.yearly || [0]
 
   const labels = range === "Monthly"
     ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -89,14 +89,15 @@ export default function PaymentChart() {
     const last = arr[arr.length - 1]
     const prev = arr[arr.length - 2]
     const diff = last - prev
+    if (prev === 0) return "No previous data"
     const percent = ((diff / prev) * 100).toFixed(1)
     return `${diff >= 0 ? "+" : ""}${percent}% vs last ${range === "Monthly" ? "month" : range === "Quarterly" ? "quarter" : "year"}`
   }
 
   const trends = {
     collected: calcTrend(fullValues),
-    pending: "-5% vs last period",   // replace with real pending dataset if available
-    refunded: "+2% vs last period",  // replace with real refunded dataset if available
+    pending: "No payment data",
+    refunded: "No payment data",
   }
 
   // Gradient line stroke
@@ -275,22 +276,23 @@ export default function PaymentChart() {
             Key Insights
           </h3>
           <ul className="text-[11px] sm:text-xs text-white/70 list-disc list-inside space-y-0.5">
-            <li>
+            {fullValues.some((value) => value > 0) && <li>
               Highest in {labels[fullValues.indexOf(Math.max(...fullValues))]}:
               ₹{Math.max(...fullValues) / 1000}K
-            </li>
-            <li>
+            </li>}
+            {fullValues.some((value) => value > 0) && <li>
               Lowest in {labels[fullValues.indexOf(Math.min(...fullValues))]}:
               ₹{Math.min(...fullValues) / 1000}K
-            </li>
-            <li>
+            </li>}
+            {fullValues.some((value) => value > 0) && <li>
               Growth: +
               {(
                 ((fullValues.at(-1) - fullValues[0]) / fullValues[0]) *
                 100
               ).toFixed(1)}
               %
-            </li>
+            </li>}
+            {!fullValues.some((value) => value > 0) && <li>Payment tracking is not configured yet.</li>}
           </ul>
         </div>
       </div>

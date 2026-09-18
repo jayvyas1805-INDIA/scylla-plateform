@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import ApprovalHoverValue from "./ApprovalHoverValue";
 
 function StatusBadge({ status }) {
   const styles = {
@@ -20,13 +21,13 @@ function StatusBadge({ status }) {
 
 export default function TeamTable({ teams, onApprove, onReject, onView, categoryBadge }) {
   return (
-    <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-hidden">
+    <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-visible">
       {/* Table header (desktop only) */}
       <div className="hidden md:grid grid-cols-12 px-4 sm:px-6 py-3 bg-admin-surface-raised border-b border-gray-800 text-sm text-admin-accent/90 font-medium drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]">
         <div className="col-span-1">Term</div>
         <div className="col-span-2">Team</div>
         <div className="col-span-2">Category</div>
-        <div className="col-span-3">University</div>
+        <div className="col-span-3">Email</div>
         <div className="col-span-2">Submitted</div>
         <div className="col-span-1">Status</div>
         <div className="col-span-1">Actions</div>
@@ -36,40 +37,40 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
       {teams.map((team) => (
         <div
           key={team.id}
-          className="grid md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
+          className="grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
         >
           {/* Term */}
           <div className="md:col-span-1 flex justify-center md:justify-start">
             <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-sm font-semibold text-white">
-              {team.term}
+              {team.logo ? <img src={team.logo} alt={`${team.team} logo`} className="w-full h-full rounded-full object-cover" /> : team.term}
             </div>
           </div>
 
           {/* Team */}
-          <div className="md:col-span-2 text-white font-medium">
+          <ApprovalHoverValue value={team.team} className="md:col-span-2 min-w-0 text-white font-medium truncate">
             <span className="md:hidden text-admin-accent font-semibold">Team: </span>
             {team.team}
-          </div>
+          </ApprovalHoverValue>
 
           {/* Category */}
-          <div className="md:col-span-2">
+          <ApprovalHoverValue value={team.category} className="md:col-span-2 min-w-0 truncate">
             <span className="md:hidden text-admin-accent font-semibold">Category: </span>
             <span className={`px-3 py-1 text-xs rounded-full ${categoryBadge(team.category)}`}>
               {team.category}
             </span>
-          </div>
+          </ApprovalHoverValue>
 
           {/* University */}
-          <div className="md:col-span-3 text-white/80">
-            <span className="md:hidden text-admin-accent font-semibold">University: </span>
+          <ApprovalHoverValue value={`Full email: ${team.university}`} className="md:col-span-3 min-w-0 text-white/80 truncate">
+            <span className="md:hidden text-admin-accent font-semibold">Email: </span>
             {team.university}
-          </div>
+          </ApprovalHoverValue>
 
           {/* Submitted */}
-          <div className="md:col-span-2 text-white/70 text-sm">
+          <ApprovalHoverValue value={team.submitted} className="md:col-span-2 min-w-0 text-white/70 text-sm truncate">
             <span className="md:hidden text-admin-accent font-semibold">Submitted: </span>
             {team.submitted}
-          </div>
+          </ApprovalHoverValue>
 
           {/* Status */}
           <div className="md:col-span-1">

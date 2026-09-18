@@ -12,10 +12,12 @@ export default function ProfileRow({
   glowColor,
 }) {
   const [count, setCount] = useState(0);
+  const viewValue = views ?? 0;
+  const viewText = String(viewValue);
 
   useEffect(() => {
     let start = 0;
-    const end = parseFloat(views.toString().replace(/[^0-9.]/g, ""));
+    const end = parseFloat(viewText.replace(/[^0-9.]/g, ""));
     if (isNaN(end)) return;
 
     const duration = 1500;
@@ -33,11 +35,11 @@ export default function ProfileRow({
     }
 
     requestAnimationFrame(step);
-  }, [views]);
+  }, [viewText]);
 
-  const formattedViews = views.includes("K")
-    ? `${count}${views.replace(/[^A-Za-z]/g, "")}`
-    : count;
+  const formattedViews = viewText.includes("K")
+    ? `${count}${viewText.replace(/[^A-Za-z]/g, "")}`
+    : count.toLocaleString();
 
   const hoverBgMap = {
     "bg-admin-accent/10": "hover:bg-admin-accent/20",

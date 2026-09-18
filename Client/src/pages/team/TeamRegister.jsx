@@ -13,6 +13,7 @@ function TeamRegister() {
 
   // ✅ ADD NAVIGATE
   const navigate = useNavigate();
+  const inviteToken = new URLSearchParams(window.location.search).get("invite");
 
   const [location, setLocation] = useState({
     address: "",
@@ -88,6 +89,7 @@ function TeamRegister() {
       Object.keys(formData).forEach((key) => {
         data.append(key, formData[key]);
       });
+      if (inviteToken) data.append("inviteToken", inviteToken);
 
       // append files
       data.append("logo", logo);

@@ -4,6 +4,7 @@ import VendorTable from "../components/VendorTable";
 import TeamTable from "../components/TeamTable";
 import DocumentTable from "../components/DocumentTable";
 import DocumentPreview from "../components/DocumentPreview.jsx";
+import AdminAccountCreateModal from "../components/AdminAccountCreateModal";
 import {
   getPendingUsers,
   approveTeam,
@@ -12,6 +13,8 @@ import {
   rejectVendor,
   fetchVerificationDoc,
   updateVerificationStatus,
+  getRegistrationInvitations,
+  deleteRegistrationInvitation,
 } from "../api/admin.api";
 
 const VENDOR_KEY = "scylla.vendors";
@@ -108,6 +111,8 @@ export default function Approvals() {
   const [activeTab, setActiveTab] = useState("Vendor Verification");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [createType, setCreateType] = useState(null);
+  const [invitations, setInvitations] = useState([]);
 
   /* ---------------- FILTER ---------------- */
   // const filterData = (data) =>
@@ -228,6 +233,7 @@ export default function Approvals() {
 
   useEffect(() => {
     loadPendingUsers();
+    loadInvitations();
   }, []);
 
   useEffect(() => {
@@ -253,6 +259,7 @@ export default function Approvals() {
             .slice(0, 2)
             .join(""),
           category: team.category,
+          logo: team.logo || "",
           university: team.email,
           submitted: team.createdAt.slice(0, 10),
           status: capitalize(team.status),
@@ -267,6 +274,7 @@ export default function Approvals() {
           category: vendor.category,
           gst: vendor.gstNumber,
           location: vendor.location,
+          logo: vendor.logo || "",
           submitted: vendor.createdAt.slice(0, 10),
           status: capitalize(vendor.status),
         }))
@@ -274,6 +282,25 @@ export default function Approvals() {
 
     } catch (err) {
       console.error("Failed to fetch pending users", err);
+    }
+  };
+
+  const loadInvitations = async () => {
+    try {
+      const { data } = await getRegistrationInvitations();
+      setInvitations(data.invitations || []);
+    } catch (err) {
+      console.error("Failed to fetch invitation history", err);
+    }
+  };
+
+  const handleDeleteInvitation = async (id) => {
+    if (!window.confirm("Delete this invitation record?")) return;
+    try {
+      await deleteRegistrationInvitation(id);
+      setInvitations((current) => current.filter((invitation) => invitation._id !== id));
+    } catch (err) {
+      console.error("Failed to delete invitation", err);
     }
   };
 
@@ -356,7 +383,12 @@ const loadVerificationDocuments = async () => {
             </div>
 
             {/* Filters */}
-            <div className="flex justify-end items-center space-x-2 mb-4">
+            <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
+              <div className="flex gap-2">
+                {activeTab === "Vendor Verification" && <button onClick={() => setCreateType("vendor")} className="bg-admin-accent text-black px-4 py-2 rounded-xl text-sm font-semibold">+ Send Vendor Invitation</button>}
+                {activeTab === "Team Verification" && <button onClick={() => setCreateType("team")} className="bg-admin-accent text-black px-4 py-2 rounded-xl text-sm font-semibold">+ Send Team Invitation</button>}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
               <input
                 className="bg-slate-700 w-full sm:w-64 md:w-80 lg:w-96 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-admin-accent"
                 placeholder="Search..."
@@ -386,6 +418,7 @@ const loadVerificationDocuments = async () => {
               >
                 Reset
               </button>
+              </div>
             </div>
           </div>
 
@@ -418,6 +451,36 @@ const loadVerificationDocuments = async () => {
               onReject={handleRejectDocument}
             />
           )}
+
+          <section className="mt-6 bg-admin-bg border border-admin-border rounded-2xl overflow-hidden">
+            <div className="px-6 py-4 bg-admin-surface-raised border-b border-admin-border flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-semibold text-admin-text">Invitation history</h2>
+                <p className="text-xs text-admin-muted mt-1">Track emails sent from this Approval page.</p>
+              </div>
+              <span className="text-sm text-admin-accent">{invitations.filter((invitation) => activeTab === "Vendor Verification" ? invitation.type === "vendor" : activeTab === "Team Verification" ? invitation.type === "team" : true).length} sent</span>
+            </div>
+            {invitations.filter((invitation) => activeTab === "Vendor Verification" ? invitation.type === "vendor" : activeTab === "Team Verification" ? invitation.type === "team" : true).length ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="text-admin-muted border-b border-admin-border">
+                    <tr><th className="px-6 py-3">Name</th><th className="px-6 py-3">Email</th><th className="px-6 py-3">Type</th><th className="px-6 py-3">Sent</th><th className="px-6 py-3">Status</th></tr>
+                  </thead>
+                  <tbody>
+                    {invitations.filter((invitation) => activeTab === "Vendor Verification" ? invitation.type === "vendor" : activeTab === "Team Verification" ? invitation.type === "team" : true).map((invitation) => (
+                      <tr key={invitation._id} className="border-b border-admin-border hover:bg-white/[0.03]">
+                        <td className="px-6 py-3 text-admin-text">{invitation.name}</td>
+                        <td className="px-6 py-3 text-admin-accent">{invitation.email}</td>
+                        <td className="px-6 py-3 text-admin-text capitalize">{invitation.type}</td>
+                        <td className="px-6 py-3 text-admin-muted">{new Date(invitation.createdAt).toLocaleString()}</td>
+                        <td className="px-6 py-3"><div className="flex items-center gap-3"><span className={`px-2 py-1 rounded-full text-xs capitalize ${invitation.status === "converted" ? "bg-green-500/15 text-green-400" : "bg-yellow-500/15 text-yellow-400"}`}>{invitation.status}</span><button onClick={() => handleDeleteInvitation(invitation._id)} className="text-xs text-red-400 hover:text-red-300">Delete</button></div></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : <p className="px-6 py-5 text-sm text-admin-muted">No invitations sent yet.</p>}
+          </section>
 
           {/* Document Preview */}
           <DocumentPreview
@@ -517,6 +580,14 @@ const loadVerificationDocuments = async () => {
                 </button>
               </div>
             </div>
+          )}
+
+          {createType && (
+            <AdminAccountCreateModal
+              type={createType}
+              onClose={() => setCreateType(null)}
+              onCreated={() => { loadPendingUsers(); loadInvitations(); }}
+            />
           )}
 
         </div>

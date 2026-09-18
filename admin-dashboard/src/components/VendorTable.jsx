@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import ApprovalHoverValue from "./ApprovalHoverValue";
 
 function StatusBadge({ status }) {
   const styles = {
@@ -20,7 +21,7 @@ function StatusBadge({ status }) {
 
 export default function VendorTable({ vendors, onApprove, onReject, onView }) {
   return (
-    <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-hidden">
+    <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-visible">
       {/* Table header */}
       <div className="hidden md:grid grid-cols-12 px-4 sm:px-6 py-3 bg-admin-surface-raised border-b border-gray-800 text-sm text-admin-accent/90 font-medium drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]">
         <div className="col-span-3">Vendor</div>
@@ -37,42 +38,42 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
         {vendors.map((v) => (
           <div
             key={v.id}
-            className="grid md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
+            className="grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
           >
             {/* Vendor */}
-            <div className="md:col-span-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="md:col-span-3 min-w-0 flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-sm font-semibold text-white">
-                {v.initials}
+                {v.logo ? <img src={v.logo} alt={`${v.name} logo`} className="w-full h-full rounded-full object-cover" /> : (v.initials || v.name?.slice(0, 2).toUpperCase())}
               </div>
               <div className="leading-tight flex flex-col">
-                <div className="text-white font-medium">{v.name}</div>
-                <div className="text-white/60 text-xs">{v.email}</div>
+                <ApprovalHoverValue value={v.name} className="text-white font-medium truncate" />
+                <ApprovalHoverValue value={v.email} className="text-white/60 text-xs truncate" />
               </div>
             </div>
 
             {/* Category */}
-            <div className="md:col-span-2 text-white/80">
+            <ApprovalHoverValue value={v.category} className="md:col-span-2 min-w-0 text-white/80 truncate">
               <span className="md:hidden font-semibold text-admin-accent">Category: </span>
               {v.category}
-            </div>
+            </ApprovalHoverValue>
 
             {/* GST */}
-            <div className="md:col-span-2 text-white/80 break-words">
+            <ApprovalHoverValue value={v.gst} className="md:col-span-2 min-w-0 text-white/80 truncate">
               <span className="md:hidden font-semibold text-admin-accent">GST/Tax ID: </span>
               {v.gst}
-            </div>
+            </ApprovalHoverValue>
 
             {/* Location */}
-            <div className="md:col-span-2 text-white/80">
+            <ApprovalHoverValue value={v.location} className="md:col-span-2 min-w-0 text-white/80 truncate">
               <span className="md:hidden font-semibold text-admin-accent">Location: </span>
               {v.location}
-            </div>
+            </ApprovalHoverValue>
 
             {/* Submitted */}
-            <div className="md:col-span-1 text-white/70 text-sm">
+            <ApprovalHoverValue value={v.submitted} className="md:col-span-1 min-w-0 text-white/70 text-sm truncate">
               <span className="md:hidden font-semibold text-admin-accent">Submitted: </span>
               {v.submitted}
-            </div>
+            </ApprovalHoverValue>
 
             {/* Status */}
             <div className="md:col-span-1">

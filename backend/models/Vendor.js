@@ -3,16 +3,16 @@ const mongoose = require("mongoose");
 const vendorSchema = new mongoose.Schema(
   {
     businessName: { type: String, required: true },
-    logo: { type: String, required: true },
-    banner: { type: String, required: true },
+    logo: { type: String, default: "" },
+    banner: { type: String, default: "" },
 
     category: {
       type: String,
-      required: true
+      default: "General"
     },
 
-    gstNumber: { type: String, required: true },
-    verificationDoc: { type: String, required: true },
+    gstNumber: { type: String, default: "Not provided" },
+    verificationDoc: { type: String, default: "" },
 
 
     email: {

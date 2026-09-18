@@ -19,6 +19,8 @@ router.put("/update",adminAuth, adminCtrl.updateAdmin);
 // Pending Users (Teams + Vendors) 
 // router.get("/pending", adminAuth, adminCtrl.getPendingUsers);
 router.get("/pending",adminAuth, adminCtrl.getPendingUsers);
+router.get("/registration-invitations", adminAuth, adminCtrl.getRegistrationInvitations);
+router.delete("/registration-invitations/:id", adminAuth, adminCtrl.deleteRegistrationInvitation);
 
 // Approve / Reject Teams 
 // router.put("/team/:id/approve", adminAuth, adminCtrl.approveTeam);

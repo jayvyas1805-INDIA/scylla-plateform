@@ -17,9 +17,26 @@ import {
 const mapEvent = (e) => ({
   id: e._id,
   name: e.name,
+  eventType: e.eventType || "other",
   date: e.date ? e.date.slice(0, 10) : "",
+  startTime: e.startTime || "",
+  endTime: e.endTime || "",
   location: e.location || "",
+  venue: e.venue || "",
+  organizer: e.organizer || "",
+  contactEmail: e.contactEmail || "",
+  registrationUrl: e.registrationUrl || "",
+  capacity: e.capacity ?? "",
+  entryFee: e.entryFee || "",
+  requirements: e.requirements || "",
+  organizerType: e.organizerType || "guest",
+  submittedByName: e.submittedByName || e.organizer || "",
+  submittedByEmail: e.submittedByEmail || e.contactEmail || "",
+  registrationCount: e.registrations?.length || 0,
+  registrations: e.registrations || [],
+  participantCount: e.registrations?.length || 0,
   description: e.description || "",
+  posterUrl: e.posterUrl || "",
   status: e.status,
 });
 
@@ -66,8 +83,18 @@ export default function Events() {
     try {
       const res = await updateEvent(updatedEvent.id, {
         name: updatedEvent.name,
+        eventType: updatedEvent.eventType,
         date: updatedEvent.date,
+        startTime: updatedEvent.startTime,
+        endTime: updatedEvent.endTime,
         location: updatedEvent.location,
+        venue: updatedEvent.venue,
+        organizer: updatedEvent.organizer,
+        contactEmail: updatedEvent.contactEmail,
+        registrationUrl: updatedEvent.registrationUrl,
+        capacity: updatedEvent.capacity === "" ? null : Number(updatedEvent.capacity),
+        entryFee: updatedEvent.entryFee,
+        requirements: updatedEvent.requirements,
         description: updatedEvent.description,
       });
       const saved = mapEvent(res.data.event);
@@ -115,6 +142,12 @@ export default function Events() {
     }
   };
 
+  const guestRegistrations = events.flatMap((event) =>
+    event.registrations
+      .filter((registration) => registration.attendeeType === "guest")
+      .map((registration) => ({ ...registration, eventName: event.name, eventDate: event.date }))
+  );
+
   return (
     <div>
       {/* Header */}
@@ -146,6 +179,39 @@ export default function Events() {
           onApprove={handleApprove}
           onReject={handleReject}
         />
+      )}
+
+      {!loading && (
+        <section className="mt-6 bg-admin-bg border border-admin-border rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 bg-admin-surface-raised border-b border-admin-border flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-semibold text-admin-text">Guest registrations</h2>
+              <p className="text-xs text-admin-muted mt-1">Guest contacts available for event follow-up and marketing.</p>
+            </div>
+            <span className="text-sm text-admin-accent">{guestRegistrations.length} guests</span>
+          </div>
+          {guestRegistrations.length ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="text-admin-muted border-b border-admin-border">
+                  <tr><th className="px-6 py-3">Guest</th><th className="px-6 py-3">Email</th><th className="px-6 py-3">Mobile</th><th className="px-6 py-3">Event</th><th className="px-6 py-3">Members</th><th className="px-6 py-3">Vehicle</th></tr>
+                </thead>
+                <tbody>
+                  {guestRegistrations.map((guest) => (
+                    <tr key={`${guest.eventName}-${guest.email}`} className="border-b border-admin-border hover:bg-white/[0.03]">
+                      <td className="px-6 py-3 text-admin-text">{guest.name}</td>
+                      <td className="px-6 py-3 text-admin-accent">{guest.email}</td>
+                      <td className="px-6 py-3 text-admin-muted">{guest.phone || "-"}</td>
+                      <td className="px-6 py-3 text-admin-text">{guest.eventName}</td>
+                      <td className="px-6 py-3 text-admin-muted">{guest.memberCount || 1}</td>
+                      <td className="px-6 py-3 text-admin-muted">{guest.vehicleClass || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : <p className="px-6 py-5 text-sm text-admin-muted">No guest registrations yet.</p>}
+        </section>
       )}
 
       {/* Modals */}

@@ -7,6 +7,70 @@ const sendMail = require("../utils/mailer");
 const logTeamActivity = require("../utils/activityLogger");
 const cloudinary = require("../config/cloudinary");
 const multer = require("multer");
+const crypto = require("crypto");
+const RegistrationInvitation = require("../models/RegistrationInvitation");
+
+const createRegistrationInvitation = async (req, res, type) => {
+  const name = (type === "team" ? req.body.name : req.body.businessName)?.trim();
+  const email = req.body.email?.trim().toLowerCase();
+  if (!name || !email) return res.status(400).json({ error: "Name and email are required" });
+
+  const existingAccount = type === "team"
+    ? await Team.findOne({ email }).select("_id").lean()
+    : await Vendor.findOne({ email }).select("_id").lean();
+  if (existingAccount) return res.status(409).json({ error: `A ${type} account with this email already exists` });
+
+  const existingInvite = await RegistrationInvitation.findOne({ email, type, status: "pending" });
+  if (existingInvite) return res.status(409).json({ error: "A pending invitation already exists for this email" });
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+  const invitation = await RegistrationInvitation.create({ name, email, type, tokenHash });
+
+  const baseUrl = (process.env.DEPLOYMENT_URL || process.env.FRONTEND_URL || "http://localhost:5173")
+    .split(",")[0]
+    .replace(/\/$/, "");
+  const registerUrl = `${type === "team" ? (process.env.TEAM_REGISTER_URL || `${baseUrl}/team/register`) : (process.env.VENDOR_REGISTER_URL || `${baseUrl}/vendor/register`)}?invite=${token}`;
+  const label = type === "team" ? "Team" : "Vendor";
+  try {
+    await sendMail({
+      to: email,
+      subject: `Your Scylla Racing ${label} invitation`,
+      text: `Hello ${name},\n\nScylla Racing invites you to register as a ${label}. Complete your registration here: ${registerUrl}\n\nThis invitation is intended for ${email}.`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#172033"><h2 style="color:#0879e8">Scylla Racing ${label} invitation</h2><p>Hello ${name},</p><p>You have been invited to register as a Scylla Racing ${label}.</p><p><a href="${registerUrl}" style="display:inline-block;background:#0879e8;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none">Complete registration</a></p><p>Or copy this link: ${registerUrl}</p><p>This invitation is intended for <strong>${email}</strong>.</p></div>`,
+    });
+  } catch (mailError) {
+    await RegistrationInvitation.findByIdAndDelete(invitation._id);
+    console.error(`${label} invitation email failed:`, mailError.message);
+    return res.status(502).json({ error: "Invitation was not sent. Check the email server configuration and try again." });
+  }
+
+  res.status(201).json({ message: `${label} invitation sent`, email, registerUrl });
+};
+
+exports.getRegistrationInvitations = async (_req, res) => {
+  try {
+    const invitations = await RegistrationInvitation.find()
+      .select("name email type status createdAt convertedAt")
+      .sort({ createdAt: -1 })
+      .lean();
+    res.json({ invitations });
+  } catch (err) {
+    console.error("Failed to fetch registration invitations:", err);
+    res.status(500).json({ error: "Failed to fetch invitation history" });
+  }
+};
+
+exports.deleteRegistrationInvitation = async (req, res) => {
+  try {
+    const invitation = await RegistrationInvitation.findByIdAndDelete(req.params.id);
+    if (!invitation) return res.status(404).json({ error: "Invitation not found" });
+    res.json({ message: "Invitation deleted" });
+  } catch (err) {
+    console.error("Failed to delete registration invitation:", err);
+    res.status(500).json({ error: "Failed to delete invitation" });
+  }
+};
 
 
 exports.upload = multer({
@@ -467,6 +531,8 @@ exports.uploadVendorFilesAdmin = multer({ dest: "uploads/" }).fields([
 
 // Create Vendor (by Admin)
 exports.createVendorByAdmin = async (req, res) => {
+  return createRegistrationInvitation(req, res, "vendor");
+  /*
   try {
     const {
       businessName,
@@ -480,9 +546,11 @@ exports.createVendorByAdmin = async (req, res) => {
       status,
     } = req.body;
 
-    if (!businessName || !category || !gstNumber || !email || !password) {
+    if (!businessName || !email) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
+    const accountPassword = password || require("crypto").randomBytes(9).toString("base64url");
 
     const existing = await Vendor.findOne({ email: email.toLowerCase() });
     if (existing) {
@@ -511,24 +579,20 @@ exports.createVendorByAdmin = async (req, res) => {
       fs.unlinkSync(req.files.verificationDoc[0].path);
     }
 
-    if (!logoUrl || !bannerUrl || !docUrl) {
-      return res.status(400).json({ error: "logo, banner and verificationDoc files are required" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(accountPassword, 10);
 
     const vendor = new Vendor({
       businessName,
-      category,
-      gstNumber,
+      category: category || "General",
+      gstNumber: gstNumber || "Not provided",
       email: email.toLowerCase(),
       password: hashedPassword,
       description,
       companyDesc,
       location,
-      logo: logoUrl,
-      banner: bannerUrl,
-      verificationDoc: docUrl,
+      logo: logoUrl || "",
+      banner: bannerUrl || "",
+      verificationDoc: docUrl || "",
       // Admin-created vendors are approved by default; pass status explicitly to override.
       status: ["pending", "approved", "rejected"].includes(status) ? status : "approved",
     });
@@ -538,11 +602,20 @@ exports.createVendorByAdmin = async (req, res) => {
     const vendorObj = vendor.toObject();
     delete vendorObj.password;
 
+    const vendorLoginUrl = process.env.VENDOR_LOGIN_URL || `${(process.env.FRONTEND_URL || "http://localhost:5173").split(",")[0]}/vendor/login`;
+    sendMail({
+      to: vendor.email,
+      subject: "Your Scylla Racing vendor account is ready",
+      text: `Hello ${vendor.businessName},\n\nYour vendor account has been created by Scylla Racing admin.\nLogin: ${vendorLoginUrl}\nEmail: ${vendor.email}\nPassword: ${accountPassword}\n\nPlease sign in and update your profile after your first login.`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#172033"><h2 style="color:#0879e8">Welcome to Scylla Racing</h2><p>Hello ${vendor.businessName},</p><p>Your vendor account has been created by the Scylla Racing admin team.</p><p><strong>Login:</strong> <a href="${vendorLoginUrl}">${vendorLoginUrl}</a><br><strong>Email:</strong> ${vendor.email}<br><strong>Temporary password:</strong> ${accountPassword}</p><p>Please sign in and update your profile after your first login.</p></div>`,
+    }).catch((mailError) => console.error("Vendor onboarding email failed:", mailError.message));
+
     res.status(201).json({ message: "Vendor created successfully", vendor: vendorObj });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Failed to create vendor" });
   }
+  */
 };
 
 // Get all vendors (Admin) — every status, optional ?status= filter
@@ -597,6 +670,8 @@ exports.uploadTeamFilesAdmin = multer({ dest: "uploads/" }).fields([
 
 // Create Team (by Admin)
 exports.createTeamByAdmin = async (req, res) => {
+  return createRegistrationInvitation(req, res, "team");
+  /*
   try {
     const {
       name,
@@ -609,9 +684,11 @@ exports.createTeamByAdmin = async (req, res) => {
       status,
     } = req.body;
 
-    if (!name || !email || !contactNo || !category || !password) {
+    if (!name || !email) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
+    const accountPassword = password || require("crypto").randomBytes(9).toString("base64url");
 
     const existing = await Team.findOne({ email: email.toLowerCase() });
     if (existing) {
@@ -644,22 +721,18 @@ exports.createTeamByAdmin = async (req, res) => {
       fs.unlinkSync(req.files.verificationDoc[0].path);
     }
 
-    if (!logoUrl || !docUrl) {
-      return res.status(400).json({ error: "logo and verificationDoc files are required" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(accountPassword, 10);
 
     const team = new Team({
       name,
       tagline,
       description,
       email: email.toLowerCase(),
-      contactNo,
-      category,
+      contactNo: contactNo || "Not provided",
+      category: category || "General",
       password: hashedPassword,
-      logo: logoUrl,
-      verificationDoc: docUrl,
+      logo: logoUrl || "",
+      verificationDoc: docUrl || "",
       location,
       status: ["pending", "approved", "rejected"].includes(status) ? status : "approved",
     });
@@ -669,11 +742,20 @@ exports.createTeamByAdmin = async (req, res) => {
     const teamObj = team.toObject();
     delete teamObj.password;
 
+    const teamLoginUrl = process.env.TEAM_LOGIN_URL || `${(process.env.FRONTEND_URL || "http://localhost:5173").split(",")[0]}/team/login`;
+    sendMail({
+      to: team.email,
+      subject: "Your Scylla Racing team account is ready",
+      text: `Hello ${team.name},\n\nYour team account has been created by Scylla Racing admin.\nLogin: ${teamLoginUrl}\nEmail: ${team.email}\nPassword: ${accountPassword}\n\nPlease sign in and update your team profile after your first login.`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#172033"><h2 style="color:#0879e8">Welcome to Scylla Racing</h2><p>Hello ${team.name},</p><p>Your team account has been created by the Scylla Racing admin team.</p><p><strong>Login:</strong> <a href="${teamLoginUrl}">${teamLoginUrl}</a><br><strong>Email:</strong> ${team.email}<br><strong>Temporary password:</strong> ${accountPassword}</p><p>Please sign in and update your team profile after your first login.</p></div>`,
+    }).catch((mailError) => console.error("Team onboarding email failed:", mailError.message));
+
     res.status(201).json({ message: "Team created successfully", team: teamObj });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Failed to create team" });
   }
+  */
 };
 
 // Get all teams (Admin) — every status, optional ?status= filter

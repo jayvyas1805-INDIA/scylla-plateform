@@ -21,6 +21,17 @@ export const getDashboardStats = () =>{
 export const getPendingUsers = () =>{
   return api.get("/api/admin/pending");}
 
+export const getRegistrationInvitations = () => api.get("/api/admin/registration-invitations");
+export const deleteRegistrationInvitation = (id) => api.delete(`/api/admin/registration-invitations/${id}`);
+
+export const createAdminVendor = (data) => api.post("/api/admin/vendor", data, {
+  headers: { "Content-Type": "multipart/form-data" },
+});
+
+export const createAdminTeam = (data) => api.post("/api/admin/team", data, {
+  headers: { "Content-Type": "multipart/form-data" },
+});
+
 
 export const approveTeam = (id) => {
   return api.put(`/api/admin/team/${id}/approve`);

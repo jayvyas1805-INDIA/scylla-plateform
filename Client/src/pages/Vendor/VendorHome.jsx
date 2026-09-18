@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/vendor/Header';
 import { getVendorProfile } from "../../api/vendor.api";
 import { getMyProduct } from "../../api/product.api";
+import EventSubmissionModal from "../../components/navbar/EventSubmissionModal";
 import './VendorHome.css';
 
 const VendorHome = () => {
@@ -14,6 +15,7 @@ const VendorHome = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showEventSubmission, setShowEventSubmission] = useState(false);
 
   useEffect(() => {
     const loadVendor = async () => {
@@ -114,6 +116,18 @@ const VendorHome = () => {
                   onClick={() => navigate('/vendor/product')}
                 >
                   ➕ Add New Product / Service
+                </button>
+                <button
+                  className="vendor-btn vendor-btn-primary"
+                  onClick={() => setShowEventSubmission(true)}
+                >
+                  🏁 Organize an Event
+                </button>
+                <button
+                  className="vendor-btn vendor-btn-primary"
+                  onClick={() => navigate('/events')}
+                >
+                  📅 Register for an Event
                 </button>
               </div>
             </div>
@@ -239,6 +253,12 @@ const VendorHome = () => {
           </div>
         </footer>
       </main>
+      {showEventSubmission && (
+        <EventSubmissionModal
+          onClose={() => setShowEventSubmission(false)}
+          onSubmitted={() => setShowEventSubmission(false)}
+        />
+      )}
     </div>
   );
 };

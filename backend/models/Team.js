@@ -24,12 +24,12 @@ const teamSchema = new mongoose.Schema(
 
     logo: {
       type: String,
-      required: true // Cloudinary URL
+      default: "" // Cloudinary URL
     },
 
     verificationDoc: {
       type: String,
-      required: true // Cloudinary URL
+      default: "" // Cloudinary URL
     },
 
     email: {
@@ -99,6 +99,11 @@ const teamSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending"
+    },
+
+    profileViews: {
+      type: Number,
+      default: 0,
     },
 
     // media: [{ type: String }],

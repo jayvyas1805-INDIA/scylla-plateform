@@ -22,6 +22,30 @@
   object-fit: cover;
 }
 
+.lp-event-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #071426, #123b58 55%, #e05a33);
+}
+
+.lp-event-fallback-title {
+  max-width: 88%;
+  color: #fff;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  animation: lp-event-title-drift 5s ease-in-out infinite alternate;
+}
+
+@keyframes lp-event-title-drift {
+  from { transform: translateX(-8px) scale(0.98); opacity: 0.78; }
+  to { transform: translateX(8px) scale(1.04); opacity: 1; }
+}
+
 .lp-event-badge {
   position: absolute;
   top: 12px;
@@ -58,6 +82,15 @@
   margin-top: 12px;
 }
 
+.lp-event-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  color: var(--lp-text-muted);
+}
+
 /* Detail modal */
 .lp-event-modal-overlay {
   position: fixed;
@@ -66,8 +99,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 800;
-  padding: 20px;
+  z-index: 2000;
+  padding: 84px 20px 20px;
+  overflow-y: auto;
+  align-items: flex-start;
 }
 
 .lp-event-modal {
@@ -124,4 +159,55 @@
   color: var(--lp-text-muted);
   line-height: 1.7;
   margin: 0;
+}
+
+.lp-event-submit-modal {
+  max-width: 720px;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+}
+
+.lp-event-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.lp-event-form-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--lp-border);
+  border-radius: 8px;
+  background: var(--lp-bg);
+  color: var(--lp-text);
+  padding: 11px 12px;
+  font: inherit;
+}
+
+.lp-event-form-input:focus {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 1px;
+}
+
+.lp-event-form-wide,
+.lp-event-form-actions {
+  grid-column: 1 / -1;
+}
+
+.lp-event-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lp-event-form-error {
+  color: #ff8e8e;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 640px) {
+  .lp-event-form {
+    grid-template-columns: 1fr;
+  }
 }
