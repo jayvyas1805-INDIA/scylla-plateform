@@ -453,6 +453,271 @@ exports.deleteAdminMedia = async (req, res) => {
 };
 
 
+// ==================================================================
+// ADMIN CRUD — VENDORS (create / read / delete)
+// Approve/Reject already exist above; these add full management.
+// ==================================================================
+
+// Multer for admin-created vendor files
+exports.uploadVendorFilesAdmin = multer({ dest: "uploads/" }).fields([
+  { name: "logo", maxCount: 1 },
+  { name: "banner", maxCount: 1 },
+  { name: "verificationDoc", maxCount: 1 },
+]);
+
+// Create Vendor (by Admin)
+exports.createVendorByAdmin = async (req, res) => {
+  try {
+    const {
+      businessName,
+      category,
+      gstNumber,
+      email,
+      password,
+      description,
+      companyDesc,
+      location,
+      status,
+    } = req.body;
+
+    if (!businessName || !category || !gstNumber || !email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const existing = await Vendor.findOne({ email: email.toLowerCase() });
+    if (existing) {
+      return res.status(400).json({ error: "A vendor with this email already exists" });
+    }
+
+    let logoUrl, bannerUrl, docUrl;
+    const fs = require("fs");
+
+    if (req.files?.logo?.[0]) {
+      const up = await cloudinary.uploader.upload(req.files.logo[0].path, { folder: "vendors/logos" });
+      logoUrl = up.secure_url;
+      fs.unlinkSync(req.files.logo[0].path);
+    }
+    if (req.files?.banner?.[0]) {
+      const up = await cloudinary.uploader.upload(req.files.banner[0].path, { folder: "vendors/banners" });
+      bannerUrl = up.secure_url;
+      fs.unlinkSync(req.files.banner[0].path);
+    }
+    if (req.files?.verificationDoc?.[0]) {
+      const up = await cloudinary.uploader.upload(req.files.verificationDoc[0].path, {
+        folder: "vendors/docs",
+        resource_type: "auto",
+      });
+      docUrl = up.secure_url;
+      fs.unlinkSync(req.files.verificationDoc[0].path);
+    }
+
+    if (!logoUrl || !bannerUrl || !docUrl) {
+      return res.status(400).json({ error: "logo, banner and verificationDoc files are required" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const vendor = new Vendor({
+      businessName,
+      category,
+      gstNumber,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      description,
+      companyDesc,
+      location,
+      logo: logoUrl,
+      banner: bannerUrl,
+      verificationDoc: docUrl,
+      // Admin-created vendors are approved by default; pass status explicitly to override.
+      status: ["pending", "approved", "rejected"].includes(status) ? status : "approved",
+    });
+
+    await vendor.save();
+
+    const vendorObj = vendor.toObject();
+    delete vendorObj.password;
+
+    res.status(201).json({ message: "Vendor created successfully", vendor: vendorObj });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Failed to create vendor" });
+  }
+};
+
+// Get all vendors (Admin) — every status, optional ?status= filter
+exports.getAllVendorsByAdmin = async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = {};
+    if (status && ["pending", "approved", "rejected"].includes(status)) {
+      filter.status = status;
+    }
+
+    const vendors = await Vendor.find(filter).select("-password").sort({ createdAt: -1 });
+    res.json({ count: vendors.length, vendors });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch vendors" });
+  }
+};
+
+// Get single vendor (Admin)
+exports.getVendorByIdAdmin = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id).select("-password");
+    if (!vendor) return res.status(404).json({ error: "Vendor not found" });
+    res.json(vendor);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch vendor" });
+  }
+};
+
+// Delete vendor (Admin)
+exports.deleteVendorByAdmin = async (req, res) => {
+  try {
+    const vendor = await Vendor.findByIdAndDelete(req.params.id);
+    if (!vendor) return res.status(404).json({ error: "Vendor not found" });
+    res.json({ message: "Vendor deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete vendor" });
+  }
+};
+
+// ==================================================================
+// ADMIN CRUD — TEAMS (create / read / delete)
+// ==================================================================
+
+exports.uploadTeamFilesAdmin = multer({ dest: "uploads/" }).fields([
+  { name: "logo", maxCount: 1 },
+  { name: "verificationDoc", maxCount: 1 },
+]);
+
+// Create Team (by Admin)
+exports.createTeamByAdmin = async (req, res) => {
+  try {
+    const {
+      name,
+      tagline,
+      description,
+      email,
+      contactNo,
+      category,
+      password,
+      status,
+    } = req.body;
+
+    if (!name || !email || !contactNo || !category || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const existing = await Team.findOne({ email: email.toLowerCase() });
+    if (existing) {
+      return res.status(400).json({ error: "A team with this email already exists" });
+    }
+
+    let location;
+    if (req.body.location) {
+      try {
+        location = JSON.parse(req.body.location);
+      } catch {
+        return res.status(400).json({ error: "Invalid location data" });
+      }
+    }
+
+    let logoUrl, docUrl;
+    const fs = require("fs");
+
+    if (req.files?.logo?.[0]) {
+      const up = await cloudinary.uploader.upload(req.files.logo[0].path, { folder: "teams/logos" });
+      logoUrl = up.secure_url;
+      fs.unlinkSync(req.files.logo[0].path);
+    }
+    if (req.files?.verificationDoc?.[0]) {
+      const up = await cloudinary.uploader.upload(req.files.verificationDoc[0].path, {
+        folder: "teams/docs",
+        resource_type: "auto",
+      });
+      docUrl = up.secure_url;
+      fs.unlinkSync(req.files.verificationDoc[0].path);
+    }
+
+    if (!logoUrl || !docUrl) {
+      return res.status(400).json({ error: "logo and verificationDoc files are required" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const team = new Team({
+      name,
+      tagline,
+      description,
+      email: email.toLowerCase(),
+      contactNo,
+      category,
+      password: hashedPassword,
+      logo: logoUrl,
+      verificationDoc: docUrl,
+      location,
+      status: ["pending", "approved", "rejected"].includes(status) ? status : "approved",
+    });
+
+    await team.save();
+
+    const teamObj = team.toObject();
+    delete teamObj.password;
+
+    res.status(201).json({ message: "Team created successfully", team: teamObj });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Failed to create team" });
+  }
+};
+
+// Get all teams (Admin) — every status, optional ?status= filter
+exports.getAllTeamsByAdmin = async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = {};
+    if (status && ["pending", "approved", "rejected"].includes(status)) {
+      filter.status = status;
+    }
+
+    const teams = await Team.find(filter).select("-password").sort({ createdAt: -1 });
+    res.json({ count: teams.length, teams });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch teams" });
+  }
+};
+
+// Get single team (Admin)
+exports.getTeamByIdAdmin = async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id).select("-password");
+    if (!team) return res.status(404).json({ error: "Team not found" });
+    res.json(team);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch team" });
+  }
+};
+
+// Delete team (Admin)
+exports.deleteTeamByAdmin = async (req, res) => {
+  try {
+    const team = await Team.findByIdAndDelete(req.params.id);
+    if (!team) return res.status(404).json({ error: "Team not found" });
+    res.json({ message: "Team deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete team" });
+  }
+};
+
+
 // Update admin media info
 exports.updateAdminMedia = async (req, res) => {
   const { mediaId } = req.params;

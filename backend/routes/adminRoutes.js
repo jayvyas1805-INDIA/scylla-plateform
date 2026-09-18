@@ -41,6 +41,36 @@ router.put("/products/:id/approve", adminCtrl.approveProduct);
 // router.put("/products/:id/reject", adminAuth, adminCtrl.rejectProduct);
 router.put("/products/:id/reject", adminCtrl.rejectProduct);
 
+// ==================== VENDOR CRUD (Admin) ====================
+// Create
+router.post(
+  "/vendor",
+  adminAuth,
+  adminCtrl.uploadVendorFilesAdmin,
+  adminCtrl.createVendorByAdmin
+);
+// Read all (optionally ?status=pending|approved|rejected)
+router.get("/vendor", adminAuth, adminCtrl.getAllVendorsByAdmin);
+// Read one
+router.get("/vendor/:id", adminAuth, adminCtrl.getVendorByIdAdmin);
+// Delete
+router.delete("/vendor/:id", adminAuth, adminCtrl.deleteVendorByAdmin);
+
+// ==================== TEAM CRUD (Admin) ====================
+// Create
+router.post(
+  "/team",
+  adminAuth,
+  adminCtrl.uploadTeamFilesAdmin,
+  adminCtrl.createTeamByAdmin
+);
+// Read all (optionally ?status=pending|approved|rejected)
+router.get("/team", adminAuth, adminCtrl.getAllTeamsByAdmin);
+// Read one
+router.get("/team/:id", adminAuth, adminCtrl.getTeamByIdAdmin);
+// Delete
+router.delete("/team/:id", adminAuth, adminCtrl.deleteTeamByAdmin);
+
 // Admin Dashboard
 // router.get("/dashboard", authUser(["admin"]), getAdminDashboardStats);
 router.get("/dashboard",adminAuth, getAdminDashboardStats);
