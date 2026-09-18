@@ -11,6 +11,7 @@ const Messages = () => {
   const [conversations, setConversations] = useState([]);
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [selectedId, setSelectedId] = useState(searchParams.get('conversation') || null);
+  const [mobileShowChat, setMobileShowChat] = useState(Boolean(searchParams.get('conversation')));
 
   const [thread, setThread] = useState([]);
   const [loadingThread, setLoadingThread] = useState(false);
@@ -73,7 +74,15 @@ const Messages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
-  const handleSelect = (id) => setSelectedId(id);
+  const handleSelect = (id) => {
+    setSelectedId(id);
+    setMobileShowChat(true);
+  };
+
+  const handleBackToList = () => {
+    setMobileShowChat(false);
+    setSearchParams({}, { replace: true });
+  };
 
   const handleSendMessage = async () => {
     if (!messageInput.trim() || !selectedId || sending) return;
@@ -119,7 +128,7 @@ const Messages = () => {
       <NavBar currentPath={location.pathname} />
 
       <main className="quotes-main">
-        <div className="quotes-container">
+        <div className={`quotes-container ${mobileShowChat ? 'mobile-chat-view' : 'mobile-list-view'}`}>
           {/* Left Sidebar - Conversations List */}
           <aside className="inquiries-sidebar">
             <div className="sidebar-header">
@@ -180,6 +189,9 @@ const Messages = () => {
             {current ? (
               <>
                 <div className="details-header">
+                  <button type="button" className="mobile-chat-back" onClick={handleBackToList} aria-label="Back to conversations">
+                    <span aria-hidden="true">←</span> Conversations
+                  </button>
                   <div className="contact-info">
                     <span className="contact-avatar">
                       {current.otherParty?.avatar ? (

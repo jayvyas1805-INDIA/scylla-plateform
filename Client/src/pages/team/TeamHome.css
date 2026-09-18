@@ -173,4 +173,94 @@
   color: #2aff9e;
 }
 
+@media (max-width: 1100px) {
+  .team-home {
+    padding: 82px 32px 32px;
+  }
+
+  .team-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 30px;
+  }
+
+  .team-hero-right {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 760px) {
+  .team-home {
+    padding: 76px 16px 24px;
+  }
+
+  .team-hero {
+    padding: 22px;
+    border-radius: 14px;
+  }
+
+  .team-hero h1 {
+    font-size: clamp(25px, 8vw, 34px);
+    line-height: 1.15;
+  }
+
+  .team-meta {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin: 20px 0;
+  }
+
+  .team-meta > div {
+    min-width: 120px;
+    max-width: 100%;
+  }
+
+  .primary-action,
+  .primary-action + .primary-action {
+    width: 100%;
+    justify-content: center;
+    margin: 8px 0 0;
+  }
+
+  .team-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .stat-card {
+    padding: 18px 10px;
+  }
+
+  .team-main-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .team-activity,
+  .quick-actions {
+    min-width: 0;
+  }
+
+  .quick-actions {
+    padding: 18px;
+  }
+
+  .system-footer {
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 26px;
+  }
+}
+
+@media (max-width: 420px) {
+  .team-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .team-hero-right {
+    min-height: 120px;
+  }
+}
+
 

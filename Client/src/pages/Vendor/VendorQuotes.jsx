@@ -16,6 +16,7 @@ const VendorQuotes = () => {
   const [conversations, setConversations] = useState([]);
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [selectedId, setSelectedId] = useState(searchParams.get('conversation') || null);
+  const [mobileShowChat, setMobileShowChat] = useState(Boolean(searchParams.get('conversation')));
 
   const [thread, setThread] = useState([]);
   const [loadingThread, setLoadingThread] = useState(false);
@@ -147,7 +148,7 @@ const VendorQuotes = () => {
       <Header currentPath={location.pathname} />
 
       <main className="vendor-quotes-main">
-        <div className="vendor-quotes-container">
+        <div className={`vendor-quotes-container ${mobileShowChat ? 'vendor-mobile-chat-view' : 'vendor-mobile-list-view'}`}>
           {/* Left Sidebar - Conversations List */}
           <aside className="vendor-quotes-sidebar">
             <div className="vendor-quotes-sidebar-header">
@@ -179,7 +180,10 @@ const VendorQuotes = () => {
                   <div
                     key={conv._id}
                     className={`vendor-quotes-inquiry-item ${selectedId === conv._id ? 'vendor-quotes-inquiry-active' : ''}`}
-                    onClick={() => setSelectedId(conv._id)}
+                    onClick={() => {
+                      setSelectedId(conv._id);
+                      setMobileShowChat(true);
+                    }}
                   >
                     <div className="vendor-quotes-inquiry-avatar">
                       {conv.otherParty?.avatar ? (
@@ -216,6 +220,9 @@ const VendorQuotes = () => {
             {current ? (
               <>
                 <div className="vendor-quotes-details-header">
+                  <button type="button" className="vendor-quotes-mobile-back" onClick={() => { setMobileShowChat(false); setSearchParams({}, { replace: true }); }} aria-label="Back to inquiries">
+                    <span aria-hidden="true">←</span> Inquiries
+                  </button>
                   <div className="vendor-quotes-contact-info">
                     <span className="vendor-quotes-contact-avatar">
                       {current.otherParty?.avatar ? (
