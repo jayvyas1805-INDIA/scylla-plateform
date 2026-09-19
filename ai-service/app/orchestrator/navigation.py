@@ -31,6 +31,7 @@ PUBLIC_ROUTES = {
     "home": "/",
     "about": "/about",
     "contact": "/contact",
+    "events": "/events",
     "teams_directory": "/teams-directory",
     "vendors_directory": "/vendors-directory",
     "team_login": "/team/login",

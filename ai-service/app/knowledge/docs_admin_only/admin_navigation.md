@@ -24,13 +24,11 @@ The Content Moderation page, at `/content-moderation`.
 The Payments page, at `/payments`.
 
 **Is there a real events-management feature in the admin dashboard?**
-The Events page (`/events`) now calls a real API layer
-(`getEvents`/`createEvent`/etc., targeting `/api/events`) — but the
-Express backend has no `/api/events` route implemented yet. Visiting
-that page will fail to load data (a fetch error), not show working
-data. If an admin asks about it, say plainly that the Events page is a
-work in progress and its backend endpoint isn't built yet — don't
-describe it as either fully broken-and-ignorable or fully functional.
+Yes. The Events page (`/events` in the admin dashboard) is backed by a
+real, working API (`/api/events`, admin-only): admins can list, view,
+create, edit, delete, and approve/reject submitted events there. Only
+events an admin approves become visible on the public `/events` page
+and to the list_events tool.
 
 **Are the Category Management, Content Moderation, and Analytics pages
 backed by real data?**

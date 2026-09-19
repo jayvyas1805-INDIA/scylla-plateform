@@ -18,10 +18,14 @@ separate public marketplace page — the approved product listings are
 served from the same marketplace data.
 
 **Does Scylla have a live events calendar or schedule?**
-No. Scylla does not currently have an events/competition-schedule
-feature. If asked about "upcoming events," say plainly that there
-isn't a live events calendar on the platform right now, rather than
-describing or inventing one.
+Yes. The Events page, at `/events`, lists approved upcoming events
+(motorsport meets, competitions, and similar) with their date,
+location, organizer, entry fee, and capacity. Visitors can also submit
+an event for admin approval and register for an approved event
+directly from that page. For the actual list of current events, use
+the list_events tool rather than describing this page from memory —
+this doc only covers that the feature exists, not what's currently
+listed.
 
 **Does Scylla organize teams into departments (like Engineering,
 Marketing, etc.)?**

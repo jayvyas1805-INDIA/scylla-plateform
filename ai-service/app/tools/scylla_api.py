@@ -99,6 +99,20 @@ async def get_marketplace_products(filters: dict | None = None) -> list:
     return await _get("/api/products/marketplace", params=filters)
 
 
+# ---- Events ----
+
+async def list_events(page: int | None = None, limit: int | None = None) -> dict:
+    """Public. Approved, upcoming-sorted events (name, date, location, organizer,
+    entry fee, capacity, registration info), paginated. Mirrors the same public
+    endpoint the Events page itself calls."""
+    params = {}
+    if page is not None:
+        params["page"] = page
+    if limit is not None:
+        params["limit"] = limit
+    return await _get("/api/public/events", params=params or None)
+
+
 # ---- Authenticated, team-scoped (require the caller's own JWT) ----
 
 async def get_my_team_profile(token: str) -> dict:

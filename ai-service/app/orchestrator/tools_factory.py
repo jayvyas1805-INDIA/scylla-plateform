@@ -142,6 +142,40 @@ def build_tools(caller: Caller, events: list | None = None) -> list:
         )
 
     @tool
+    async def list_events(page: int | None = None) -> str:
+        """List approved, upcoming Scylla events (name, date, location, organizer,
+        entry fee/capacity, and whether registration is open), soonest first.
+        Call this for any question about what events exist, when they are, or
+        where — never invent an event name or date. Defaults to the first page
+        of results; pass a higher page number only if the user asks for more."""
+        try:
+            data = await scylla_api.list_events(page=page)
+        except scylla_api.ScyllaApiError as e:
+            return f"[unavailable: {e.message}]"
+
+        events_list = data.get("events", [])
+        pagination = data.get("pagination", {})
+
+        def _row(e: dict) -> str:
+            date = e.get("date", "date TBD")
+            cap = e.get("capacity")
+            cap_str = f", capacity {cap}" if cap else ""
+            fee = e.get("entryFee")
+            fee_str = f", entry fee {fee}" if fee else ""
+            return (
+                f"- {e.get('name')} (id: {e.get('_id')}) — {date} at "
+                f"{e.get('venue') or e.get('location', 'TBD')}, organized by "
+                f"{e.get('organizer', 'unknown')}{fee_str}{cap_str}"
+            )
+
+        body = _fmt([_row(e) for e in events_list], "No upcoming approved events found.")
+        total = pagination.get("total")
+        total_pages = pagination.get("totalPages")
+        if total is not None and total_pages and total_pages > 1:
+            body += f"\n({total} events total across {total_pages} pages; this is page {pagination.get('page', 1)}.)"
+        return body
+
+    @tool
     async def navigate_to(destination_key: str, entity_id: str | None = None) -> str:
         """
         Take the user to a real page in THIS app. destination_key MUST be one
@@ -222,6 +256,7 @@ def build_tools(caller: Caller, events: list | None = None) -> list:
         list_vendors,
         get_vendor_profile,
         search_marketplace,
+        list_events,
         navigate_to,
         compare_teams,
         compare_vendors,
