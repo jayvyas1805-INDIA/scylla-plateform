@@ -65,7 +65,19 @@ async def _get(path: str, token: str | None = None, params: dict | None = None):
     if resp.status_code >= 400:
         raise ScyllaApiError(resp.status_code, "Scylla's backend couldn't complete that request.")
 
-    return resp.json()
+    try:
+        return resp.json()
+    except ValueError as exc:
+        # A 2xx status doesn't guarantee a JSON body — a proxy/timeout
+        # error page, an empty response, or a misconfigured route can all
+        # return 200 with something that isn't JSON. Same reasoning as
+        # the httpx.RequestError branch above: without this, resp.json()
+        # raising here escapes every "except ScyllaApiError" the tools
+        # already handle gracefully and crashes the whole turn instead of
+        # letting the model give a normal "that's unavailable" reply.
+        raise ScyllaApiError(
+            502, "Scylla's backend returned something unexpected."
+        ) from exc
 
 
 # ---- Teams ----

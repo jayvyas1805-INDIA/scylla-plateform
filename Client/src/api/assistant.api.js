@@ -129,7 +129,16 @@ export const streamAssistantMessage = async (
         continue;
       }
 
-      // Backend reported an error through SSE.
+      // Backend reported an error through SSE. A "[error:429]" prefix
+      // means the LLM provider itself rate-limited us (distinct from an
+      // actual crash) — surfaced as a real 429 so the widget's existing
+      // "you're sending messages a bit fast" handling actually fires,
+      // instead of every SSE error looking like the same generic outage.
+      if (data.startsWith("[error:429]")) {
+        const err = new Error(data.slice("[error:429]".length).trim());
+        err.response = { status: 429 };
+        throw err;
+      }
       if (data.startsWith("[error]")) {
         const err = new Error(data);
         err.response = { status: 502 };

@@ -97,11 +97,7 @@ that's what actually moves them there. If they only ask WHERE something is \
 compare_vendors (after resolving both ids via list_teams/list_vendors/\
 get_my_team_profile/get_my_vendor_profile as needed) rather than just describing \
 both separately in prose.
-13. Keep formatting plain and match the size of the question: a short factual \
-question (a name, a date, a location) gets a short plain-text answer — no bold/\
-markdown emphasis on routine facts, no bullet list for one item, no sign-off \
-line like "let me know if you need anything else." Save structure (bullets, \
-bold) for when it actually helps someone scan a longer list or comparison.
+13. Never use markdown syntax in your reply — no ** for bold, no # headers, no `code fences`, no markdown bullet/numbered lists. The chat window displays your text as-is, so markdown characters show up as literal stray symbols to the user. Write plain sentences; if you need to list a few items, use a simple line per item with a dash and a space, nothing else. Keep short factual answers (a name, a date, a location) short — one plain sentence, no sign-off line like "let me know if you need anything else."
 """
 
 _ROLE_CONTEXT_NOTES = {
@@ -226,26 +222,23 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
     tools = build_tools(caller, events)
     tools_by_name = {t.name: t for t in tools}
 
-    # The FIRST turn of a genuinely NEW conversation (no prior history sent
-    # from the client) forces a tool call (tool_choice="required"). Without
-    # this, a model can and sometimes does answer a Scylla-specific or
-    # navigation question straight from its own (wrong/invented) guess
+    # The FIRST turn always forces a tool call (tool_choice="required").
+    # Without this, a model can and sometimes does answer a Scylla-specific
+    # or navigation question straight from its own (wrong/invented) guess
     # instead of calling search_scylla_knowledge or a data tool — the
     # exact failure mode that produced a fabricated "Admin Console" menu
     # path in testing. Forcing at least one real lookup before any final
-    # answer closes that gap.
+    # answer closes that gap. Later turns (after the model already has
+    # real tool output to work with) go back to normal "auto" tool use.
     #
-    # Once the conversation has history, we do NOT force this on every
-    # subsequent request even though each one is its own call into this
-    # function — the model already has real, tool-grounded facts sitting
-    # in that history (an earlier turn's tool output or its own prior
-    # answer built from one), and a one-word follow-up like "when" about
-    # something it already looked up shouldn't pay for a second live
-    # backend round-trip plus an extra LLM turn just to re-fetch data it
-    # already has. "auto" tool use plus the system prompt's instruction to
-    # only reuse data actually grounded in this conversation (never invent
-    # beyond it) covers this case without the forced round-trip.
-    force_first_tool_call = len(request.history) == 0
+    # (We tried skipping this for turns that already have conversation
+    # history, on the theory that a follow-up like "when" could reuse
+    # data from earlier in the same conversation. That didn't pay off:
+    # `history` only carries the model's rendered TEXT answers, not the
+    # raw tool output, so a question about a field that wasn't in the
+    # previous sentence still needs a real tool call either way — "auto"
+    # just added an extra decision step, and occasionally let the model
+    # chain through more than one tool before answering. Reverted.)
     llm_forced = get_llm().bind_tools(tools, tool_choice="required")
     llm_auto = get_llm().bind_tools(tools)
 
@@ -275,7 +268,7 @@ async def run_chat_stream(request: ChatRequest, caller: Caller):
     messages.append(HumanMessage(content=request.message))
 
     for i in range(MAX_TOOL_ITERATIONS):
-        llm = llm_forced if (i == 0 and force_first_tool_call) else llm_auto
+        llm = llm_forced if i == 0 else llm_auto
         final_msg = None
         turn_kind = None
         async for kind, payload in _stream_llm_turn(llm, messages):
