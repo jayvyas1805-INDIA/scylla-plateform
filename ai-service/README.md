@@ -191,10 +191,39 @@ same OpenAI-compatible chat API:
 
 | Provider | LLM_BASE_URL | Example LLM_MODEL |
 |---|---|---|
-| Groq (default) | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` |
+| Groq (default) | `https://api.groq.com/openai/v1` | `openai/gpt-oss-120b` (Groq retired `llama-3.3-70b-versatile` on 2026-08-16) |
 | Together AI | `https://api.together.xyz/v1` | `meta-llama/Llama-3.3-70B-Instruct-Turbo` |
 | OpenRouter | `https://openrouter.ai/api/v1` | `meta-llama/llama-3.3-70b-instruct` |
 | Local Ollama | `http://localhost:11434/v1` | `llama3.3` |
+
+## Automatic fallback providers (free tiers)
+
+If the primary provider fails (429 rate limit, 5xx, timeout, retired model),
+the service tries the next one configured in `.env` as `LLM_FALLBACK_1_*`,
+`LLM_FALLBACK_2_*`, ... (up to 5; each needs `BASE_URL`, `MODEL` and
+`API_KEY`, incomplete slots are skipped). See `.env.example` for a
+Groq -> Groq (smaller model) -> NVIDIA NIM -> OpenRouter chain. Logic lives
+in `app/llm.py` (`FallbackChat`) and is covered by `tests/test_llm_fallback.py`.
+
+- Latency: HTTPS clients are reused between requests; there are no
+  same-provider retries; a stalled provider is abandoned after
+  `LLM_TIMEOUT` seconds; and a provider that just failed is skipped for a
+  while (429 honors `Retry-After`, capped at 5 min; outages 30 s; bad
+  key/retired model 5 min) instead of every request paying for a doomed
+  attempt first. Skipped providers are still tried last, so a stale
+  cooldown never causes a hard failure. Failures are logged as warnings
+  ("LLM provider ... failed ...; trying next"). Optional
+  `LLM_REASONING_EFFORT=low` speeds up Groq gpt-oss first-token time.
+- Failover happens before the first token streams; a provider that dies
+  mid-answer still surfaces as an error (already-streamed text is kept by
+  the widgets), it is never spliced with another model's output.
+- Free tiers are rate-limited and change often; some log prompts or forbid
+  confidential data (NVIDIA NIM trial terms, OpenRouter free providers).
+  Tool results here contain team/vendor data, so review each provider's
+  terms before putting real user data through it.
+- Fallback models must support tool calling. After adding one, run
+  `python -m eval.run_eval` with that model as the primary to check that
+  behaviour holds up.
 
 ## Verifying the service works manually
 

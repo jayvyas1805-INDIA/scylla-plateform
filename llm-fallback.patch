@@ -1,0 +1,355 @@
+diff --git a/ai-service/.env.example b/ai-service/.env.example
+index a54577f..1135629 100644
+--- a/ai-service/.env.example
++++ b/ai-service/.env.example
+@@ -1,16 +1,32 @@
+ # --- LLM provider (OpenAI-compatible endpoint) ---
+-# Recommended default: Groq, open-weight Llama 3.3 70B, free tier, fast,
+-# supports tool calling (needed from Phase 6 onward).
++# Primary: Groq, open-weight gpt-oss-120b, free tier, supports tool calling
++# (needed from Phase 6 onward). NOTE: Groq retired llama-3.3-70b-versatile on
++# 2026-08-16, so do not use it here any more.
+ LLM_PROVIDER=groq
+-LLM_MODEL=llama-3.3-70b-versatile
++LLM_MODEL=openai/gpt-oss-120b
+ LLM_BASE_URL=https://api.groq.com/openai/v1
+ LLM_API_KEY=your_groq_api_key_here
+ LLM_TEMPERATURE=0.3
+ 
+-# To switch providers later, change ONLY the three values above, e.g.:
+-#   Together AI : LLM_BASE_URL=https://api.together.xyz/v1        LLM_MODEL=meta-llama/Llama-3.3-70B-Instruct-Turbo
+-#   OpenRouter  : LLM_BASE_URL=https://openrouter.ai/api/v1        LLM_MODEL=meta-llama/llama-3.3-70b-instruct
+-#   Local Ollama: LLM_BASE_URL=http://localhost:11434/v1           LLM_MODEL=llama3.3   LLM_API_KEY=ollama
++# --- Fallbacks (optional, tried in order when the primary fails) ---
++# Each slot needs all three values, otherwise it is skipped. Up to 5 slots.
++# Keep them tool-calling capable; the same model family as the primary
++# keeps behaviour close to what the prompt/tests were tuned against.
++
++# 1) Same Groq key, smaller model (Groq rate limits are per model)
++LLM_FALLBACK_1_BASE_URL=https://api.groq.com/openai/v1
++LLM_FALLBACK_1_MODEL=openai/gpt-oss-20b
++LLM_FALLBACK_1_API_KEY=your_groq_api_key_here
++
++# 2) NVIDIA NIM (free with NVIDIA Developer Program; trial terms, see README)
++LLM_FALLBACK_2_BASE_URL=https://integrate.api.nvidia.com/v1
++LLM_FALLBACK_2_MODEL=openai/gpt-oss-120b
++LLM_FALLBACK_2_API_KEY=nvapi-your_key_here
++
++# 3) OpenRouter free model (low daily cap unless you buy $10+ credits once)
++LLM_FALLBACK_3_BASE_URL=https://openrouter.ai/api/v1
++LLM_FALLBACK_3_MODEL=openai/gpt-oss-20b:free
++LLM_FALLBACK_3_API_KEY=sk-or-your_key_here
+ 
+ # --- Existing Scylla backend ---
+ SCYLLA_BACKEND_URL=http://localhost:5000
+diff --git a/ai-service/README.md b/ai-service/README.md
+index c1f4374..163efe8 100644
+--- a/ai-service/README.md
++++ b/ai-service/README.md
+@@ -191,11 +191,31 @@ same OpenAI-compatible chat API:
+ 
+ | Provider | LLM_BASE_URL | Example LLM_MODEL |
+ |---|---|---|
+-| Groq (default) | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` |
++| Groq (default) | `https://api.groq.com/openai/v1` | `openai/gpt-oss-120b` (Groq retired `llama-3.3-70b-versatile` on 2026-08-16) |
+ | Together AI | `https://api.together.xyz/v1` | `meta-llama/Llama-3.3-70B-Instruct-Turbo` |
+ | OpenRouter | `https://openrouter.ai/api/v1` | `meta-llama/llama-3.3-70b-instruct` |
+ | Local Ollama | `http://localhost:11434/v1` | `llama3.3` |
+ 
++## Automatic fallback providers (free tiers)
++
++If the primary provider fails (429 rate limit, 5xx, timeout, retired model),
++the service tries the next one configured in `.env` as `LLM_FALLBACK_1_*`,
++`LLM_FALLBACK_2_*`, ... (up to 5; each needs `BASE_URL`, `MODEL` and
++`API_KEY`, incomplete slots are skipped). See `.env.example` for a
++Groq -> Groq (smaller model) -> NVIDIA NIM -> OpenRouter chain. Logic lives
++in `app/llm.py` (`FallbackChat`) and is covered by `tests/test_llm_fallback.py`.
++
++- Failover happens before the first token streams; a provider that dies
++  mid-answer still surfaces as an error (already-streamed text is kept by
++  the widgets), it is never spliced with another model's output.
++- Free tiers are rate-limited and change often; some log prompts or forbid
++  confidential data (NVIDIA NIM trial terms, OpenRouter free providers).
++  Tool results here contain team/vendor data, so review each provider's
++  terms before putting real user data through it.
++- Fallback models must support tool calling. After adding one, run
++  `python -m eval.run_eval` with that model as the primary to check that
++  behaviour holds up.
++
+ ## Verifying the service works manually
+ 
+ ```bash
+diff --git a/ai-service/app/config.py b/ai-service/app/config.py
+index 2dda459..69c717c 100644
+--- a/ai-service/app/config.py
++++ b/ai-service/app/config.py
+@@ -16,6 +16,23 @@ def _split_origins(raw: str) -> list[str]:
+     return [o.strip() for o in raw.split(",") if o.strip()]
+ 
+ 
++def _load_llm_fallbacks(max_fallbacks: int = 5) -> list[dict]:
++    """
++    Reads LLM_FALLBACK_1_*, LLM_FALLBACK_2_*, ... from the environment.
++    A fallback is only used if its BASE_URL, MODEL and API_KEY are all set,
++    so unused slots (or providers you haven't signed up for yet) are
++    silently skipped.
++    """
++    fallbacks = []
++    for n in range(1, max_fallbacks + 1):
++        base_url = os.getenv(f"LLM_FALLBACK_{n}_BASE_URL", "").strip()
++        model = os.getenv(f"LLM_FALLBACK_{n}_MODEL", "").strip()
++        api_key = os.getenv(f"LLM_FALLBACK_{n}_API_KEY", "").strip()
++        if base_url and model and api_key:
++            fallbacks.append({"base_url": base_url, "model": model, "api_key": api_key})
++    return fallbacks
++
++
+ class Settings:
+     # --- LLM provider (OpenAI-compatible endpoint) ---
+     # Works unchanged for Groq, Together AI, Fireworks, OpenRouter, or a
+@@ -27,6 +44,10 @@ class Settings:
+     LLM_BASE_URL: str = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
+     LLM_TEMPERATURE: float = float(os.getenv("LLM_TEMPERATURE", "0.3"))
+ 
++    # Tried in order when the primary above fails (rate limit, outage,
++    # timeout, retired model). Same three values per slot, see .env.example.
++    LLM_FALLBACKS: list[dict] = _load_llm_fallbacks()
++
+     # --- Existing Scylla backend (source of truth for data + auth) ---
+     SCYLLA_BACKEND_URL: str = os.getenv("SCYLLA_BACKEND_URL", "http://localhost:5000")
+ 
+diff --git a/ai-service/app/llm.py b/ai-service/app/llm.py
+index 53c0a7e..8a57b2a 100644
+--- a/ai-service/app/llm.py
++++ b/ai-service/app/llm.py
+@@ -1,29 +1,86 @@
+ """
+ LLM provider abstraction.
+ 
+-Every provider we care about (Groq, Together AI, Fireworks, OpenRouter,
+-local Ollama) speaks the same OpenAI-compatible chat-completions API, so
+-one LangChain client class covers all of them. Which provider is active
+-is purely a config.py/.env concern — this file should never need to
+-change when you switch providers or models.
++Every provider we care about (Groq, NVIDIA NIM, OpenRouter, Ollama, ...)
++speaks the same OpenAI-compatible chat-completions API, so one LangChain
++client class covers all of them. Which providers are active, and in what
++order, is purely a config.py/.env concern.
++
++get_llm() returns a FallbackChat: it exposes the same three methods the
++orchestrator uses (bind_tools / astream / ainvoke) but tries the primary
++provider first and moves on to LLM_FALLBACK_n_* when a call fails with a
++rate limit (429), provider error (5xx), timeout, connection error, or a
++retired/unknown model.
++
++Note: failover happens BEFORE the first token is streamed. If a provider
++dies halfway through an answer, that error propagates as before (and the
++widgets already keep whatever text streamed) - we never splice two models'
++output into one reply.
+ """
+ 
++import logging
++
++import openai
+ from langchain_openai import ChatOpenAI
++
+ from app.config import settings
+ 
++log = logging.getLogger(__name__)
++
++# 1 quick retry for a transient blip, then fail over instead of sitting
++# through several backoff rounds against a provider that is rate-limited.
++_MAX_RETRIES = 1
++_TIMEOUT = 30
++
++FALLBACK_ERRORS = (openai.APIError,)
++
++
++def _build(model: str, api_key: str, base_url: str, temperature: float) -> ChatOpenAI:
++    return ChatOpenAI(
++        model=model,
++        api_key=api_key,
++        base_url=base_url,
++        temperature=temperature,
++        timeout=_TIMEOUT,
++        max_retries=_MAX_RETRIES,
++    )
++
+ 
+-def get_llm(temperature: float | None = None) -> ChatOpenAI:
++class FallbackChat:
++    def __init__(self, models: list):
++        self._models = models
++
++    @staticmethod
++    def _chain(models: list):
++        primary, *rest = models
++        if not rest:
++            return primary
++        return primary.with_fallbacks(rest, exceptions_to_handle=FALLBACK_ERRORS)
++
++    def bind_tools(self, tools, tool_choice=None):
++        # Bind on every model FIRST, then chain: RunnableWithFallbacks
++        # itself has no bind_tools.
++        bound = [m.bind_tools(tools, tool_choice=tool_choice) for m in self._models]
++        return self._chain(bound)
++
++    def astream(self, messages):
++        return self._chain(self._models).astream(messages)
++
++    async def ainvoke(self, messages):
++        return await self._chain(self._models).ainvoke(messages)
++
++
++def get_llm(temperature: float | None = None) -> FallbackChat:
+     if not settings.LLM_API_KEY:
+         raise RuntimeError(
+             "LLM_API_KEY is not set. Add it to ai-service/.env "
+             "(see .env.example)."
+         )
+ 
+-    return ChatOpenAI(
+-        model=settings.LLM_MODEL,
+-        api_key=settings.LLM_API_KEY,
+-        base_url=settings.LLM_BASE_URL,
+-        temperature=temperature if temperature is not None else settings.LLM_TEMPERATURE,
+-        timeout=30,
+-        max_retries=2,
+-    )
++    temp = temperature if temperature is not None else settings.LLM_TEMPERATURE
++
++    models = [_build(settings.LLM_MODEL, settings.LLM_API_KEY, settings.LLM_BASE_URL, temp)]
++    for fb in settings.LLM_FALLBACKS:
++        models.append(_build(fb["model"], fb["api_key"], fb["base_url"], temp))
++
++    return FallbackChat(models)
+diff --git a/ai-service/tests/test_llm_fallback.py b/ai-service/tests/test_llm_fallback.py
+new file mode 100644
+index 0000000..f177ca7
+--- /dev/null
++++ b/ai-service/tests/test_llm_fallback.py
+@@ -0,0 +1,124 @@
++"""
++Provider failover: when the primary LLM fails with a rate limit / outage,
++the next configured fallback answers instead. No network or API keys
++needed - the models here are in-process fakes.
++"""
++
++import httpx
++import openai
++import pytest
++from langchain_core.language_models.chat_models import BaseChatModel
++from langchain_core.messages import AIMessage, HumanMessage
++from langchain_core.outputs import ChatGeneration, ChatResult
++
++from app import llm as llm_module
++from app.config import _load_llm_fallbacks, settings
++from app.llm import FallbackChat, get_llm
++
++
++class FakeChat(BaseChatModel):
++    reply: str = "ok"
++    fail_with: Exception | None = None
++    calls: int = 0
++
++    @property
++    def _llm_type(self) -> str:
++        return "fake"
++
++    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
++        self.calls += 1
++        if self.fail_with:
++            raise self.fail_with
++        return ChatResult(generations=[ChatGeneration(message=AIMessage(content=self.reply))])
++
++    def bind_tools(self, tools, tool_choice=None):
++        return self
++
++
++def _rate_limited() -> openai.RateLimitError:
++    req = httpx.Request("POST", "http://provider.test/chat/completions")
++    return openai.RateLimitError("rate limited", response=httpx.Response(429, request=req), body=None)
++
++
++async def _collect(runnable, messages):
++    text = ""
++    async for chunk in runnable.astream(messages):
++        text += chunk.content
++    return text
++
++
++MSGS = [HumanMessage(content="hi")]
++
++
++async def test_rate_limited_primary_falls_back_with_bound_tools_and_streaming():
++    primary = FakeChat(reply="from primary", fail_with=_rate_limited())
++    backup = FakeChat(reply="from backup")
++    bound = FallbackChat([primary, backup]).bind_tools([], tool_choice="required")
++
++    assert await _collect(bound, MSGS) == "from backup"
++    assert primary.calls == 1 and backup.calls == 1
++
++
++async def test_healthy_primary_never_touches_fallback():
++    primary = FakeChat(reply="from primary")
++    backup = FakeChat(reply="from backup")
++
++    assert await _collect(FallbackChat([primary, backup]), MSGS) == "from primary"
++    assert backup.calls == 0
++
++
++async def test_ainvoke_also_fails_over():
++    primary = FakeChat(fail_with=_rate_limited())
++    backup = FakeChat(reply="summary text")
++
++    result = await FallbackChat([primary, backup]).ainvoke(MSGS)
++    assert result.content == "summary text"
++
++
++async def test_programming_errors_are_not_swallowed():
++    primary = FakeChat(fail_with=ValueError("bug in our code"))
++    backup = FakeChat(reply="from backup")
++
++    with pytest.raises(ValueError):
++        await _collect(FallbackChat([primary, backup]), MSGS)
++    assert backup.calls == 0
++
++
++async def test_all_providers_failing_raises():
++    a = FakeChat(fail_with=_rate_limited())
++    b = FakeChat(fail_with=_rate_limited())
++
++    with pytest.raises(openai.RateLimitError):
++        await _collect(FallbackChat([a, b]), MSGS)
++
++
++def test_incomplete_fallback_slots_are_skipped(monkeypatch):
++    for k in list(__import__("os").environ):
++        if k.startswith("LLM_FALLBACK_"):
++            monkeypatch.delenv(k)
++    monkeypatch.setenv("LLM_FALLBACK_1_BASE_URL", "http://one/v1")
++    monkeypatch.setenv("LLM_FALLBACK_1_MODEL", "m1")
++    monkeypatch.setenv("LLM_FALLBACK_1_API_KEY", "k1")
++    # slot 2 has no key -> skipped; slot 3 is complete -> kept
++    monkeypatch.setenv("LLM_FALLBACK_2_BASE_URL", "http://two/v1")
++    monkeypatch.setenv("LLM_FALLBACK_2_MODEL", "m2")
++    monkeypatch.setenv("LLM_FALLBACK_3_BASE_URL", "http://three/v1")
++    monkeypatch.setenv("LLM_FALLBACK_3_MODEL", "m3")
++    monkeypatch.setenv("LLM_FALLBACK_3_API_KEY", "k3")
++
++    assert [f["model"] for f in _load_llm_fallbacks()] == ["m1", "m3"]
++
++
++def test_get_llm_builds_primary_then_fallbacks_in_order(monkeypatch):
++    monkeypatch.setattr(settings, "LLM_API_KEY", "primary-key")
++    monkeypatch.setattr(settings, "LLM_MODEL", "primary-model")
++    monkeypatch.setattr(
++        settings,
++        "LLM_FALLBACKS",
++        [{"base_url": "http://fb/v1", "model": "fb-model", "api_key": "fb-key"}],
++    )
++
++    chat = get_llm()
++
++    assert [m.model_name for m in chat._models] == ["primary-model", "fb-model"]
++    assert chat._models[0].max_retries == llm_module._MAX_RETRIES
