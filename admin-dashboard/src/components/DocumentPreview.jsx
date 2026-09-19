@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import AiSuggestionBadge from "./AiSuggestionBadge";
 // import * as pdfjsLib from "pdfjs-dist";
 // import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
 
@@ -176,6 +177,26 @@ export default function DocumentPreview({
             </div>
           </div>
 
+      {/* AI SUGGESTION */}
+      {doc.aiReview?.suggestion && (
+        <div className="px-6 py-3 bg-admin-bg border-b border-white/10 flex items-start gap-3">
+          <AiSuggestionBadge aiReview={doc.aiReview} />
+          {doc.aiReview.reasoning && (
+            <p className="text-slate-400 text-sm flex-1">{doc.aiReview.reasoning}</p>
+          )}
+        </div>
+      )}
+      {doc.aiReview?.flaggedRules?.length > 0 && (
+        <div className="px-6 pb-3 bg-admin-bg border-b border-white/10">
+          <p className="text-slate-500 text-xs mb-1">Flagged checklist rules:</p>
+          <ul className="list-disc list-inside text-slate-400 text-xs space-y-0.5">
+            {doc.aiReview.flaggedRules.map((rule, i) => (
+              <li key={i}>{rule}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* CONTENT */}
       {/* CONTENT */}
       <div className="relative h-[80vh] overflow-auto bg-[#f4f6f9] p-6">
@@ -236,8 +257,8 @@ export default function DocumentPreview({
 const btn =
   "px-3 py-1 rounded bg-white/10 text-white hover:bg-white/20";
 const btnGreen =
-  "px-4 py-2 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30";
+  "px-4 py-2 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30 hover:scale-105 transition-all";
 const btnRed =
-  "px-4 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30";
+  "px-4 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 hover:scale-105 transition-all";
 const btnBlue =
-  "px-4 py-2 rounded bg-admin-accent/20 text-admin-accent hover:bg-admin-accent/30";
+  "px-4 py-2 rounded bg-admin-accent/20 text-admin-accent hover:bg-admin-accent/30 transition-all";

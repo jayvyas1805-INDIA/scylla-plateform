@@ -1,6 +1,8 @@
 import { useState } from "react";
 import clsx from "clsx";
 import { FaBuilding, FaUserGraduate } from "react-icons/fa";
+import AiSuggestionBadge from "./AiSuggestionBadge";
+import { aiRowAccentClasses } from "../utils/aiRowAccent";
 
 function StatusBadge({ status }) {
   const styles = {
@@ -66,10 +68,11 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
       <div className="hidden md:grid grid-cols-12 px-6 py-3 bg-admin-surface-raised border-b border-gray-800 text-sm text-admin-accent/90 font-medium drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]">
         <div className="col-span-1">Type</div>
         <div className="col-span-2">Title</div>
-        <div className="col-span-2">Badge</div>
-        <div className="col-span-3">Owner</div>
+        <div className="col-span-1">Badge</div>
+        <div className="col-span-2">Owner</div>
         <div className="col-span-2">Submitted</div>
         <div className="col-span-1">Status</div>
+        <div className="col-span-2">AI Suggestion</div>
         <div className="col-span-1">Actions</div>
       </div>
 
@@ -83,7 +86,7 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
           filteredDocs.map((doc) => (
             <div
               key={doc.id}
-              className="grid md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
+              className={`grid md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors ${aiRowAccentClasses(doc.aiReview)}`}
             >
               {/* Type */}
               <div className="md:col-span-1 flex items-center gap-2">
@@ -100,12 +103,12 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
               </div>
 
               {/* Badge (desktop only, already shown inline on mobile) */}
-              <div className="hidden md:block md:col-span-2">
+              <div className="hidden md:block md:col-span-1">
                 <TypeBadge type={doc.type} />
               </div>
 
               {/* Owner */}
-              <div className="md:col-span-3 flex flex-col leading-tight">
+              <div className="md:col-span-2 flex flex-col leading-tight">
                 <span className="md:hidden text-admin-accent font-semibold">Owner: </span>
                 <div className="text-white font-medium">{doc.owner}</div>
                 {doc.email && <div className="text-white/60 text-xs">{doc.email}</div>}
@@ -123,6 +126,12 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
                 <StatusBadge status={doc.status} />
               </div>
 
+              {/* AI Suggestion */}
+              <div className="md:col-span-2">
+                <span className="md:hidden text-admin-accent font-semibold">AI Suggestion: </span>
+                <AiSuggestionBadge aiReview={doc.aiReview} />
+              </div>
+
               {/* Actions */}
               <div className="md:col-span-1 flex md:flex-col gap-2 mt-2 md:mt-0">
                 <button
@@ -135,6 +144,7 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
                       status: doc.status,
                       refId: doc.id,
                       model: doc.type,
+                      aiReview: doc.aiReview,
                     })
                   }
 
@@ -146,7 +156,8 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
                 {doc.status !== "Approved" && (
                   <button
                    onClick={() => onApprove(doc)}
-                    className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 transition-colors"
+                   style={{ "--glow-color": "rgba(34, 197, 94, 0.6)" }}
+                    className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 hover:scale-105 hover:animate-pulse-glow transition-all"
                   >
                     Approve
                   </button>
@@ -155,7 +166,8 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
                 {doc.status !== "Rejected" && (
                   <button
                    onClick={() => onReject(doc)}
-                    className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 transition-colors"
+                   style={{ "--glow-color": "rgba(239, 68, 68, 0.6)" }}
+                    className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 hover:scale-105 hover:animate-pulse-glow transition-all"
                   >
                     Reject
                   </button>

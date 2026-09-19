@@ -341,12 +341,12 @@ exports.rejectProduct = async (req, res) => {
 exports.fetchVerificationDoc = async (req, res) => {
   const teams = await Team.find(
     {},
-    "name verificationDoc status createdAt"
+    "name verificationDoc status createdAt aiReview"
   );
 
   const vendors = await Vendor.find(
     {},
-    "businessName verificationDoc status createdAt"
+    "businessName verificationDoc status createdAt aiReview"
   );
 
   const documents = [
@@ -357,6 +357,7 @@ exports.fetchVerificationDoc = async (req, res) => {
       fileUrl: team.verificationDoc,
       status: team.status,
       submittedAt: team.createdAt,
+      aiReview: team.aiReview,
     })),
     ...vendors.map(vendor => ({
       ownerType: "Vendor",
@@ -365,6 +366,7 @@ exports.fetchVerificationDoc = async (req, res) => {
       fileUrl: vendor.verificationDoc,
       status: vendor.status,
       submittedAt: vendor.createdAt,
+      aiReview: vendor.aiReview,
     }))
   ];
 

@@ -59,6 +59,8 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/admin/moderation", require("./routes/moderationRoutes"));
 app.use("/api/admin/categories", require("./routes/categoryRoutes"));
 
+app.use("/api/admin/rules", require("./routes/approvalRuleRoutes"));
+
 // app.use("/api/products", require("./routes/productRoutes"));
 
 app.use("/api/vehicles", require("./routes/vehicleRoutes"));

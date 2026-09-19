@@ -5,6 +5,7 @@ import {
   Wallet,
   ClipboardCheck,
   ShieldCheck,
+  ListChecks,
   BarChart3,
   LogOut,
 } from "lucide-react";
@@ -18,6 +19,7 @@ export default function Sidebar({ open, onClose }) {
   const items = [
     { label: "Dashboard", icon: LayoutDashboard, path: "/" },
     { label: "User Approvals", icon: UserCheck, path: "/approvals" },
+    { label: "Approval Checklist", icon: ListChecks, path: "/approval-rules" },
     { label: "Content Moderation", icon: ShieldCheck, path: "/content-moderation" },
     { label: "Category Management", icon: ClipboardCheck, path: "/category" },
     { label: "Analytics", icon: BarChart3, path: "/analytics" },

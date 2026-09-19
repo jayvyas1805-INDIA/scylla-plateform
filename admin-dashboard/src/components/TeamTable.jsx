@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import ApprovalHoverValue from "./ApprovalHoverValue";
+import AiSuggestionBadge from "./AiSuggestionBadge";
+import { aiRowAccentClasses } from "../utils/aiRowAccent";
 
 function StatusBadge({ status }) {
   const styles = {
@@ -26,10 +28,11 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
       <div className="hidden md:grid grid-cols-12 px-4 sm:px-6 py-3 bg-admin-surface-raised border-b border-gray-800 text-sm text-admin-accent/90 font-medium drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]">
         <div className="col-span-1">Term</div>
         <div className="col-span-2">Team</div>
-        <div className="col-span-2">Category</div>
-        <div className="col-span-3">Email</div>
+        <div className="col-span-1">Category</div>
+        <div className="col-span-2">Email</div>
         <div className="col-span-2">Submitted</div>
         <div className="col-span-1">Status</div>
+        <div className="col-span-2">AI Suggestion</div>
         <div className="col-span-1">Actions</div>
       </div>
 
@@ -37,7 +40,7 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
       {teams.map((team) => (
         <div
           key={team.id}
-          className="grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
+          className={`grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors ${aiRowAccentClasses(team.aiReview)}`}
         >
           {/* Term */}
           <div className="md:col-span-1 flex justify-center md:justify-start">
@@ -53,15 +56,15 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
           </ApprovalHoverValue>
 
           {/* Category */}
-          <ApprovalHoverValue value={team.category} className="md:col-span-2 min-w-0 truncate">
+          <ApprovalHoverValue value={team.category} className="md:col-span-1 min-w-0 truncate">
             <span className="md:hidden text-admin-accent font-semibold">Category: </span>
             <span className={`px-3 py-1 text-xs rounded-full ${categoryBadge(team.category)}`}>
               {team.category}
             </span>
           </ApprovalHoverValue>
 
-          {/* University */}
-          <ApprovalHoverValue value={`Full email: ${team.university}`} className="md:col-span-3 min-w-0 text-white/80 truncate">
+          {/* Email */}
+          <ApprovalHoverValue value={`Full email: ${team.university}`} className="md:col-span-2 min-w-0 text-white/80 truncate">
             <span className="md:hidden text-admin-accent font-semibold">Email: </span>
             {team.university}
           </ApprovalHoverValue>
@@ -78,6 +81,12 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
             <StatusBadge status={team.status} />
           </div>
 
+          {/* AI Suggestion */}
+          <div className="md:col-span-2">
+            <span className="md:hidden text-admin-accent font-semibold">AI Suggestion: </span>
+            <AiSuggestionBadge aiReview={team.aiReview} />
+          </div>
+
           {/* Actions */}
           <div className="md:col-span-1 flex md:flex-col gap-2 mt-2 md:mt-0">
             <button
@@ -90,7 +99,8 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
             {team.status !== "Approved" && (
               <button
                 onClick={() => onApprove(team.id)}
-                className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 transition-colors"
+                style={{ "--glow-color": "rgba(34, 197, 94, 0.6)" }}
+                className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 hover:scale-105 hover:animate-pulse-glow transition-all"
               >
                 Approve
               </button>
@@ -99,7 +109,8 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
             {team.status !== "Rejected" && (
               <button
                 onClick={() => onReject(team.id)}
-                className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 transition-colors"
+                style={{ "--glow-color": "rgba(239, 68, 68, 0.6)" }}
+                className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 hover:scale-105 hover:animate-pulse-glow transition-all"
               >
                 Reject
               </button>

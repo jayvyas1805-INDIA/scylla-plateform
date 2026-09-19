@@ -60,6 +60,20 @@ export const fetchVerificationDoc = () =>{
 export const updateVerificationStatus = (ownerType, id, status) =>
  api.patch(`/api/admin/verification/${ownerType}/${id}`, { status });
 
+// approval checklist rules (Rule Management page) — the AI review's
+// source of truth. docType is "team" or "vendor".
+export const getApprovalRules = (docType) =>
+  api.get("/api/admin/rules", { params: docType ? { docType } : {} });
+
+export const createApprovalRule = (data) =>
+  api.post("/api/admin/rules", data);
+
+export const updateApprovalRule = (id, data) =>
+  api.put(`/api/admin/rules/${id}`, data);
+
+export const deleteApprovalRule = (id) =>
+  api.delete(`/api/admin/rules/${id}`);
+
 
 // add content moderation
 export const saveAdminContent = (formData) =>{

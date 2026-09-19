@@ -137,6 +137,15 @@ exports.registerTeam = async (req, res) => {
       await invitation.save();
     }
 
+    // Fire-and-forget: runs the AI checklist review exactly once for this
+    // upload. Never awaited so a slow/unavailable ai-service can't delay
+    // or break registration.
+    require("../utils/aiDocumentReview").triggerDocumentReview({
+      ownerType: "team",
+      ownerId: team._id,
+      docUrl: team.verificationDoc
+    });
+
     res.status(201).json({
       success: true,
       message: "Team registered. Await admin approval.",
@@ -438,6 +447,18 @@ exports.updateTeamProfile = async (req, res) => {
       team.verificationDoc = docUpload.secure_url
     }
     await team.save();
+
+    // Re-upload → verificationDoc actually changed → exactly one fresh
+    // AI review for the new version. Re-saving the profile WITHOUT a new
+    // doc does not re-trigger anything (this block only runs inside the
+    // `if (req.files?.verificationDoc?.[0])` above).
+    if (req.files?.verificationDoc?.[0]) {
+      require("../utils/aiDocumentReview").triggerDocumentReview({
+        ownerType: "team",
+        ownerId: team._id,
+        docUrl: team.verificationDoc
+      });
+    }
 
     await logTeamActivity(
       team._id,

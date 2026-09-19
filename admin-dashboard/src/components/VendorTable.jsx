@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import ApprovalHoverValue from "./ApprovalHoverValue";
+import AiSuggestionBadge from "./AiSuggestionBadge";
+import { aiRowAccentClasses } from "../utils/aiRowAccent";
 
 function StatusBadge({ status }) {
   const styles = {
@@ -24,12 +26,13 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
     <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-visible">
       {/* Table header */}
       <div className="hidden md:grid grid-cols-12 px-4 sm:px-6 py-3 bg-admin-surface-raised border-b border-gray-800 text-sm text-admin-accent/90 font-medium drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]">
-        <div className="col-span-3">Vendor</div>
+        <div className="col-span-2">Vendor</div>
         <div className="col-span-2">Category</div>
-        <div className="col-span-2">GST/Tax ID</div>
-        <div className="col-span-2">Location</div>
-        <div className="col-span-1">Submitted</div>
+        <div className="col-span-1">GST/Tax ID</div>
+        <div className="col-span-1">Location</div>
+        <div className="col-span-2">Submitted</div>
         <div className="col-span-1">Status</div>
+        <div className="col-span-2">AI Suggestion</div>
         <div className="col-span-1">Actions</div>
       </div>
 
@@ -38,10 +41,10 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
         {vendors.map((v) => (
           <div
             key={v.id}
-            className="grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors"
+            className={`grid min-w-0 md:grid-cols-12 gap-y-3 md:gap-y-0 items-start md:items-center px-4 sm:px-6 py-4 border-t border-gray-800 hover:bg-white/[0.03] transition-colors ${aiRowAccentClasses(v.aiReview)}`}
           >
             {/* Vendor */}
-            <div className="md:col-span-3 min-w-0 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="md:col-span-2 min-w-0 flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-sm font-semibold text-white">
                 {v.logo ? <img src={v.logo} alt={`${v.name} logo`} className="w-full h-full rounded-full object-cover" /> : (v.initials || v.name?.slice(0, 2).toUpperCase())}
               </div>
@@ -58,19 +61,19 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
             </ApprovalHoverValue>
 
             {/* GST */}
-            <ApprovalHoverValue value={v.gst} className="md:col-span-2 min-w-0 text-white/80 truncate">
+            <ApprovalHoverValue value={v.gst} className="md:col-span-1 min-w-0 text-white/80 truncate">
               <span className="md:hidden font-semibold text-admin-accent">GST/Tax ID: </span>
               {v.gst}
             </ApprovalHoverValue>
 
             {/* Location */}
-            <ApprovalHoverValue value={v.location} className="md:col-span-2 min-w-0 text-white/80 truncate">
+            <ApprovalHoverValue value={v.location} className="md:col-span-1 min-w-0 text-white/80 truncate">
               <span className="md:hidden font-semibold text-admin-accent">Location: </span>
               {v.location}
             </ApprovalHoverValue>
 
             {/* Submitted */}
-            <ApprovalHoverValue value={v.submitted} className="md:col-span-1 min-w-0 text-white/70 text-sm truncate">
+            <ApprovalHoverValue value={v.submitted} className="md:col-span-2 min-w-0 text-white/70 text-sm truncate">
               <span className="md:hidden font-semibold text-admin-accent">Submitted: </span>
               {v.submitted}
             </ApprovalHoverValue>
@@ -79,6 +82,12 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
             <div className="md:col-span-1">
               <span className="md:hidden font-semibold text-admin-accent">Status: </span>
               <StatusBadge status={v.status} />
+            </div>
+
+            {/* AI Suggestion */}
+            <div className="md:col-span-2">
+              <span className="md:hidden font-semibold text-admin-accent">AI Suggestion: </span>
+              <AiSuggestionBadge aiReview={v.aiReview} />
             </div>
 
             {/* Actions */}
@@ -93,7 +102,8 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
               {v.status !== "Approved" && (
                 <button
                   onClick={() => onApprove(v.id)}
-                  className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 transition-colors"
+                  style={{ "--glow-color": "rgba(34, 197, 94, 0.6)" }}
+                  className="px-3 py-1 text-xs rounded-lg bg-green-600/80 text-white hover:bg-green-600 hover:scale-105 hover:animate-pulse-glow transition-all"
                 >
                   Approve
                 </button>
@@ -102,7 +112,8 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
               {v.status !== "Rejected" && (
                 <button
                   onClick={() => onReject(v.id)}
-                  className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 transition-colors"
+                  style={{ "--glow-color": "rgba(239, 68, 68, 0.6)" }}
+                  className="px-3 py-1 text-xs rounded-lg bg-red-600/80 text-white hover:bg-red-600 hover:scale-105 hover:animate-pulse-glow transition-all"
                 >
                   Reject
                 </button>

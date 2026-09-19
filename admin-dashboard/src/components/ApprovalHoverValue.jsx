@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-export default function ApprovalHoverValue({ value, className = "", children }) {
+export default function ApprovalHoverValue({ value, className = "", style, children }) {
   const [tooltip, setTooltip] = useState(null);
 
   const showTooltip = (event) => {
@@ -17,6 +17,7 @@ export default function ApprovalHoverValue({ value, className = "", children }) 
   return (
     <div
       className={`approval-hover-value ${className}`}
+      style={style}
       onMouseEnter={showTooltip}
       onMouseLeave={() => setTooltip(null)}
       onFocus={showTooltip}

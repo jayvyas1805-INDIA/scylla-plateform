@@ -8,3 +8,6 @@ pyjwt==2.10.1
 httpx==0.28.1
 rank-bm25==0.2.2
 slowapi==0.1.9
+pypdf==5.1.0
+pytesseract==0.3.13
+Pillow==11.0.0

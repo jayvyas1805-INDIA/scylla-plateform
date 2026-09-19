@@ -134,6 +134,11 @@ body {
 .hover\:animate-pulse-glow:hover {
   animation: pulse-glow 1.5s infinite;
 }
+/* Same glow, always on — used for the AI suggestion badges so an
+   approve/reject verdict catches the eye without needing a hover. */
+.animate-pulse-glow-persistent {
+  animation: pulse-glow 2.2s ease-in-out infinite;
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

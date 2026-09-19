@@ -7,6 +7,7 @@ import ControlPanelLayout from "./layouts/ControlPanelLayout";
 
 import Dashboard from "./pages/Dashboard";
 import Approvals from "./pages/Approvals";
+import ApprovalRules from "./pages/ApprovalRules";
 import Events from "./pages/Events";
 import Payments from "./pages/Payments";
 import CategoryManagement from "./pages/CategoryManagement";
@@ -76,6 +77,18 @@ export default function App() {
 <Navbar toggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
                 <ControlPanelLayout title="" isSidebarOpen={isSidebarOpen}>
                   <Approvals />
+                </ControlPanelLayout>
+              </RequireAdminAuth>
+            }
+          />
+
+          <Route
+            path="/approval-rules"
+            element={
+              <RequireAdminAuth>
+<Navbar toggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
+                <ControlPanelLayout title="" isSidebarOpen={isSidebarOpen}>
+                  <ApprovalRules />
                 </ControlPanelLayout>
               </RequireAdminAuth>
             }

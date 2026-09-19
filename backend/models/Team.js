@@ -106,6 +106,32 @@ const teamSchema = new mongoose.Schema(
       default: 0,
     },
 
+    // AI document-review verdict for `verificationDoc`. Written EXACTLY
+    // ONCE per document version by ai-service (see
+    // backend/utils/aiDocumentReview.js) right after the doc is
+    // uploaded/re-uploaded — never recomputed just because an admin opens
+    // the Approvals page. `docVersion` is what verificationDoc looked
+    // like when this verdict was produced; a re-upload changes
+    // verificationDoc, which makes docVersion stale and triggers exactly
+    // one fresh review.
+    aiReview: {
+      suggestion: {
+        type: String,
+        enum: ["approve", "reject", "review", null],
+        default: null
+      },
+      confidence: { type: Number, default: null }, // 0-1
+      reasoning: { type: String, default: "" },
+      flaggedRules: [{ type: String }], // rule text(s) the doc failed/triggered
+      reviewedAt: { type: Date, default: null },
+      docVersion: { type: String, default: null }, // verificationDoc value this verdict covers
+      status: {
+        type: String,
+        enum: ["idle", "pending", "done", "failed"],
+        default: "idle"
+      }
+    },
+
     // media: [{ type: String }],
 
     sponsors: [

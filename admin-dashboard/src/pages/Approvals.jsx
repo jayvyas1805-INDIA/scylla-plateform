@@ -5,6 +5,7 @@ import TeamTable from "../components/TeamTable";
 import DocumentTable from "../components/DocumentTable";
 import DocumentPreview from "../components/DocumentPreview.jsx";
 import AdminAccountCreateModal from "../components/AdminAccountCreateModal";
+import AiSuggestionBadge from "../components/AiSuggestionBadge";
 import {
   getPendingUsers,
   approveTeam,
@@ -263,6 +264,7 @@ export default function Approvals() {
           university: team.email,
           submitted: team.createdAt.slice(0, 10),
           status: capitalize(team.status),
+          aiReview: team.aiReview,
         }))
       );
 
@@ -277,6 +279,7 @@ export default function Approvals() {
           logo: vendor.logo || "",
           submitted: vendor.createdAt.slice(0, 10),
           status: capitalize(vendor.status),
+          aiReview: vendor.aiReview,
         }))
       );
 
@@ -344,6 +347,7 @@ const loadVerificationDocuments = async () => {
           "",         // 🔑 MUST EXIST
         status: capitalize(doc.status),
         submitted: doc.submittedAt?.slice(0, 10),
+        aiReview: doc.aiReview,
       }))
     );
   } catch (err) {
@@ -571,6 +575,18 @@ const loadVerificationDocuments = async () => {
                     </>
                   )}
                 </div>
+
+                {modalData.aiReview?.suggestion && (
+                  <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-semibold text-admin-accent text-sm">AI Suggestion:</span>
+                      <AiSuggestionBadge aiReview={modalData.aiReview} />
+                    </div>
+                    {modalData.aiReview.reasoning && (
+                      <p className="text-white/70 text-xs">{modalData.aiReview.reasoning}</p>
+                    )}
+                  </div>
+                )}
 
                 <button
                   onClick={() => setModalData(null)}

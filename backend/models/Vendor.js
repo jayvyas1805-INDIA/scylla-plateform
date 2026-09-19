@@ -31,6 +31,26 @@ const vendorSchema = new mongoose.Schema(
       default: "pending"
     },
 
+    // See Team.js's aiReview for the full explanation — same shape,
+    // written once per verificationDoc version by ai-service.
+    aiReview: {
+      suggestion: {
+        type: String,
+        enum: ["approve", "reject", "review", null],
+        default: null
+      },
+      confidence: { type: Number, default: null },
+      reasoning: { type: String, default: "" },
+      flaggedRules: [{ type: String }],
+      reviewedAt: { type: Date, default: null },
+      docVersion: { type: String, default: null },
+      status: {
+        type: String,
+        enum: ["idle", "pending", "done", "failed"],
+        default: "idle"
+      }
+    },
+
     location: { type: String },
 
     media: [{ type: String }],

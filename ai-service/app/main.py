@@ -5,7 +5,7 @@ from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
 from app.rate_limit import limiter
-from app.routers import chat
+from app.routers import chat, document_review
 
 import logging
 
@@ -47,6 +47,7 @@ if settings.ENV == "production" and all(
     )
 
 app.include_router(chat.router)
+app.include_router(document_review.router)
 
 
 @app.get("/health")

@@ -102,6 +102,12 @@ exports.registerVendor = async (req, res) => {
       await invitation.save();
     }
 
+    require("../utils/aiDocumentReview").triggerDocumentReview({
+      ownerType: "vendor",
+      ownerId: vendor._id,
+      docUrl: vendor.verificationDoc
+    });
+
     res.status(201).json({
       success: true,
       message: "Vendor registered. Await admin approval."

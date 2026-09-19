@@ -174,5 +174,10 @@ class Settings:
         "development"
     )
 
+    # --- Document-review (RAG) endpoint ---
+    # Server-to-server only (Express -> ai-service, right after a doc is
+    # uploaded). Must match backend/.env's INTERNAL_SERVICE_SECRET.
+    INTERNAL_SERVICE_SECRET: str = os.getenv("INTERNAL_SERVICE_SECRET", "")
+
 
 settings = Settings()
