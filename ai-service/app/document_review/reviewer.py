@@ -76,15 +76,20 @@ async def review_document(payload: DocumentReviewRequest) -> DocumentReviewRespo
         f"Extracted document text:\n\"\"\"\n{truncated_text}\n\"\"\""
     )
 
-    llm = get_llm(temperature=0.1).with_structured_output(DocumentReviewResponse)
+    llm = get_llm(temperature=0.1).bind_tools(
+        [DocumentReviewResponse], tool_choice="required"
+    )
 
     try:
-        result: DocumentReviewResponse = await llm.ainvoke(
+        response = await llm.ainvoke(
             [
                 {"role": "system", "content": SYSTEM_PROMPT.format(doc_type=payload.docType)},
                 {"role": "user", "content": prompt},
             ]
         )
+        if not response.tool_calls:
+            raise ValueError("Model did not return a structured verdict.")
+        result = DocumentReviewResponse(**response.tool_calls[0]["args"])
     except Exception:
         logger.exception("LLM call failed during document review")
         return DocumentReviewResponse(

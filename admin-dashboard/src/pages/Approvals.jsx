@@ -189,20 +189,24 @@ export default function Approvals() {
   };
 
 
-  const handleApproveDocument = async () => {
+  const handleApproveDocument = async (doc) => {
+    const target = doc || selectedDoc;
+    if (!target?.id) return;
     await updateVerificationStatus(
-      selectedDoc.ownerType,
-      selectedDoc.id,
+      target.ownerType,
+      target.id,
       "approved"
     );
     setSelectedDoc(null);
     loadVerificationDocuments();
   };
 
-  const handleRejectDocument = async () => {
+  const handleRejectDocument = async (doc) => {
+    const target = doc || selectedDoc;
+    if (!target?.id) return;
     await updateVerificationStatus(
-      selectedDoc.ownerType,
-      selectedDoc.id,
+      target.ownerType,
+      target.id,
       "rejected"
     );
     setSelectedDoc(null);

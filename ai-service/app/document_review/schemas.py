@@ -16,7 +16,17 @@ class DocumentReviewRequest(BaseModel):
 
 
 class DocumentReviewResponse(BaseModel):
-    suggestion: str = Field(pattern="^(approve|reject|review)$")
-    confidence: float = Field(ge=0, le=1)
-    reasoning: str
-    flaggedRules: list[str] = Field(default_factory=list)
+    """The compliance verdict for a single verification document."""
+
+    suggestion: str = Field(
+        pattern="^(approve|reject|review)$",
+        description="'approve' if the document satisfies every applicable rule, "
+        "'reject' if it clearly fails a mandatory rule, 'review' if you are not "
+        "confident either way and a human should look at it.",
+    )
+    confidence: float = Field(ge=0, le=1, description="How confident you are in this suggestion, 0-1.")
+    reasoning: str = Field(description="2-4 sentences an admin can read quickly explaining why.")
+    flaggedRules: list[str] = Field(
+        default_factory=list,
+        description="Exact text of every rule the document failed or could not be verified against.",
+    )
