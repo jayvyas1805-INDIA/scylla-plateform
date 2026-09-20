@@ -580,7 +580,7 @@ const loadVerificationDocuments = async () => {
                   )}
                 </div>
 
-                {modalData.aiReview?.suggestion && (
+                {(modalData.aiReview?.suggestion || modalData.aiReview?.status === "failed") && (
                   <div className="mt-4 pt-4 border-t border-white/10">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold text-admin-accent text-sm">AI Suggestion:</span>

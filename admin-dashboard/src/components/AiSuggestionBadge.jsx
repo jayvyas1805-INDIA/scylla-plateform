@@ -21,10 +21,13 @@ export default function AiSuggestionBadge({ aiReview }) {
 
   if (aiReview.status === "failed") {
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium bg-slate-600/30 text-slate-300 border border-slate-500/30">
+      <ApprovalHoverValue
+        value={aiReview.reasoning || "No error detail recorded."}
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium bg-slate-600/30 text-slate-300 border border-slate-500/30"
+      >
         <CircleSlash size={13} />
         AI check unavailable
-      </span>
+      </ApprovalHoverValue>
     );
   }
 

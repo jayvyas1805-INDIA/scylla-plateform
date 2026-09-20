@@ -84,7 +84,11 @@ async function triggerDocumentReview({ ownerType, ownerId, docUrl }) {
     console.error(`AI document review failed for ${ownerType} ${ownerId}:`, err.message);
     await Model.findByIdAndUpdate(ownerId, {
       "aiReview.status": "failed",
-      "aiReview.docVersion": docUrl
+      "aiReview.docVersion": docUrl,
+      // Stored so the admin dashboard can show the actual cause on hover
+      // instead of "unavailable" with no detail — saves a trip to the
+      // server logs for every failure.
+      "aiReview.reasoning": err.message?.slice(0, 500) || "Unknown error"
     }).catch(() => {});
   }
 }

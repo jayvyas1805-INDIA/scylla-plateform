@@ -178,7 +178,7 @@ export default function DocumentPreview({
           </div>
 
       {/* AI SUGGESTION */}
-      {doc.aiReview?.suggestion && (
+      {(doc.aiReview?.suggestion || doc.aiReview?.status === "failed") && (
         <div className="px-6 py-3 bg-admin-bg border-b border-white/10 flex items-start gap-3">
           <AiSuggestionBadge aiReview={doc.aiReview} />
           {doc.aiReview.reasoning && (
