@@ -42,7 +42,7 @@ function TypeIcon({ type }) {
   );
 }
 
-export default function DocumentTable({ documents, onApprove, onReject, onView }) {
+export default function DocumentTable({ documents, onApprove, onReject, onView, onRerunAi }) {
   const [filterType, setFilterType] = useState("All");
 
   const filteredDocs = documents.filter((doc) =>
@@ -129,7 +129,12 @@ export default function DocumentTable({ documents, onApprove, onReject, onView }
               {/* AI Suggestion */}
               <div className="md:col-span-2">
                 <span className="md:hidden text-admin-accent font-semibold">AI Suggestion: </span>
-                <AiSuggestionBadge aiReview={doc.aiReview} />
+                <AiSuggestionBadge
+                  aiReview={doc.aiReview}
+                  ownerType={doc.ownerType?.toLowerCase()}
+                  ownerId={doc.id}
+                  onRerun={onRerunAi}
+                />
               </div>
 
               {/* Actions */}

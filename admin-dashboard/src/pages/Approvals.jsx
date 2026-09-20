@@ -438,6 +438,7 @@ const loadVerificationDocuments = async () => {
               onView={handleViewVendor}
               onApprove={handleApproveVendor}
               onReject={handleRejectVendor}
+              onRerunAi={loadPendingUsers}
             />
           )}
 
@@ -448,6 +449,7 @@ const loadVerificationDocuments = async () => {
               onView={handleViewTeam}
               onApprove={handleApproveTeam}
               onReject={handleRejectTeam}
+              onRerunAi={loadPendingUsers}
             />
           )}
 
@@ -457,6 +459,7 @@ const loadVerificationDocuments = async () => {
               onView={handleViewDocument}
               onApprove={handleApproveDocument}
               onReject={handleRejectDocument}
+              onRerunAi={loadVerificationDocuments}
             />
           )}
 
@@ -496,6 +499,7 @@ const loadVerificationDocuments = async () => {
             onClose={() => setSelectedDoc(null)}
             onApprove={handleApproveDocument}
             onReject={handleRejectDocument}
+            onRerunAi={loadVerificationDocuments}
           />
 
 
@@ -580,13 +584,18 @@ const loadVerificationDocuments = async () => {
                   )}
                 </div>
 
-                {(modalData.aiReview?.suggestion || modalData.aiReview?.status === "failed") && (
+                {modalData.aiReview !== undefined && (
                   <div className="mt-4 pt-4 border-t border-white/10">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold text-admin-accent text-sm">AI Suggestion:</span>
-                      <AiSuggestionBadge aiReview={modalData.aiReview} />
+                      <AiSuggestionBadge
+                        aiReview={modalData.aiReview}
+                        ownerType={modalType?.toLowerCase()}
+                        ownerId={modalData.id}
+                        onRerun={loadPendingUsers}
+                      />
                     </div>
-                    {modalData.aiReview.reasoning && (
+                    {modalData.aiReview?.reasoning && (
                       <p className="text-white/70 text-xs">{modalData.aiReview.reasoning}</p>
                     )}
                   </div>

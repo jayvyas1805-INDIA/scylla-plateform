@@ -20,6 +20,8 @@ router.put("/update",adminAuth, adminCtrl.updateAdmin);
 // Pending Users (Teams + Vendors) 
 // router.get("/pending", adminAuth, adminCtrl.getPendingUsers);
 router.get("/pending",adminAuth, adminCtrl.getPendingUsers);
+
+router.post("/rerun-ai-review/:ownerType/:id", adminAuth, adminCtrl.rerunAiReview);
 router.get("/registration-invitations", adminAuth, adminCtrl.getRegistrationInvitations);
 router.delete("/registration-invitations/:id", adminAuth, adminCtrl.deleteRegistrationInvitation);
 

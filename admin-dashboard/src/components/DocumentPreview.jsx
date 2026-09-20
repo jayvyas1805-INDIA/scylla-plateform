@@ -12,6 +12,7 @@ export default function DocumentPreview({
   onClose,
   onApprove,
   onReject,
+  onRerunAi,
 }) {
   const containerRef = useRef(null);
   // const canvasRef = useRef(null);
@@ -178,10 +179,15 @@ export default function DocumentPreview({
           </div>
 
       {/* AI SUGGESTION */}
-      {(doc.aiReview?.suggestion || doc.aiReview?.status === "failed") && (
+      {doc.aiReview !== undefined && (
         <div className="px-6 py-3 bg-admin-bg border-b border-white/10 flex items-start gap-3">
-          <AiSuggestionBadge aiReview={doc.aiReview} />
-          {doc.aiReview.reasoning && (
+          <AiSuggestionBadge
+            aiReview={doc.aiReview}
+            ownerType={doc.ownerType?.toLowerCase() || doc.model?.toLowerCase()}
+            ownerId={doc.refId}
+            onRerun={onRerunAi}
+          />
+          {doc.aiReview?.reasoning && (
             <p className="text-slate-400 text-sm flex-1">{doc.aiReview.reasoning}</p>
           )}
         </div>

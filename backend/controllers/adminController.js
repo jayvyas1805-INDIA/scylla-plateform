@@ -830,3 +830,37 @@ exports.updateAdminMedia = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+// Manual re-run of the AI document check, for admins — bypasses waiting
+// on a team/vendor to re-upload their doc. Awaits the review (unlike the
+// fire-and-forget calls on upload) so the admin gets an immediate
+// success/failure response, with the actual result/error already saved
+// to aiReview by the time this responds — see backend/utils/aiDocumentReview.js.
+exports.rerunAiReview = async (req, res) => {
+  try {
+    const { ownerType, id } = req.params;
+    const normalizedType = ownerType?.toLowerCase();
+    if (!["team", "vendor"].includes(normalizedType)) {
+      return res.status(400).json({ error: "ownerType must be 'team' or 'vendor'" });
+    }
+
+    const Model = normalizedType === "team" ? Team : Vendor;
+    const doc = await Model.findById(id).select("verificationDoc");
+    if (!doc) return res.status(404).json({ error: `${normalizedType} not found` });
+    if (!doc.verificationDoc) {
+      return res.status(400).json({ error: "No verification document on file to review" });
+    }
+
+    const { triggerDocumentReview } = require("../utils/aiDocumentReview");
+    await triggerDocumentReview({
+      ownerType: normalizedType,
+      ownerId: id,
+      docUrl: doc.verificationDoc
+    });
+
+    const updated = await Model.findById(id).select("aiReview");
+    res.json({ aiReview: updated.aiReview });
+  } catch (err) {
+    console.error("Error re-running AI review:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};

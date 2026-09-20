@@ -21,7 +21,7 @@ function StatusBadge({ status }) {
   );
 }
 
-export default function TeamTable({ teams, onApprove, onReject, onView, categoryBadge }) {
+export default function TeamTable({ teams, onApprove, onReject, onView, categoryBadge, onRerunAi }) {
   return (
     <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-visible">
       {/* Table header (desktop only) */}
@@ -84,7 +84,12 @@ export default function TeamTable({ teams, onApprove, onReject, onView, category
           {/* AI Suggestion */}
           <div className="md:col-span-2">
             <span className="md:hidden text-admin-accent font-semibold">AI Suggestion: </span>
-            <AiSuggestionBadge aiReview={team.aiReview} />
+            <AiSuggestionBadge
+              aiReview={team.aiReview}
+              ownerType="team"
+              ownerId={team.id}
+              onRerun={onRerunAi}
+            />
           </div>
 
           {/* Actions */}

@@ -21,7 +21,7 @@ function StatusBadge({ status }) {
   );
 }
 
-export default function VendorTable({ vendors, onApprove, onReject, onView }) {
+export default function VendorTable({ vendors, onApprove, onReject, onView, onRerunAi }) {
   return (
     <div className="bg-admin-bg border border-gray-800 rounded-2xl overflow-visible">
       {/* Table header */}
@@ -87,7 +87,12 @@ export default function VendorTable({ vendors, onApprove, onReject, onView }) {
             {/* AI Suggestion */}
             <div className="md:col-span-2">
               <span className="md:hidden font-semibold text-admin-accent">AI Suggestion: </span>
-              <AiSuggestionBadge aiReview={v.aiReview} />
+              <AiSuggestionBadge
+                aiReview={v.aiReview}
+                ownerType="vendor"
+                ownerId={v.id}
+                onRerun={onRerunAi}
+              />
             </div>
 
             {/* Actions */}

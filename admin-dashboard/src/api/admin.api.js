@@ -74,6 +74,11 @@ export const updateApprovalRule = (id, data) =>
 export const deleteApprovalRule = (id) =>
   api.delete(`/api/admin/rules/${id}`);
 
+// Manual re-run of the AI document check — for testing/diagnosing without
+// needing the team/vendor to re-upload their document.
+export const rerunAiReview = (ownerType, id) =>
+  api.post(`/api/admin/rerun-ai-review/${ownerType}/${id}`);
+
 
 // add content moderation
 export const saveAdminContent = (formData) =>{

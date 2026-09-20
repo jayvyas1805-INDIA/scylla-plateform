@@ -1,14 +1,62 @@
+import { useState } from "react";
 import clsx from "clsx";
-import { CheckCircle2, XCircle, AlertTriangle, Loader2, CircleSlash } from "lucide-react";
+import { CheckCircle2, XCircle, AlertTriangle, Loader2, CircleSlash, RotateCw } from "lucide-react";
+import toast from "react-hot-toast";
 import ApprovalHoverValue from "./ApprovalHoverValue";
+import { rerunAiReview } from "../api/admin.api";
 
 // Renders the cached `aiReview` field the backend writes ONCE per
-// document version (see backend/utils/aiDocumentReview.js). This
-// component never triggers a model call itself — it only displays
-// whatever is already sitting in the team/vendor/document record, so
-// switching tabs or refreshing this page is free.
-export default function AiSuggestionBadge({ aiReview }) {
-  if (!aiReview || aiReview.status === "idle") return null;
+// document version (see backend/utils/aiDocumentReview.js). Displaying
+// it never triggers a model call — but if `ownerType`/`ownerId` are
+// passed, this also renders a manual re-run control (admin-only action,
+// hits POST /api/admin/rerun-ai-review) for testing/diagnosing a check
+// without waiting on a team/vendor to re-upload their document.
+export default function AiSuggestionBadge({ aiReview, ownerType, ownerId, onRerun }) {
+  const [rerunning, setRerunning] = useState(false);
+
+  const canRerun = ownerType && ownerId;
+
+  const handleRerun = async (e) => {
+    e.stopPropagation();
+    if (!canRerun || rerunning) return;
+    setRerunning(true);
+    try {
+      await rerunAiReview(ownerType, ownerId);
+      toast.success("AI check re-run.");
+      onRerun?.();
+    } catch (err) {
+      console.error("Failed to re-run AI check", err);
+      toast.error(err?.response?.data?.error || "Could not re-run AI check.");
+    } finally {
+      setRerunning(false);
+    }
+  };
+
+  const RerunButton = canRerun && (
+    <button
+      onClick={handleRerun}
+      disabled={rerunning}
+      title="Re-run AI check"
+      className="text-slate-400 hover:text-white disabled:opacity-50 transition-colors"
+    >
+      <RotateCw size={12} className={rerunning ? "animate-spin" : ""} />
+    </button>
+  );
+
+  if (!aiReview || aiReview.status === "idle") {
+    // Nothing has ever run for this document — still offer a manual
+    // trigger so an admin isn't stuck waiting on a re-upload.
+    return canRerun ? (
+      <button
+        onClick={handleRerun}
+        disabled={rerunning}
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium bg-slate-700/40 text-slate-400 border border-slate-600/40 hover:text-white disabled:opacity-50 transition-colors"
+      >
+        <RotateCw size={12} className={rerunning ? "animate-spin" : ""} />
+        Run AI check
+      </button>
+    ) : null;
+  }
 
   if (aiReview.status === "pending") {
     return (
@@ -21,13 +69,16 @@ export default function AiSuggestionBadge({ aiReview }) {
 
   if (aiReview.status === "failed") {
     return (
-      <ApprovalHoverValue
-        value={aiReview.reasoning || "No error detail recorded."}
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium bg-slate-600/30 text-slate-300 border border-slate-500/30"
-      >
-        <CircleSlash size={13} />
-        AI check unavailable
-      </ApprovalHoverValue>
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium bg-slate-600/30 text-slate-300 border border-slate-500/30">
+        <ApprovalHoverValue
+          value={aiReview.reasoning || "No error detail recorded."}
+          className="inline-flex items-center gap-1.5"
+        >
+          <CircleSlash size={13} />
+          AI check unavailable
+        </ApprovalHoverValue>
+        {RerunButton}
+      </span>
     );
   }
 
@@ -58,19 +109,24 @@ export default function AiSuggestionBadge({ aiReview }) {
   const Icon = config.icon;
 
   return (
-    <ApprovalHoverValue
-      value={aiReview.reasoning || "No reasoning recorded."}
+    <span
       style={{ "--glow-color": config.glow }}
       className={clsx(
         "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full font-medium animate-fadeIn animate-pulse-glow-persistent",
         config.classes
       )}
     >
-      <Icon size={13} />
-      {config.label}
-      {typeof aiReview.confidence === "number" && (
-        <span className="opacity-70">({Math.round(aiReview.confidence * 100)}%)</span>
-      )}
-    </ApprovalHoverValue>
+      <ApprovalHoverValue
+        value={aiReview.reasoning || "No reasoning recorded."}
+        className="inline-flex items-center gap-1.5"
+      >
+        <Icon size={13} />
+        {config.label}
+        {typeof aiReview.confidence === "number" && (
+          <span className="opacity-70">({Math.round(aiReview.confidence * 100)}%)</span>
+        )}
+      </ApprovalHoverValue>
+      {RerunButton}
+    </span>
   );
 }
