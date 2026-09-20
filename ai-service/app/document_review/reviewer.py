@@ -1,4 +1,5 @@
 import logging
+import re
 
 from app.document_review.extract import ExtractionError, extract_document_text
 from app.document_review.rules_retrieval import select_relevant_rules
@@ -67,9 +68,16 @@ async def review_document(payload: DocumentReviewRequest) -> DocumentReviewRespo
         f"- [{'MANDATORY' if r.mandatory else 'optional'}] {r.text}" for r in relevant_rules
     )
 
-    # Extracted text can be long (multi-page PDFs); cap what we send so a
-    # single document can't blow the context window or the token bill.
-    truncated_text = document_text[:12000]
+    # Verification documents (GST certs, university IDs, registration
+    # letters) are short — a page or two at most. The old 12,000-char cap
+    # (~3-4k tokens) was sized for arbitrary long PDFs, not this specific
+    # use case, and was the single biggest line item in every request's
+    # token bill. Collapsing PDF-extraction whitespace (blank lines,
+    # repeated spaces are common artifacts, not content) before
+    # truncating packs the same useful text into far fewer tokens.
+    cleaned_text = re.sub(r"[ \t]+", " ", document_text)
+    cleaned_text = re.sub(r"\n{2,}", "\n", cleaned_text).strip()
+    truncated_text = cleaned_text[:4000]
 
     prompt = (
         f"Checklist rules:\n{rules_block}\n\n"
